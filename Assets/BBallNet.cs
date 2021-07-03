@@ -42,6 +42,20 @@ public class BBallNet : MonoBehaviour
         scorer.shootScore++;
         ChatManager.instance.chatterScoreHistory[scorer.username.text] = scorer.shootScore;
         Leaderboard.instance.UpdateLeaderboard(scorer);
+
+        //Toggle crown if necessary
+        if (Leaderboard.instance.topLeaders[0].username.text == scorer.username.text)
+        {
+            //Activate crown on new leader
+            scorer.ActivateCrown();
+
+            //Deactivate crown on dethroned leader
+            if (ChatManager.instance.chatterDict.ContainsKey(Leaderboard.instance.topLeaders[1].username.text))
+            {
+                ChatManager.instance.chatterDict[Leaderboard.instance.topLeaders[1].username.text].DeactivateCrown();
+            }
+        }
+
         StopAllCoroutines();
         StartCoroutine(this.TurnOffScoreTextAfterDelay());
     }

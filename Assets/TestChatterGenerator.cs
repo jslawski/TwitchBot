@@ -10,6 +10,7 @@ public class TestChatterGenerator : MonoBehaviour
     {
         if (Input.GetKeyUp(KeyCode.F10))
         {
+            this.ClearTestCabbages();
             this.SpawnTestChatterBatch();
         }
         if (Input.GetKeyUp(KeyCode.F9))
@@ -22,7 +23,7 @@ public class TestChatterGenerator : MonoBehaviour
     {
         for (int i = 0; i < numTestCabbagesToSpawn; i++)
         {
-            string chatterName = "TestCabbage" + i.ToString();
+            string chatterName = ("TestCabbage" + i.ToString()).ToLower();
 
             if (ChatManager.instance.chatterDict.ContainsKey(chatterName))
             {
@@ -43,7 +44,7 @@ public class TestChatterGenerator : MonoBehaviour
 
     private void SpawnNewTestChatter(int chatterId)
     {
-        string chatterName = "TestCabbage" + chatterId.ToString();
+        string chatterName = ("TestCabbage" + chatterId.ToString()).ToLower();
 
         float randomXPosition = Random.Range(ChatManager.instance.spawnBoundaries.bounds.min.x, ChatManager.instance.spawnBoundaries.bounds.max.x);
         Vector3 instantiationPosition = new Vector3(randomXPosition, ChatManager.instance.spawnBoundaries.transform.position.y, 0f);
@@ -62,6 +63,12 @@ public class TestChatterGenerator : MonoBehaviour
         if (ChatManager.instance.chatterScoreHistory.ContainsKey(cabbageChatter.chatterName))
         {
             cabbageChatter.shootScore = ChatManager.instance.chatterScoreHistory[cabbageChatter.chatterName];
+
+            //Toggle crown if the leader has respawned
+            if (Leaderboard.instance.topLeaders[0].username.text == cabbageChatter.username.text)
+            {
+                cabbageChatter.ActivateCrown();
+            }
         }
         else
         {

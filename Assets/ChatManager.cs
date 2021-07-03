@@ -247,6 +247,12 @@ public class ChatManager : MonoBehaviour
         if (this.chatterScoreHistory.ContainsKey(cabbageChatter.chatterName))
         {
             cabbageChatter.shootScore = this.chatterScoreHistory[cabbageChatter.chatterName];
+
+            //Toggle crown if the leader has respawned
+            if (Leaderboard.instance.topLeaders[0].username.text == cabbageChatter.username.text)
+            {
+                cabbageChatter.ActivateCrown();
+            }
         }
         else
         {

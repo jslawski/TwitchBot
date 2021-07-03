@@ -28,7 +28,7 @@ public class AutoScore : MonoBehaviour
             return;
         }
 
-        GameObject selectedChatter = GameObject.Find(this.targetChatter.text);
+        GameObject selectedChatter = GameObject.Find(this.targetChatter.text.ToLower());
 
         if (selectedChatter == null)
         {

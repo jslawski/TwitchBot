@@ -14,6 +14,7 @@ public class CabbageChatter : MonoBehaviour
     public GameObject emoteMessageBoxObject;
     public GameObject cabbageVisualHolder;
     public GameObject shooterText;
+    public GameObject crown;
 
     //Character Creator Fields
     public SpriteRenderer headPiece;
@@ -73,6 +74,16 @@ public class CabbageChatter : MonoBehaviour
     private void Start()
     {
         this.GenerateCharacter();
+    }
+
+    public void ActivateCrown()
+    {
+        this.crown.SetActive(true);
+    }
+
+    public void DeactivateCrown()
+    {
+        this.crown.SetActive(false);
     }
 
     private void GenerateCharacter()
