@@ -72,17 +72,4 @@ public class LeaderboardEntry : MonoBehaviour
         this.scoreText.text = chatterEntry.score.ToString();
         this.score = chatterEntry.score;
     }
-
-    public void ReplaceWithEntry(LeaderboardEntry entry)
-    {
-        this.headPiece.sprite = entry.headPiece.sprite;
-        this.eyeBrows.sprite = entry.eyeBrows.sprite;
-        this.eyes.sprite = entry.eyes.sprite;
-        this.nose.sprite = entry.nose.sprite;
-        this.mouth.sprite = entry.mouth.sprite;
-
-        this.username.text = entry.username.text;
-        this.scoreText.text = entry.score.ToString();
-        this.score = entry.score;
-    }
 }
