@@ -40,6 +40,7 @@ public class BBallNet : MonoBehaviour
         this.airhornAudio.Play();
         this.niceShotAudio.Play();
         scorer.shootScore++;
+        ChatManager.instance.chatterScoreHistory[scorer.username.text] = scorer.shootScore;
         Leaderboard.instance.UpdateLeaderboard(scorer);
         StopAllCoroutines();
         StartCoroutine(this.TurnOffScoreTextAfterDelay());

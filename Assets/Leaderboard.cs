@@ -4,18 +4,37 @@ using UnityEngine;
 
 public class FullLeaderboardEntry
 {
-    public CabbageChatter chatter;
+    public Sprite baseCabbage;
+    public Sprite headPiece;
+    public Sprite eyeBrows;
+    public Sprite eyes;
+    public Sprite nose;
+    public Sprite mouth;
+
+    public string username;
     public int score;
 
     public FullLeaderboardEntry()
     {
-        this.chatter = null;
+        this.baseCabbage = null;
+        this.headPiece = null;
+        this.eyeBrows = null;
+        this.eyes = null;
+        this.nose = null;
+        this.mouth = null;
+        this.username = string.Empty;
         this.score = int.MinValue;
     }
 
     public FullLeaderboardEntry(CabbageChatter chatter, int score)
     {
-        this.chatter = chatter;
+        this.baseCabbage = chatter.baseCabbage.sprite;
+        this.headPiece = chatter.headPiece.sprite;
+        this.eyeBrows = chatter.eyeBrows.sprite;
+        this.eyes = chatter.eyes.sprite;
+        this.nose = chatter.nose.sprite;
+        this.mouth = chatter.mouth.sprite;
+        this.username = chatter.username.text;
         this.score = score;
     }
 }
@@ -42,19 +61,25 @@ public class Leaderboard : MonoBehaviour
         FullLeaderboardEntry tempEntry = new FullLeaderboardEntry();
         for (int i = 0; i < this.fullLeaderboard.Count; i++)
         {
-            if (this.fullLeaderboard[i].chatter == chatter)
+            if (this.fullLeaderboard[i].username == chatter.username.text)
             {
-                tempEntry = new FullLeaderboardEntry(this.fullLeaderboard[i].chatter, this.fullLeaderboard[i].score);
+                //We need this line in case the chatter has been despawned due to prior inactivity
+                //In these cases, the chatter needs to be refreshed with the most recent instance of its object
+                //Debug.LogError("Refreshing chatter");
+                //this.fullLeaderboard[i].chatter = chatter;
+
+                tempEntry = new FullLeaderboardEntry(chatter, this.fullLeaderboard[i].score);
                 this.fullLeaderboard.RemoveAt(i);
             }
         }
 
-        if (tempEntry.chatter == null)
+        if (tempEntry.username == string.Empty)
         {
             this.InsertNewEntry(chatter);
         }
         else
         {
+            tempEntry.score = chatter.shootScore;
             this.UpdateCreatedEntry(tempEntry);
         }
     }
@@ -68,17 +93,15 @@ public class Leaderboard : MonoBehaviour
 
     private void UpdateCreatedEntry(FullLeaderboardEntry entry)
     {
-        entry.score = entry.chatter.shootScore;
-
         bool inserted = false;
 
         for (int i = 0; i < this.fullLeaderboard.Count; i++)
         {
-            Debug.LogError("New Entry Score: " + entry.score + " Existing Score: " + this.fullLeaderboard[i].score);
+            //Debug.LogError("New Entry Score: " + entry.score + " Existing Score: " + this.fullLeaderboard[i].score);
 
             if (entry.score >= this.fullLeaderboard[i].score)
             {
-                Debug.LogError("Inserting ahead of existing entry");
+                //Debug.LogError("Inserting ahead of existing entry");
                 //Insert entry 1 position ahead of the first entry it is >= than
                 //If we are at the end of the list, just add a new entry
                 if ((i + 1) < this.fullLeaderboard.Count)
@@ -98,7 +121,7 @@ public class Leaderboard : MonoBehaviour
         //Insert the entry to the bottom of the leaderboard if its score doesn't surpass any existing entries
         if (inserted == false)
         {
-            Debug.LogError("Inserting at beginning of list");
+            //Debug.LogError("Inserting at beginning of list");
             this.fullLeaderboard.Insert(0, entry);
         }
 
@@ -107,14 +130,14 @@ public class Leaderboard : MonoBehaviour
             this.fullLeaderboard.Add(entry);
         }
 
-        string currentLeaderboard = string.Empty;
+        /*string currentLeaderboard = string.Empty;
         for (int i = 0; i < this.fullLeaderboard.Count; i++)
         {
             currentLeaderboard += this.fullLeaderboard[i].chatter.chatterName + ", ";
         }
 
         Debug.LogError("Leaderboard: " + currentLeaderboard);
-
+        */
         this.UpdateLeaderboardVisuals();
     }
 
@@ -130,7 +153,7 @@ public class Leaderboard : MonoBehaviour
                 break;
             }
 
-            this.topLeaders[i].UpdateEntry(this.fullLeaderboard[leaderIndex].chatter);
+            this.topLeaders[i].UpdateEntry(this.fullLeaderboard[leaderIndex]);
             this.topLeaders[i].gameObject.SetActive(true);
             currentLeaderboardIndex--;
         }

@@ -24,13 +24,14 @@ public class ChatManager : MonoBehaviour
     public AudioSource shotsAudio;
 
     public Dictionary<string, CabbageChatter> chatterDict;
-    
+    public Dictionary<string, int> chatterScoreHistory;
+
     Dictionary<string, int> wheelWeights;
     public DrinkWheel currentDrinkWheel;
 
     public List<CabbageChatter> currentActiveChatters;
 
-    private Queue<CabbageChatter> chatterQueue;
+    public Queue<CabbageChatter> chatterQueue;
     private bool readyForNextChatter = true;
 
     [SerializeField]
@@ -80,6 +81,7 @@ public class ChatManager : MonoBehaviour
         pubSubClient.Connect();
 
         this.chatterDict = new Dictionary<string, CabbageChatter>();
+        this.chatterScoreHistory = new Dictionary<string, int>();
         this.currentActiveChatters = new List<CabbageChatter>();
         this.chatterQueue = new Queue<CabbageChatter>();
 
@@ -89,10 +91,12 @@ public class ChatManager : MonoBehaviour
         { 
             this.bballHoopMusic = Resources.LoadAll<AudioClip>("BBallMusic");
         }
-       
-        RawKeyInput.Start(true);
 
-        RawKeyInput.OnKeyUp += HandleKeyUp;
+        if (!Application.isEditor)
+        {
+            RawKeyInput.Start(true);
+            RawKeyInput.OnKeyUp += HandleKeyUp;
+        }
     }
 
     private void HandleKeyUp(RawKey key)
@@ -236,6 +240,18 @@ public class ChatManager : MonoBehaviour
 
         cabbageChatter.chatterName = newChatterMessage.Username.ToLower();
         cabbageChatter.DisplayChatMessage(newChatterMessage.Username, this.GetProperMessage(newChatterMessage));
+        newChatter.name = newChatterMessage.Username;
+
+        //Update chatter with their last shoot score, if it exists
+        //Otherwise, initialize it to 0
+        if (this.chatterScoreHistory.ContainsKey(cabbageChatter.chatterName))
+        {
+            cabbageChatter.shootScore = this.chatterScoreHistory[cabbageChatter.chatterName];
+        }
+        else
+        {
+            this.chatterScoreHistory.Add(cabbageChatter.chatterName, 0);
+        }
     }
 
     private string GetProperMessage(ChatMessage chatMessage)
@@ -393,11 +409,20 @@ public class ChatManager : MonoBehaviour
         {
             this.PushChatterToFront(this.chatterQueue.Dequeue());
         }
+
+        if (Application.isEditor && Input.GetKeyUp(KeyCode.F2))
+        {
+            this.ToggleShootMode();
+        }
     }
 
     private void OnApplicationQuit()
     {
         this.chatClient.Disconnect();
-        RawKeyInput.Stop();
+
+        if (!Application.isEditor)
+        {
+            RawKeyInput.Stop();
+        }
     }
 }

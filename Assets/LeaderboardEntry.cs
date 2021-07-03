@@ -30,21 +30,21 @@ public class LeaderboardEntry : MonoBehaviour
         this.score = score;
     }
 
-    public LeaderboardEntry(CabbageChatter chatter)
+    public LeaderboardEntry(FullLeaderboardEntry chatterEntry)
     {
-        this.headPiece.sprite = chatter.headPiece.sprite;
-        this.eyeBrows.sprite = chatter.eyeBrows.sprite;
-        this.eyes.sprite = chatter.eyes.sprite;
-        this.nose.sprite = chatter.nose.sprite;
-        this.mouth.sprite = chatter.mouth.sprite;
-        this.username.text = chatter.username.text;
-        this.scoreText.text = chatter.shootScore.ToString();
-        this.score = chatter.shootScore;
+        this.headPiece.sprite = chatterEntry.headPiece;
+        this.eyeBrows.sprite = chatterEntry.eyeBrows;
+        this.eyes.sprite = chatterEntry.eyes;
+        this.nose.sprite = chatterEntry.nose;
+        this.mouth.sprite = chatterEntry.mouth;
+        this.username.text = chatterEntry.username;
+        this.scoreText.text = chatterEntry.score.ToString();
+        this.score = chatterEntry.score;
     }
 
-    public void UpdateEntry(CabbageChatter chatter)
+    public void UpdateEntry(FullLeaderboardEntry chatterEntry)
     {
-        this.baseCabbage.sprite = chatter.baseCabbage.sprite;
+        this.baseCabbage.sprite = chatterEntry.baseCabbage;
         if (this.baseCabbage.sprite.name != "cabbage")
         {
             this.headPiece.gameObject.SetActive(false);
@@ -62,15 +62,15 @@ public class LeaderboardEntry : MonoBehaviour
             this.mouth.gameObject.SetActive(true);
         }
 
-        this.headPiece.sprite = chatter.headPiece.sprite;
-        this.eyeBrows.sprite = chatter.eyeBrows.sprite;
-        this.eyes.sprite = chatter.eyes.sprite;
-        this.nose.sprite = chatter.nose.sprite;
-        this.mouth.sprite = chatter.mouth.sprite;
+        this.headPiece.sprite = chatterEntry.headPiece;
+        this.eyeBrows.sprite = chatterEntry.eyeBrows;
+        this.eyes.sprite = chatterEntry.eyes;
+        this.nose.sprite = chatterEntry.nose;
+        this.mouth.sprite = chatterEntry.mouth;
 
-        this.username.text = chatter.username.text;
-        this.scoreText.text = chatter.shootScore.ToString();
-        this.score = chatter.shootScore;
+        this.username.text = chatterEntry.username;
+        this.scoreText.text = chatterEntry.score.ToString();
+        this.score = chatterEntry.score;
     }
 
     public void ReplaceWithEntry(LeaderboardEntry entry)
