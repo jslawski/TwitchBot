@@ -1,0 +1,24 @@
+fileFormatVersion: 2
+guid: e8b073fa5eb04a84996dc1c71159f4ff
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: Lucida Casual
+  fontNames:
+  - Lucida Casual
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: 7199af120744a3042939769a999574f8, type: 3}
+  - {fileID: 12800000, guid: 148e10059024a694594bc8cb0d4145ac, type: 3}
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
+  shouldRoundAdvanceValue: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
