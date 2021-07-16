@@ -49,13 +49,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 90cd44bb38f1115489a3ec114bfdd4fa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  emoteBoxObject: {fileID: 2168362969496383146, guid: 8b56986699f11b84ba4c9ea1b450ad1b,
+  emoteBoxObject: {fileID: 2168362969496383146, guid: cf992cfd9291542429b4154b950e7cd8,
     type: 3}
   messageBoxObject: {fileID: 6302988042070317731, guid: ed5a08b89111d2a40844db064c7ba60f,
     type: 3}
   chatLineObject: {fileID: 2876240682260919382, guid: 859d91123a17191448d28c924c220af2,
     type: 3}
-  currentMessageBoxRect: {fileID: 0}
+  currentChatLineRect: {fileID: 0}
   parentRect: {fileID: 0}
   parentVerticalLayoutGroup: {fileID: 0}
 --- !u!114 &-8905624864854820746

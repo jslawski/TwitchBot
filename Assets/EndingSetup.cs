@@ -33,7 +33,7 @@ public class EndingSetup : MonoBehaviour
 
         string fullMessage = LinkPrefixStub + "\"" + videoTitle + "\"" + LinkSuffixStub + YoutubeLinkStub + videoLinkStub;
 
-        //ChatManager.instance.chatClient.SendMessage(TwitchSecrets.ChannelName, fullMessage);
+        ChatManager.instance.chatClient.SendMessage(TwitchSecrets.ChannelName, fullMessage);
     }
 
     public void BeginEndSequence()

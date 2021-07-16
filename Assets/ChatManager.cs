@@ -6,6 +6,10 @@ using TwitchLib.Client.Events;
 using TwitchLib.PubSub.Events;
 using UnityEngine.UI;
 using UnityRawInput;
+using TwitchLib.Communication.Models;
+using System;
+using TwitchLib.Communication.Clients;
+using System.Collections;
 
 public class ChatManager : MonoBehaviour
 {
@@ -55,6 +59,9 @@ public class ChatManager : MonoBehaviour
     private AudioSource bballSource;
     private AudioClip[] bballHoopMusic;
 
+    private const string ClipStub = "https://clips.twitch.tv/";
+    private string recentClip = string.Empty;
+
     // Start is called before the first frame update
     void Awake()
     {
@@ -65,20 +72,30 @@ public class ChatManager : MonoBehaviour
 
         Application.runInBackground = true;
 
+        ClientOptions clientOptions = new ClientOptions
+        {
+            MessagesAllowedInPeriod = 750,
+            ThrottlingPeriod = TimeSpan.FromSeconds(30)
+        };
+
+        WebSocketClient customClient = new WebSocketClient(clientOptions);
+
         this.chatClient = new Client();
         this.chatClient.Initialize(botCreds, TwitchSecrets.ChannelName);
         this.chatClient.OnMessageReceived += this.ProcessMessage;
         this.chatClient.WillReplaceEmotes = true;
         this.chatClient.OnUserLeft += this.RemoveCabbageChatter;
         this.chatClient.OnChatCommandReceived += this.ProcessCommand;
+        this.chatClient.OnConnected += this.Client_OnConnected;
+        this.chatClient.AutoReListenOnException = true;
         this.chatClient.Disconnect();
         this.chatClient.Connect();
 
-        pubSubClient = new PubSub();
-        pubSubClient.OnPubSubServiceConnected += this.PubSubConnected;
-        pubSubClient.OnRewardRedeemed += this.PubSubRewardRedeemed;
-        pubSubClient.Disconnect();
-        pubSubClient.Connect();
+        this.pubSubClient = new PubSub();
+        this.pubSubClient.OnPubSubServiceConnected += this.PubSubConnected;
+        this.pubSubClient.OnRewardRedeemed += this.PubSubRewardRedeemed;
+        this.pubSubClient.Disconnect();
+        this.pubSubClient.Connect();
 
         this.chatterDict = new Dictionary<string, CabbageChatter>();
         this.chatterScoreHistory = new Dictionary<string, int>();
@@ -88,7 +105,7 @@ public class ChatManager : MonoBehaviour
         SetupWheelDict();
 
         if (!Application.isEditor)
-        { 
+        {
             this.bballHoopMusic = Resources.LoadAll<AudioClip>("BBallMusic");
         }
 
@@ -97,14 +114,15 @@ public class ChatManager : MonoBehaviour
             RawKeyInput.Start(true);
             RawKeyInput.OnKeyUp += HandleKeyUp;
         }
+
+        StartCoroutine(this.RejoinHeartbeat());
     }
 
     private void HandleKeyUp(RawKey key)
     {
-
-        if (key == RawKey.F5)
+        if (key == RawKey.F7)
         {
-            this.endingSetup.BeginEndSequence();
+            this.ShowRecentClip();
         }
         else if (key == RawKey.F2)
         {
@@ -149,6 +167,11 @@ public class ChatManager : MonoBehaviour
         {
             this.InitiateAlwaysSunny(e.Message);
         }
+    }
+
+    private void Client_OnConnected(object sender, OnConnectedArgs e)
+    {
+        this.chatClient.JoinChannel(TwitchSecrets.ChannelName, true);
     }
 
     private void ProcessCommand(object sender, OnChatCommandReceivedArgs e)
@@ -199,9 +222,17 @@ public class ChatManager : MonoBehaviour
             this.chatterDict[e.Command.ChatMessage.Username].RerollCharacter();
         }
 
-        if (this.chatterDict.ContainsKey(e.Command.ChatMessage.Username) && e.Command.CommandText.ToLower().Contains("shoot") && shootModeActive == true)
+        if (e.Command.CommandText.ToLower().Contains("shoot") && shootModeActive == true)
         {
-            this.chatterDict[e.Command.ChatMessage.Username].ShootCharacter();
+            if (this.chatterDict.ContainsKey(e.Command.ChatMessage.Username))
+            {
+                this.chatterDict[e.Command.ChatMessage.Username].ShootCharacter(e.Command.ArgumentsAsString);
+            }
+            else
+            {
+                this.SpawnNewChatter(e.Command.ChatMessage);
+                this.chatterDict[e.Command.ChatMessage.Username].ShootCharacter(e.Command.ArgumentsAsString);
+            }
         }
     }
 
@@ -217,6 +248,11 @@ public class ChatManager : MonoBehaviour
             return;
         }
 
+        if (e.ChatMessage.Message.Contains(ChatManager.ClipStub))
+        {
+            this.GrabClipLink(e.ChatMessage.Message);
+        }
+
         if (this.chatterDict.ContainsKey(e.ChatMessage.Username))
         {
             this.chatterDict[e.ChatMessage.Username].DisplayChatMessage(e.ChatMessage.Username, this.GetProperMessage(e.ChatMessage));
@@ -230,7 +266,7 @@ public class ChatManager : MonoBehaviour
 
     private void SpawnNewChatter(ChatMessage newChatterMessage)
     {
-        float randomXPosition = Random.Range(spawnBoundaries.bounds.min.x, spawnBoundaries.bounds.max.x);
+        float randomXPosition = UnityEngine.Random.Range(spawnBoundaries.bounds.min.x, spawnBoundaries.bounds.max.x);
         Vector3 instantiationPosition = new Vector3(randomXPosition, spawnBoundaries.transform.position.y, 0f);
         GameObject newChatter = Instantiate(cabbageChatterPrefab, instantiationPosition, new Quaternion(), this.parentChat.transform) as GameObject;
         CabbageChatter cabbageChatter = newChatter.GetComponent<CabbageChatter>();
@@ -334,7 +370,7 @@ public class ChatManager : MonoBehaviour
         wheelWeights = new Dictionary<string, int>();
         wheelWeights.Add("Vodka/Seductive", 5);
         wheelWeights.Add("Midori/JarJar", 5);
-        wheelWeights.Add("Tequila/Wizened",5);
+        wheelWeights.Add("Tequila/Wizened", 5);
         wheelWeights.Add("Jager/Surfer", 5);
         wheelWeights.Add("Sake/NYBaby", 5);
         wheelWeights.Add("SoCo/Jammer", 5);
@@ -387,7 +423,7 @@ public class ChatManager : MonoBehaviour
         {
             if (!Application.isEditor)
             {
-                int audioClipIndex = Random.Range(0, this.bballHoopMusic.Length);
+                int audioClipIndex = UnityEngine.Random.Range(0, this.bballHoopMusic.Length);
                 this.bballSource.clip = this.bballHoopMusic[audioClipIndex];
                 bballSource.Play();
             }
@@ -409,6 +445,25 @@ public class ChatManager : MonoBehaviour
         }
     }
 
+    private void GrabClipLink(string chatMessage)
+    {
+        int startIndex = chatMessage.IndexOf(ChatManager.ClipStub);
+        string remainingMessage = chatMessage.Substring(startIndex);
+        int endIndex = remainingMessage.IndexOf(" ");
+        if (endIndex < 0)
+        {
+            endIndex = remainingMessage.Length;
+        }
+
+        this.recentClip = chatMessage.Substring(startIndex, endIndex);
+    }
+
+    private void ShowRecentClip()
+    {
+        //Debug.LogError("Recent Clip: " + this.recentClip);
+        this.chatClient.SendMessage(TwitchSecrets.ChannelName, "!showClip " + this.recentClip);
+    }
+
     private void Update()
     {
         if (this.chatterQueue.Count > 0 && this.readyForNextChatter == true)
@@ -419,6 +474,20 @@ public class ChatManager : MonoBehaviour
         if (Application.isEditor && Input.GetKeyUp(KeyCode.F2))
         {
             this.ToggleShootMode();
+        }
+
+        if (Application.isEditor && Input.GetKeyUp(KeyCode.F7))
+        {
+            this.ShowRecentClip();
+        }
+    }
+
+    private IEnumerator RejoinHeartbeat()
+    {
+        while (true)
+        {
+            this.chatClient.JoinChannel(TwitchSecrets.ChannelName, true);
+            yield return new WaitForSeconds(300);
         }
     }
 

@@ -88,28 +88,39 @@ public class CabbageChatter : MonoBehaviour
 
     private void GenerateCharacter()
     {
-        if (this.chatterName == "ruddgasm") {
+        if (this.chatterName.ToLower() == "ruddgasm")
+        {
             this.baseCabbage.sprite = Resources.Load<Sprite>("charles");
             return;
         }
-        else if (this.chatterName == "ruddpuddle")
+        else if (this.chatterName.ToLower() == "ruddpuddle")
         {
             this.baseCabbage.sprite = Resources.Load<Sprite>("prisonMike");
             return;
         }
-        else if (this.chatterName == "levanter_")
+        else if (this.chatterName.ToLower() == "levanter_")
         {
             this.baseCabbage.sprite = Resources.Load<Sprite>("nicCage");
             return;
         }
-        else if (this.chatterName == "coleslawski")
+        else if (this.chatterName.ToLower() == "coleslawski")
         {
-            this.baseCabbage.sprite = Resources.Load<Sprite>("pedro");
+            this.baseCabbage.sprite = Resources.Load<Sprite>("SuperJaredBall");
             return;
         }
-        else if (this.chatterName == "cabbagegatekeeper")
+        else if (this.chatterName.ToLower() == "cabbagegatekeeper")
         {
             this.baseCabbage.sprite = Resources.Load<Sprite>("guard");
+            return;
+        }
+        else if (this.chatterName.ToLower() == "roh_ka")
+        {
+            this.baseCabbage.sprite = Resources.Load<Sprite>("dampboi");
+            return;
+        }
+        else if (this.chatterName.ToLower() == "safireninja")
+        {
+            this.baseCabbage.sprite = Resources.Load<Sprite>("ninjaKanpai");
             return;
         }
 
@@ -169,7 +180,7 @@ public class CabbageChatter : MonoBehaviour
         }
     }
 
-    public void ShootCharacter()
+    public void ShootCharacter(string direction = "")
     {
         if (this.shootCooldownActive == true)
         {
@@ -177,6 +188,20 @@ public class CabbageChatter : MonoBehaviour
         }
 
         float xLaunchDirection = Random.Range(-1.0f, 1.0f);
+
+        if (direction.ToLower().Contains("left"))
+        {
+            xLaunchDirection = Random.Range(-1.0f, -0.5f);
+        }
+        else if (direction.ToLower().Contains("up"))
+        {
+            xLaunchDirection = Random.Range(-0.3f, 0.3f);
+        }
+        else if (direction.ToLower().Contains("right"))
+        {
+            xLaunchDirection = Random.Range(1.0f, 0.5f);
+        }
+
         float yLaunchDirection = Random.Range(0.8f, 1.0f);
         this.cabbageRigidbody.AddForce(new Vector3(xLaunchDirection, yLaunchDirection, 0f) * this.launchVelocity);
         this.shootCooldownActive = true;

@@ -5,9 +5,13 @@ using UnityEngine.UI;
 
 public class EmoteMessageBox : MonoBehaviour
 {
-    const string EmoteUrlStub = "https://static-cdn.jtvnw.net/emoticons";
-    private Dictionary<string, string> bttvEmoteUrls;
-        
+    public const string TwitchEmoteUrlStub = "https://static-cdn.jtvnw.net/emoticons";
+    public const string BTTVEmoteUrlStub = "https://cdn.betterttv.net/emote";
+    public const string FrankerFacezEmoteUrlStub = "https://cdn.frankerfacez.com/emoticon";
+    private List<string> bttvEmoteNames;
+
+    private Dictionary<string, string> thirdPartyEmoteDict;
+
     public GameObject emoteBoxObject;
     public GameObject messageBoxObject;
     public GameObject chatLineObject;
@@ -22,21 +26,34 @@ public class EmoteMessageBox : MonoBehaviour
 
     private void Awake()
     {
-        this.InitializeBTTVEmotesDict(); 
+        this.InitializeThirdPartyEmotes(); 
 
         this.parentRect = this.transform.parent.transform.parent.GetComponent<RectTransform>();
         this.parentVerticalLayoutGroup = this.transform.parent.GetComponent<VerticalLayoutGroup>();
     }
 
-    private void InitializeBTTVEmotesDict()
+    private void InitializeThirdPartyEmotes()
     {
-        this.bttvEmoteUrls = new Dictionary<string, string>()
+        this.bttvEmoteNames = new List<string>{"catJAM", "AquaTriggered", "LOADING", "dekuHYPE", "nutButton", "CouldYouNot", "OOOO", "Clap", "coffinPls", "pepeD"};
+
+        this.thirdPartyEmoteDict = new Dictionary<string, string>
         {
-            { "catJAM", "https://cdn.betterttv.net/emote/5f1b0186cf6d2144653d2970/1x"},
-            { "weSmart", "https://cdn.betterttv.net/emote/589771dc10c0975495c578d1/1x"},
-            { "ddHuh", "https://cdn.betterttv.net/emote/58b20d74d07b273e0dcfd57c/1x"},
-            { "dekuHYPE", "https://cdn.betterttv.net/emote/594c13b436b6a43b492ce4bd/1x"},
-            { "nutButton", "https://cdn.betterttv.net/emote/5e0c5beb89079f7ba7c45b4c/1x"}
+            { "EZ", "https://cdn.betterttv.net/emote/5590b223b344e2c42a9e28e3/1x" },
+            { "ThisIsFine", "https://cdn.betterttv.net/emote/5823dfea4ccad28a2102dd5b/1x" },
+            { "Tuturu", "https://cdn.betterttv.net/emote/55371944236a1aa17a9970a8/1x" },
+            { "ZOINKS", "https://cdn.betterttv.net/emote/5b1741ee83deca65adc4a3c6/1x" },
+            { "FeelsBadMan", "https://cdn.frankerfacez.com/emoticon/33355/1" },
+            { "KEKW", "https://cdn.frankerfacez.com/emoticon/381875/1" },
+            { "monkaHmm", "https://cdn.frankerfacez.com/emoticon/240746/1" },
+            { "monkaS", "https://cdn.frankerfacez.com/emoticon/130762/1" },
+            { "monkaSpeed", "https://cdn.frankerfacez.com/emoticon/260557/1" },
+            { "monkaTOS", "https://cdn.frankerfacez.com/emoticon/237857/1" },
+            { "OMEGALUL", "https://cdn.frankerfacez.com/emoticon/128054/1" },
+            { "PepeHands", "https://cdn.frankerfacez.com/emoticon/231552/1" },
+            { "POGGERS", "https://cdn.frankerfacez.com/emoticon/214129/1" },
+            { "Stonks", "https://cdn.frankerfacez.com/emoticon/428011/1" },
+            { "weSmart", "https://cdn.frankerfacez.com/emoticon/165742/1" },
+            { "YEP", "https://cdn.frankerfacez.com/emoticon/418189/1" },
         };
     }
 
@@ -44,6 +61,13 @@ public class EmoteMessageBox : MonoBehaviour
     {
         StartCoroutine(this.ParseEmoteMessage(emoteMessage));
         StartCoroutine(this.DestroyMessageAfterDelay());
+    }
+
+    private bool IsEmote(string word)
+    {
+        return (word.Contains(EmoteMessageBox.TwitchEmoteUrlStub) || 
+            word.Contains(EmoteMessageBox.BTTVEmoteUrlStub) || 
+            word.Contains(EmoteMessageBox.FrankerFacezEmoteUrlStub));
     }
 
     public IEnumerator ParseEmoteMessage(string emoteMessage)
@@ -58,23 +82,31 @@ public class EmoteMessageBox : MonoBehaviour
         foreach (string currentWord in words)
         {
             //Is it an emote?
-            if (currentWord.Contains(EmoteUrlStub) /*|| this.IsBTTVEmote(currentWord)*/)
+            if (this.IsEmote(currentWord) || this.IsThirdPartyEmote(currentWord))
             {
                 GameObject newEmote = Instantiate(emoteBoxObject, this.currentChatLine.transform) as GameObject;
                 EmoteBox newEmoteBox = newEmote.GetComponent<EmoteBox>();
-                newEmoteBox.LoadEmote(currentWord);
 
+                if (this.thirdPartyEmoteDict.ContainsKey(currentWord))
+                {
+                    newEmoteBox.LoadEmote(this.thirdPartyEmoteDict[currentWord]);
+                }
+                else
+                {
+                    newEmoteBox.LoadEmote(currentWord);
+                }
+                
                 //Wait for emote to load
                 int maxAttempts = 100;
                 for (int i = 0; i < maxAttempts; i++)
                 {
-                    if (newEmoteBox.emoteImage.sprite != null)
+                    if (newEmoteBox.emoteImage.sprite != null || newEmoteBox.gifEmote != null)
                     {
                         break;
                     }
                     yield return null;
                 }
-
+                
                 yield return new WaitForSeconds(0.01f);
 
                 //Create a linebreak if the width of the parent rect gets exceeded
@@ -142,9 +174,9 @@ public class EmoteMessageBox : MonoBehaviour
         Destroy(this.gameObject);
     }
 
-    private bool IsBTTVEmote(string currentWord)
+    private bool IsThirdPartyEmote(string currentWord)
     {
-        return this.bttvEmoteUrls.ContainsKey(currentWord);
+        return (this.bttvEmoteNames.Contains(currentWord) || this.thirdPartyEmoteDict.ContainsKey(currentWord));
     }
 
     public void DestroyEarly()
