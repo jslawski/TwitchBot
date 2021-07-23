@@ -224,6 +224,8 @@ public class CabbageChatter : MonoBehaviour
         //this.shooterText.SetActive(true);
         StartCoroutine(this.ReduceShootCooldown());
         //Invoke("DisableParticleSystem", 1.0f);
+
+        this.gameObject.layer = LayerMask.NameToLayer("launchedCabbage");
     }
 
     private void DisableParticleSystem()
@@ -268,6 +270,13 @@ public class CabbageChatter : MonoBehaviour
             {
                 this.cabbageRigidbody.velocity = this.cabbageRigidbody.velocity.normalized * this.launchVelocity;
             }
+
+            this.gameObject.layer = LayerMask.NameToLayer("launchedCabbage");
+        }
+
+        if (collision.gameObject.CompareTag("floor"))
+        {
+            this.gameObject.layer = LayerMask.NameToLayer("cabbage");
         }
     }
 

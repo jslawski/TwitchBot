@@ -59,6 +59,7 @@ public class ChatManager : MonoBehaviour
     private AudioSource bballSource;
     private AudioClip[] bballHoopMusic;
     private GameObject[] bballLevels;
+    private GameObject activeBBallLevel;
 
     private const string ClipStub = "https://clips.twitch.tv/";
     private string recentClip = string.Empty;
@@ -443,9 +444,17 @@ public class ChatManager : MonoBehaviour
         shootModeActive = !shootModeActive;
         //this.hoopObject.SetActive(shootModeActive);
 
-        int levelIndex = 1;//UnityEngine.Random.Range(0, this.bballLevels.Length);
+        int levelIndex = UnityEngine.Random.Range(0, this.bballLevels.Length);
         GameObject randomLevel = this.bballLevels[levelIndex];
-        Instantiate(randomLevel, this.hoopObject.transform, false);
+
+        if (shootModeActive)
+        {
+            this.activeBBallLevel = Instantiate(randomLevel, this.hoopObject.transform, false) as GameObject;
+        }
+        else
+        {
+            Destroy(this.activeBBallLevel);
+        }
 
         this.leaderboardCanvas.SetActive(shootModeActive);
 
@@ -509,6 +518,11 @@ public class ChatManager : MonoBehaviour
         if (Application.isEditor && Input.GetKeyUp(KeyCode.F7))
         {
             this.ShowRecentClip();
+        }
+
+        if (Application.isEditor && Input.GetKeyUp(KeyCode.F3))
+        {
+            this.LaunchAllCabbages();
         }
     }
 
