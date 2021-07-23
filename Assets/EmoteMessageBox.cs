@@ -34,7 +34,7 @@ public class EmoteMessageBox : MonoBehaviour
 
     private void InitializeThirdPartyEmotes()
     {
-        this.bttvEmoteNames = new List<string>{"catJAM", "AquaTriggered", "LOADING", "dekuHYPE", "nutButton", "CouldYouNot", "OOOO", "Clap", "coffinPls", "pepeD"};
+        this.bttvEmoteNames = new List<string>{"catJAM", "AquaTriggered", "LOADING", "dekuHYPE", "nutButton", "CouldYouNot", "OOOO", "Clap", "coffinPls", "pepeD", "ddHuh"};
 
         this.thirdPartyEmoteDict = new Dictionary<string, string>
         {

@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Bounce
   - Bumper
+  - kill
   layers:
   - Default
   - TransparentFX
@@ -16,7 +17,7 @@ TagManager:
   - 
   - 
   - cabbage
-  - 
+  - kill
   - 
   - 
   - 

@@ -58,6 +58,7 @@ public class ChatManager : MonoBehaviour
     [SerializeField]
     private AudioSource bballSource;
     private AudioClip[] bballHoopMusic;
+    private GameObject[] bballLevels;
 
     private const string ClipStub = "https://clips.twitch.tv/";
     private string recentClip = string.Empty;
@@ -114,6 +115,8 @@ public class ChatManager : MonoBehaviour
             RawKeyInput.Start(true);
             RawKeyInput.OnKeyUp += HandleKeyUp;
         }
+
+        this.bballLevels = Resources.LoadAll<GameObject>("BBallLevels");
 
         StartCoroutine(this.RejoinHeartbeat());
     }
@@ -226,7 +229,15 @@ public class ChatManager : MonoBehaviour
         {
             if (this.chatterDict.ContainsKey(e.Command.ChatMessage.Username))
             {
-                this.chatterDict[e.Command.ChatMessage.Username].ShootCharacter(e.Command.ArgumentsAsString);
+                string chatUsername = e.Command.ChatMessage.Username.ToLower();
+                if (chatUsername == "coleslawski" || chatUsername == "ruddgasm" || chatUsername == "ruddpuddle" || chatUsername == "levanter_")
+                {
+                    StartCoroutine(DelayedShot(e.Command.ChatMessage.Username, e.Command.ArgumentsAsString));
+                }
+                else
+                {
+                    this.chatterDict[e.Command.ChatMessage.Username].ShootCharacter(e.Command.ArgumentsAsString);
+                }
             }
             else
             {
@@ -234,6 +245,15 @@ public class ChatManager : MonoBehaviour
                 this.chatterDict[e.Command.ChatMessage.Username].ShootCharacter(e.Command.ArgumentsAsString);
             }
         }
+    }
+
+    private IEnumerator DelayedShot(string username, string direction)
+    {
+        float randomDelay = UnityEngine.Random.Range(1.0f, 3.5f);
+
+        yield return new WaitForSeconds(randomDelay);
+
+        this.chatterDict[username].ShootCharacter(direction);
     }
 
     private void ProcessMessage(object sender, OnMessageReceivedArgs e)
@@ -310,11 +330,16 @@ public class ChatManager : MonoBehaviour
 
     private void RemoveCabbageChatter(object sender, OnUserLeftArgs e)
     {
-        if (this.chatterDict.ContainsKey(e.Username))
+        this.RemoveCabbage(e.Username);
+    }
+
+    public void RemoveCabbage(string username)
+    {
+        if (this.chatterDict.ContainsKey(username))
         {
-            Destroy(this.chatterDict[e.Username].gameObject);
-            currentActiveChatters.Remove(this.chatterDict[e.Username]);
-            this.chatterDict.Remove(e.Username);
+            Destroy(this.chatterDict[username].gameObject);
+            currentActiveChatters.Remove(this.chatterDict[username]);
+            this.chatterDict.Remove(username);
         }
     }
 
@@ -416,7 +441,12 @@ public class ChatManager : MonoBehaviour
     private void ToggleShootMode()
     {
         shootModeActive = !shootModeActive;
-        this.hoopObject.SetActive(shootModeActive);
+        //this.hoopObject.SetActive(shootModeActive);
+
+        int levelIndex = 1;//UnityEngine.Random.Range(0, this.bballLevels.Length);
+        GameObject randomLevel = this.bballLevels[levelIndex];
+        Instantiate(randomLevel, this.hoopObject.transform, false);
+
         this.leaderboardCanvas.SetActive(shootModeActive);
 
         if (shootModeActive)

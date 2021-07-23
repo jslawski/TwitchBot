@@ -35,11 +35,11 @@ public class BBallNet : MonoBehaviour
 
     private void InitiateScoreSequence(CabbageChatter scorer)
     {
-        this.scoreText.text = scorer.username.text + " Scored!";
         this.audienceAudio.Play();
         this.airhornAudio.Play();
         this.niceShotAudio.Play();
         scorer.shootScore++;
+        this.scoreText.text = scorer.username.text + " Scored!\n" + scorer.shootScore.ToString() + "pts";
         ChatManager.instance.chatterScoreHistory[scorer.username.text] = scorer.shootScore;
         Leaderboard.instance.UpdateLeaderboard(scorer);
 

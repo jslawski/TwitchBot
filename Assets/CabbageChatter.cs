@@ -110,7 +110,7 @@ public class CabbageChatter : MonoBehaviour
         }
         else if (this.chatterName.ToLower() == "cabbagegatekeeper")
         {
-            this.baseCabbage.sprite = Resources.Load<Sprite>("guard");
+            this.baseCabbage.sprite = Resources.Load<Sprite>("beefCat");
             return;
         }
         else if (this.chatterName.ToLower() == "roh_ka")
@@ -123,6 +123,21 @@ public class CabbageChatter : MonoBehaviour
             this.baseCabbage.sprite = Resources.Load<Sprite>("ninjaKanpai");
             return;
         }
+        else if (this.chatterName.ToLower() == "nickpea_and_thebean")
+        {
+            this.baseCabbage.sprite = Resources.Load<Sprite>("PeaCabbage");
+            return;
+        }
+        else if (this.chatterName.ToLower() == "cotmweasel")
+        {
+            this.baseCabbage.sprite = Resources.Load<Sprite>("gengar");
+            return;
+        }
+        /*else if (this.chatterName.ToLower() == "pomothedog")
+        {
+            this.baseCabbage.sprite = Resources.Load<Sprite>("pomo");
+            return;
+        }*/
 
         this.headPiece.sprite = CharacterCreator.instance.GetHeadpiece();
         this.eyeBrows.sprite = CharacterCreator.instance.GetEyebrows();
@@ -195,7 +210,7 @@ public class CabbageChatter : MonoBehaviour
         }
         else if (direction.ToLower().Contains("up"))
         {
-            xLaunchDirection = Random.Range(-0.3f, 0.3f);
+            xLaunchDirection = Random.Range(-0.4f, 0.4f);
         }
         else if (direction.ToLower().Contains("right"))
         {
@@ -248,6 +263,11 @@ public class CabbageChatter : MonoBehaviour
             Vector3 reflectNormal = collision.GetContact(0).normal;
             this.cabbageRigidbody.AddForce(reflectNormal * this.launchVelocity);
             collision.gameObject.GetComponent<AudioSource>().Play();
+
+            if (this.cabbageRigidbody.velocity.magnitude > this.launchVelocity)
+            {
+                this.cabbageRigidbody.velocity = this.cabbageRigidbody.velocity.normalized * this.launchVelocity;
+            }
         }
     }
 
@@ -276,6 +296,14 @@ public class CabbageChatter : MonoBehaviour
         foreach (EmoteMessageBox emoteMessageToDestroy in this.chatBoxObject.GetComponentsInChildren<EmoteMessageBox>())
         {
             emoteMessageToDestroy.DestroyEarly();
+        }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.tag == "kill")
+        {
+            ChatManager.instance.RemoveCabbage(this.username.text);
         }
     }
 }
