@@ -39,22 +39,16 @@ public class BBallNet : MonoBehaviour
         this.airhornAudio.Play();
         this.niceShotAudio.Play();
         scorer.shootScore++;
+
         this.scoreText.text = scorer.username.text + " Scored!\n" + scorer.shootScore.ToString() + "pts";
+
+        if (scorer.shootScore >= 10)
+        {
+            scorer.TriggerPrestige();
+        }
+
         ChatManager.instance.chatterScoreHistory[scorer.username.text] = scorer.shootScore;
         Leaderboard.instance.UpdateLeaderboard(scorer);
-
-        //Toggle crown if necessary
-        if (Leaderboard.instance.topLeaders[0].username.text == scorer.username.text)
-        {
-            //Activate crown on new leader
-            scorer.ActivateCrown();
-
-            //Deactivate crown on dethroned leader
-            if (ChatManager.instance.chatterDict.ContainsKey(Leaderboard.instance.topLeaders[1].username.text))
-            {
-                ChatManager.instance.chatterDict[Leaderboard.instance.topLeaders[1].username.text].DeactivateCrown();
-            }
-        }
 
         StopAllCoroutines();
         StartCoroutine(this.TurnOffScoreTextAfterDelay());

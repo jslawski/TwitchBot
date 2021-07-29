@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using TMPro;
-using TwitchLib.Client.Models;
 using UnityEngine;
 
 public class CabbageChatter : MonoBehaviour
@@ -15,6 +14,8 @@ public class CabbageChatter : MonoBehaviour
     public GameObject cabbageVisualHolder;
     public GameObject shooterText;
     public GameObject crown;
+    public GameObject prestigeBadge;
+    public TextMeshProUGUI prestigeText;
 
     //Character Creator Fields
     public SpriteRenderer headPiece;
@@ -47,6 +48,16 @@ public class CabbageChatter : MonoBehaviour
     private float shootCooldown = 3.0f;
 
     public int shootScore = 0;
+
+    public int prestigeLevel = 0;
+
+    [SerializeField]
+    private GameObject prestigeAnnouncement;
+
+    private float prestigeAnnouncementMinX = -18f;
+    private float prestigeAnnouncementMaxX = 18f;
+    private float prestigeAnnouncementMinY = -5f;
+    private float prestigeAnnouncementMaxY = 7f;
 
     [SerializeField]
     private GameObject shootParticleObject;
@@ -84,6 +95,12 @@ public class CabbageChatter : MonoBehaviour
     public void DeactivateCrown()
     {
         this.crown.SetActive(false);
+    }
+
+    public void UpdatePrestigeBadge()
+    {
+        this.prestigeBadge.SetActive(true);
+        this.prestigeText.text = this.prestigeLevel.ToString();
     }
 
     private void GenerateCharacter()
@@ -133,11 +150,11 @@ public class CabbageChatter : MonoBehaviour
             this.baseCabbage.sprite = Resources.Load<Sprite>("gengar");
             return;
         }
-        /*else if (this.chatterName.ToLower() == "pomothedog")
+        else if (this.chatterName.ToLower() == "pomothedog")
         {
             this.baseCabbage.sprite = Resources.Load<Sprite>("pomo");
             return;
-        }*/
+        }
 
         this.headPiece.sprite = CharacterCreator.instance.GetHeadpiece();
         this.eyeBrows.sprite = CharacterCreator.instance.GetEyebrows();
@@ -298,6 +315,22 @@ public class CabbageChatter : MonoBehaviour
     private Color GetRandomColor()
     {
         return new Color(Random.Range(0.0f, 1.0f), Random.Range(0.0f, 1.0f), Random.Range(0.0f, 1.0f), 1.0f);
+    }
+
+    public void TriggerPrestige()
+    {
+        this.prestigeLevel++;
+        this.shootScore = 0;
+        this.UpdatePrestigeBadge();
+
+        float randomX = Random.Range(this.prestigeAnnouncementMinX, this.prestigeAnnouncementMaxX);
+        float randomY = Random.Range(this.prestigeAnnouncementMinY, this.prestigeAnnouncementMaxY);
+
+        Vector3 spawnPoint = new Vector3(randomX, randomY, this.transform.position.z);
+
+        GameObject prestigeObject = Instantiate(this.prestigeAnnouncement, spawnPoint, new Quaternion());
+        PrestigeAnimation prestigeComponent = prestigeObject.GetComponent<PrestigeAnimation>();
+        prestigeComponent.SetCabbage(this);
     }
 
     private void OnDestroy()

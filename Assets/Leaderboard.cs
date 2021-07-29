@@ -77,6 +77,19 @@ public class Leaderboard : MonoBehaviour
             tempEntry.score = chatter.shootScore;
             this.UpdateCreatedEntry(tempEntry);
         }
+
+        this.UpdateCrown(chatter.username.text);
+    }
+
+    private void UpdateCrown(string scorerName)
+    {
+        if (ChatManager.instance.lastLeader != null)
+        {
+            ChatManager.instance.lastLeader.DeactivateCrown();
+        }
+
+        ChatManager.instance.chatterDict[this.topLeaders[0].username.text].ActivateCrown();
+        ChatManager.instance.lastLeader = ChatManager.instance.chatterDict[this.topLeaders[0].username.text];
     }
 
     private void InsertNewEntry(CabbageChatter chatter)

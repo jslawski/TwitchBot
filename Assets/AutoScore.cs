@@ -8,7 +8,7 @@ public class AutoScore : MonoBehaviour
     [SerializeField]
     private GameObject debugCanvas;
     [SerializeField]
-    private Transform hoopTransform;
+    private static Transform hoopTransform;
     [SerializeField]
     private InputField targetChatter;
 
@@ -35,14 +35,19 @@ public class AutoScore : MonoBehaviour
             return;
         }
 
-        selectedChatter.transform.position = new Vector3(this.hoopTransform.position.x, this.hoopTransform.position.y, selectedChatter.transform.position.z);
+        selectedChatter.transform.position = new Vector3(AutoScore.hoopTransform.position.x, AutoScore.hoopTransform.position.y, selectedChatter.transform.position.z);
     }
 
     public void AllAutoScore()
     {
         foreach (CabbageChatter chatter in ChatManager.instance.currentActiveChatters)
         {
-            chatter.gameObject.transform.position = new Vector3(this.hoopTransform.position.x, this.hoopTransform.position.y, chatter.gameObject.transform.position.z);
+            chatter.gameObject.transform.position = new Vector3(AutoScore.hoopTransform.position.x, AutoScore.hoopTransform.position.y, chatter.gameObject.transform.position.z);
         }
+    }
+
+    public static void SetHoopTransform(Transform hoop)
+    {
+        AutoScore.hoopTransform = hoop;
     }
 }

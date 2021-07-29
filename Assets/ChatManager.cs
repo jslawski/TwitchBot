@@ -61,6 +61,8 @@ public class ChatManager : MonoBehaviour
     private GameObject[] bballLevels;
     private GameObject activeBBallLevel;
 
+    public CabbageChatter lastLeader;
+
     private const string ClipStub = "https://clips.twitch.tv/";
     private string recentClip = string.Empty;
 
@@ -136,6 +138,11 @@ public class ChatManager : MonoBehaviour
         else if (key == RawKey.F3)
         {
             this.LaunchAllCabbages();
+        }
+
+        else if (key == RawKey.F12)
+        {
+            this.SendPlsLaugh();
         }
     }
 
@@ -450,6 +457,7 @@ public class ChatManager : MonoBehaviour
         if (shootModeActive)
         {
             this.activeBBallLevel = Instantiate(randomLevel, this.hoopObject.transform, false) as GameObject;
+            AutoScore.SetHoopTransform(GameObject.Find("bballhoop").transform);
         }
         else
         {
@@ -503,6 +511,11 @@ public class ChatManager : MonoBehaviour
         this.chatClient.SendMessage(TwitchSecrets.ChannelName, "!showClip " + this.recentClip);
     }
 
+    private void SendPlsLaugh()
+    {
+        this.chatClient.SendMessage(TwitchSecrets.ChannelName, "!plslaugh");
+    }
+
     private void Update()
     {
         if (this.chatterQueue.Count > 0 && this.readyForNextChatter == true)
@@ -523,6 +536,11 @@ public class ChatManager : MonoBehaviour
         if (Application.isEditor && Input.GetKeyUp(KeyCode.F3))
         {
             this.LaunchAllCabbages();
+        }
+
+        if (Application.isEditor && Input.GetKeyUp(KeyCode.F12))
+        {
+            this.SendPlsLaugh();
         }
     }
 
