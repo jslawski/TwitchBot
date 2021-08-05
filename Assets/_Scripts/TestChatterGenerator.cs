@@ -74,5 +74,21 @@ public class TestChatterGenerator : MonoBehaviour
         {
             ChatManager.instance.chatterScoreHistory.Add(cabbageChatter.chatterName, 0);
         }
+
+        //Do the same thing with prestige
+        if (ChatManager.instance.chatterPrestigeHistory.ContainsKey(cabbageChatter.chatterName))
+        {
+            cabbageChatter.prestigeLevel = ChatManager.instance.chatterPrestigeHistory[cabbageChatter.chatterName];
+
+            //Toggle prestige badge if player has one
+            if (cabbageChatter.prestigeLevel > 0)
+            {
+                cabbageChatter.UpdatePrestigeBadge();
+            }
+        }
+        else
+        {
+            ChatManager.instance.chatterPrestigeHistory.Add(cabbageChatter.chatterName, 0);
+        }
     }
 }

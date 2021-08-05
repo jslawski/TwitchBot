@@ -62,6 +62,8 @@ public class CabbageChatter : MonoBehaviour
     [SerializeField]
     private GameObject shootParticleObject;
 
+    private static float spawnDepth = -2.0f;
+
     private void Awake()
     {
         this.chatterColor = this.GetRandomColor();
@@ -107,52 +109,52 @@ public class CabbageChatter : MonoBehaviour
     {
         if (this.chatterName.ToLower() == "ruddgasm")
         {
-            this.baseCabbage.sprite = Resources.Load<Sprite>("charles");
+            this.baseCabbage.sprite = Resources.Load<Sprite>("CustomCabbages/charles");
             return;
         }
         else if (this.chatterName.ToLower() == "ruddpuddle")
         {
-            this.baseCabbage.sprite = Resources.Load<Sprite>("prisonMike");
+            this.baseCabbage.sprite = Resources.Load<Sprite>("CustomCabbages/prisonMike");
             return;
         }
         else if (this.chatterName.ToLower() == "levanter_")
         {
-            this.baseCabbage.sprite = Resources.Load<Sprite>("nicCage");
+            this.baseCabbage.sprite = Resources.Load<Sprite>("CustomCabbages/nicCage");
             return;
         }
         else if (this.chatterName.ToLower() == "coleslawski")
         {
-            this.baseCabbage.sprite = Resources.Load<Sprite>("SuperJaredBall");
+            this.baseCabbage.sprite = Resources.Load<Sprite>("CustomCabbages/SuperJaredBall");
             return;
         }
         else if (this.chatterName.ToLower() == "cabbagegatekeeper")
         {
-            this.baseCabbage.sprite = Resources.Load<Sprite>("beefCat");
+            this.baseCabbage.sprite = Resources.Load<Sprite>("CustomCabbages/beefCat");
             return;
         }
         else if (this.chatterName.ToLower() == "roh_ka")
         {
-            this.baseCabbage.sprite = Resources.Load<Sprite>("dampboi");
+            this.baseCabbage.sprite = Resources.Load<Sprite>("CustomCabbages/dampboi");
             return;
         }
         else if (this.chatterName.ToLower() == "safireninja")
         {
-            this.baseCabbage.sprite = Resources.Load<Sprite>("ninjaKanpai");
+            this.baseCabbage.sprite = Resources.Load<Sprite>("CustomCabbages/ninjaKanpai");
             return;
         }
         else if (this.chatterName.ToLower() == "nickpea_and_thebean")
         {
-            this.baseCabbage.sprite = Resources.Load<Sprite>("PeaCabbage");
+            this.baseCabbage.sprite = Resources.Load<Sprite>("CustomCabbages/PeaCabbage");
             return;
         }
         else if (this.chatterName.ToLower() == "cotmweasel")
         {
-            this.baseCabbage.sprite = Resources.Load<Sprite>("gengar");
+            this.baseCabbage.sprite = Resources.Load<Sprite>("CustomCabbages/gengar");
             return;
         }
         else if (this.chatterName.ToLower() == "pomothedog")
         {
-            this.baseCabbage.sprite = Resources.Load<Sprite>("pomo");
+            this.baseCabbage.sprite = Resources.Load<Sprite>("CustomCabbages/pomo");
             return;
         }
 
@@ -326,11 +328,13 @@ public class CabbageChatter : MonoBehaviour
         float randomX = Random.Range(this.prestigeAnnouncementMinX, this.prestigeAnnouncementMaxX);
         float randomY = Random.Range(this.prestigeAnnouncementMinY, this.prestigeAnnouncementMaxY);
 
-        Vector3 spawnPoint = new Vector3(randomX, randomY, this.transform.position.z);
+        Vector3 spawnPoint = new Vector3(randomX, randomY, CabbageChatter.spawnDepth);
 
         GameObject prestigeObject = Instantiate(this.prestigeAnnouncement, spawnPoint, new Quaternion());
         PrestigeAnimation prestigeComponent = prestigeObject.GetComponent<PrestigeAnimation>();
         prestigeComponent.SetCabbage(this);
+
+        CabbageChatter.spawnDepth -= 0.01f;
     }
 
     private void OnDestroy()

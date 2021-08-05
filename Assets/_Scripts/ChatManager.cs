@@ -29,6 +29,9 @@ public class ChatManager : MonoBehaviour
 
     public Dictionary<string, CabbageChatter> chatterDict;
     public Dictionary<string, int> chatterScoreHistory;
+    //TODO: Get rid of this.  Keep track of total score and do prestige/leaderboard calculations
+    //      based on the total score % 10
+    public Dictionary<string, int> chatterPrestigeHistory;
 
     Dictionary<string, int> wheelWeights;
     public DrinkWheel currentDrinkWheel;
@@ -103,6 +106,7 @@ public class ChatManager : MonoBehaviour
 
         this.chatterDict = new Dictionary<string, CabbageChatter>();
         this.chatterScoreHistory = new Dictionary<string, int>();
+        this.chatterPrestigeHistory = new Dictionary<string, int>();
         this.currentActiveChatters = new List<CabbageChatter>();
         this.chatterQueue = new Queue<CabbageChatter>();
 
@@ -257,7 +261,7 @@ public class ChatManager : MonoBehaviour
 
     private IEnumerator DelayedShot(string username, string direction)
     {
-        float randomDelay = UnityEngine.Random.Range(1.0f, 3.5f);
+        float randomDelay = UnityEngine.Random.Range(1.0f, 2.5f);
 
         yield return new WaitForSeconds(randomDelay);
 
@@ -321,6 +325,22 @@ public class ChatManager : MonoBehaviour
         else
         {
             this.chatterScoreHistory.Add(cabbageChatter.chatterName, 0);
+        }
+
+        //Do the same thing with prestige
+        if (this.chatterPrestigeHistory.ContainsKey(cabbageChatter.chatterName))
+        {
+            cabbageChatter.prestigeLevel = this.chatterPrestigeHistory[cabbageChatter.chatterName];
+
+            //Toggle prestige badge if player has one
+            if (cabbageChatter.prestigeLevel > 0)
+            {
+                cabbageChatter.UpdatePrestigeBadge();
+            }
+        }
+        else
+        {
+            this.chatterPrestigeHistory.Add(cabbageChatter.chatterName, 0);
         }
     }
 

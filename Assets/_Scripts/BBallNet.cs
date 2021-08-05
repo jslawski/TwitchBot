@@ -48,6 +48,7 @@ public class BBallNet : MonoBehaviour
         }
 
         ChatManager.instance.chatterScoreHistory[scorer.username.text] = scorer.shootScore;
+        ChatManager.instance.chatterPrestigeHistory[scorer.username.text] = scorer.prestigeLevel;
         Leaderboard.instance.UpdateLeaderboard(scorer);
 
         StopAllCoroutines();
