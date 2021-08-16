@@ -16,6 +16,7 @@ public class CabbageChatter : MonoBehaviour
     public GameObject crown;
     public GameObject prestigeBadge;
     public TextMeshProUGUI prestigeText;
+    public GameObject magnifyingGlass;
 
     //Character Creator Fields
     public SpriteRenderer headPiece;
@@ -39,6 +40,7 @@ public class CabbageChatter : MonoBehaviour
     const int MaxChatMessagesVisable = 3;
 
     private List<string> rerollPhrases;
+    private List<string> hmmPhrases;
 
     private float layerGapAmount = 0.01f;
 
@@ -64,6 +66,9 @@ public class CabbageChatter : MonoBehaviour
 
     private static float spawnDepth = -2.0f;
 
+    [SerializeField]
+    private GameObject deathEffect;
+
     private void Awake()
     {
         this.chatterColor = this.GetRandomColor();
@@ -81,6 +86,22 @@ public class CabbageChatter : MonoBehaviour
             "One handome new cabbage, coming right up!",
             "Oh god, is this worse?",
             "Please let this one be okay, this is giving me an existential crisis"
+        };
+
+        this.hmmPhrases = new List<string>()
+        {
+            "HOW INTERESTING",
+            "Let's get a closer look at that...",
+            "AHA!!",
+            "E N H A N C E",
+            "Detective Mode: ACTIVATE!",
+            "Stand aside, and leave this to a professional.",
+            "Let's have a look...",
+            "Oooohhhh, fascinating!",
+            "I've never seen something like THIS before!",
+            "Now what do we have here...",
+            "Is that what I think it is?",
+            "Oh my, what is THAT?"
         };
     }
 
@@ -337,6 +358,16 @@ public class CabbageChatter : MonoBehaviour
         CabbageChatter.spawnDepth -= 0.01f;
     }
 
+    public void ToggleMagnifyingGlass()
+    {
+        this.magnifyingGlass.SetActive(!this.magnifyingGlass.activeSelf);
+
+        if (this.magnifyingGlass.activeSelf == true)
+        {
+            this.DisplayChatMessage(this.chatterName, this.hmmPhrases[Random.Range(0, this.hmmPhrases.Count)]);
+        }
+    }
+
     private void OnDestroy()
     {
         foreach (EmoteMessageBox emoteMessageToDestroy in this.chatBoxObject.GetComponentsInChildren<EmoteMessageBox>())
@@ -349,7 +380,26 @@ public class CabbageChatter : MonoBehaviour
     {
         if (other.tag == "kill")
         {
-            ChatManager.instance.RemoveCabbage(this.username.text);
+            this.KillCabbage();
         }
+    }
+
+    private void KillCabbage()
+    {
+        Vector3 orientationVector = -this.gameObject.transform.position;
+
+        RaycastHit hit;
+
+        int layerMask = LayerMask.GetMask("KillEffectCollider");
+
+        Physics.Raycast(this.gameObject.transform.position, orientationVector, out hit, Mathf.Infinity, layerMask);
+
+        Vector3 instantiationPoint = hit.point;
+
+        GameObject deathEffectObject = Instantiate(this.deathEffect, instantiationPoint, new Quaternion()) as GameObject;
+
+        deathEffectObject.transform.up = orientationVector;
+
+        ChatManager.instance.RemoveCabbage(this.username.text);
     }
 }

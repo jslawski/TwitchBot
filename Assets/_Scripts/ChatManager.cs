@@ -69,6 +69,8 @@ public class ChatManager : MonoBehaviour
     private const string ClipStub = "https://clips.twitch.tv/";
     private string recentClip = string.Empty;
 
+    private List<string> cabbageCodeVictors;
+
     // Start is called before the first frame update
     void Awake()
     {
@@ -125,6 +127,8 @@ public class ChatManager : MonoBehaviour
 
         this.bballLevels = Resources.LoadAll<GameObject>("BBallLevels");
 
+        this.InitializeCabbageCodeVictors();
+
         StartCoroutine(this.RejoinHeartbeat());
     }
 
@@ -148,6 +152,19 @@ public class ChatManager : MonoBehaviour
         {
             this.SendPlsLaugh();
         }
+
+        if (key == RawKey.M && shootModeActive)
+        {
+            if (this.bballSource.isPlaying)
+            {
+                this.bballSource.Stop();
+            }
+            else
+            {
+                this.bballSource.Play();    
+            }
+        }
+
     }
 
     private void PubSubConnected(object sender, System.EventArgs e)
@@ -256,6 +273,11 @@ public class ChatManager : MonoBehaviour
                 this.SpawnNewChatter(e.Command.ChatMessage);
                 this.chatterDict[e.Command.ChatMessage.Username].ShootCharacter(e.Command.ArgumentsAsString);
             }
+        }
+
+        if (e.Command.CommandText.ToLower().Contains("hmm"))
+        {
+            this.ActivateHmmCommand(e.Command.ChatMessage);
         }
     }
 
@@ -534,6 +556,33 @@ public class ChatManager : MonoBehaviour
     private void SendPlsLaugh()
     {
         this.chatClient.SendMessage(TwitchSecrets.ChannelName, "!plslaugh");
+    }
+
+    private void InitializeCabbageCodeVictors()
+    {
+        this.cabbageCodeVictors = new List<string> { "coleslawski", "ruddgasm", "ruddpuddle", "brainoidgames", "pomothedog", "spacey3d", "johngames", "roh_ka", "nickpea_and_thebean", "rookrules", "doctor_denny", "honestdangames" };
+    }
+
+    private void ActivateHmmCommand(ChatMessage activateMessage)
+    {
+        string chatUsername = activateMessage.Username.ToLower();
+
+        if (this.cabbageCodeVictors.Contains(chatUsername))
+        {
+            if (this.chatterDict.ContainsKey(chatUsername))
+            {
+                    this.chatterDict[chatUsername].ToggleMagnifyingGlass();
+            }
+            else
+            {
+                this.SpawnNewChatter(activateMessage);
+                this.chatterDict[chatUsername].ToggleMagnifyingGlass();
+            }
+        }
+        else
+        {
+            this.chatClient.SendMessage(TwitchSecrets.ChannelName, "@" + chatUsername + " ACCESS DENIED! If you would access to this command, then you must solve the Cabbage Code at: https://jared-slawski.itch.io/the-cabbage-code");
+        }
     }
 
     private void Update()

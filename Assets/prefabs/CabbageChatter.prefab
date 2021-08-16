@@ -10941,6 +10941,7 @@ MonoBehaviour:
   crown: {fileID: 8917837804558314087}
   prestigeBadge: {fileID: 1792477245747012111}
   prestigeText: {fileID: 6322437161660637547}
+  magnifyingGlass: {fileID: 4717158531017442178}
   headPiece: {fileID: 2044002785489438088}
   eyeBrows: {fileID: 1164855262840980166}
   eyes: {fileID: 3313334447251904257}
@@ -10955,6 +10956,8 @@ MonoBehaviour:
   prestigeAnnouncement: {fileID: 3318636820637576507, guid: 31e7c096670cf504181f3e3edb975f68,
     type: 3}
   shootParticleObject: {fileID: 7999887933340692989}
+  deathEffect: {fileID: 5891589686819358219, guid: 39cc70c5202e04a45909971797f1fdac,
+    type: 3}
 --- !u!54 &1389817806519313973
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -11019,9 +11022,9 @@ RectTransform:
   m_Father: {fileID: 2049244825204971823}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 250, y: -100}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 250, y: 0}
   m_SizeDelta: {x: 241.1, y: 0}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!222 &6955807680222993146
