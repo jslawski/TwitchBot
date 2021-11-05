@@ -88,8 +88,8 @@ public class Leaderboard : MonoBehaviour
             ChatManager.instance.lastLeader.DeactivateCrown();
         }
 
-        ChatManager.instance.chatterDict[this.topLeaders[0].username.text].ActivateCrown();
-        ChatManager.instance.lastLeader = ChatManager.instance.chatterDict[this.topLeaders[0].username.text];
+        ChatManager.instance.chatterDict[this.topLeaders[0].username.text.ToLower()].ActivateCrown();
+        ChatManager.instance.lastLeader = ChatManager.instance.chatterDict[this.topLeaders[0].username.text.ToLower()];
     }
 
     private void InsertNewEntry(CabbageChatter chatter)

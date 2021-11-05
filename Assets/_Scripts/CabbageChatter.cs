@@ -33,6 +33,8 @@ public class CabbageChatter : MonoBehaviour
     private float maxXVelocity = 1500f;
     private float initialYVelocity = 400f;
     private float launchVelocity = 4000f;
+    private float nukeVelocity = 7000f;
+    private float arcForce = 0.15f;
 
     private Color chatterColor;
     public string chatterName;
@@ -176,6 +178,16 @@ public class CabbageChatter : MonoBehaviour
         else if (this.chatterName.ToLower() == "pomothedog")
         {
             this.baseCabbage.sprite = Resources.Load<Sprite>("CustomCabbages/pomo");
+            return;
+        }
+        else if (this.chatterName.ToLower() == "itsboats")
+        {
+            this.baseCabbage.sprite = Resources.Load<Sprite>("CustomCabbages/boatLizard");
+            return;
+        }
+        else if (this.chatterName.ToLower() == "rookrules")
+        {
+            this.baseCabbage.sprite = Resources.Load<Sprite>("CustomCabbages/rook");
             return;
         }
 
@@ -368,6 +380,31 @@ public class CabbageChatter : MonoBehaviour
         }
     }
 
+    public void NukeCabbage()
+    {
+        float xLaunchDirection = Random.Range(-0.5f, 0.5f);
+
+        float yLaunchDirection = Random.Range(0.8f, 1.0f);
+        this.cabbageRigidbody.AddForce(new Vector3(xLaunchDirection, yLaunchDirection, 0f) * this.nukeVelocity);
+        this.shootParticleObject.SetActive(true);
+        this.gameObject.layer = LayerMask.NameToLayer("NukedCabbage");
+
+        StartCoroutine(this.ApplyArcForce());
+    }
+
+    private IEnumerator ApplyArcForce()
+    {
+        yield return new WaitForFixedUpdate();
+
+        float directionalArcForce = (this.cabbageRigidbody.velocity.x > 0) ? -this.arcForce : this.arcForce;
+
+        while (true)
+        {
+            this.cabbageRigidbody.AddForce(Quaternion.Euler(0, 0, 90) * this.cabbageRigidbody.velocity * directionalArcForce);
+            yield return null;
+        }
+    }
+
     private void OnDestroy()
     {
         foreach (EmoteMessageBox emoteMessageToDestroy in this.chatBoxObject.GetComponentsInChildren<EmoteMessageBox>())
@@ -386,6 +423,10 @@ public class CabbageChatter : MonoBehaviour
 
     private void KillCabbage()
     {
+        this.shootParticleObject.transform.parent = null;
+        ParticleSystem.MainModule mainParticles = this.shootParticleObject.GetComponent<ParticleSystem>().main;
+        mainParticles.loop = false;
+
         Vector3 orientationVector = -this.gameObject.transform.position;
 
         RaycastHit hit;

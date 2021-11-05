@@ -25,11 +25,11 @@ public class TestChatterGenerator : MonoBehaviour
         {
             string chatterName = ("TestCabbage" + i.ToString()).ToLower();
 
-            if (ChatManager.instance.chatterDict.ContainsKey(chatterName))
+            if (ChatManager.instance.chatterDict.ContainsKey(chatterName.ToLower()))
             {
-                Destroy(ChatManager.instance.chatterDict[chatterName].gameObject);
-                ChatManager.instance.currentActiveChatters.Remove(ChatManager.instance.chatterDict[chatterName]);
-                ChatManager.instance.chatterDict.Remove(chatterName);
+                Destroy(ChatManager.instance.chatterDict[chatterName.ToLower()].gameObject);
+                ChatManager.instance.currentActiveChatters.Remove(ChatManager.instance.chatterDict[chatterName.ToLower()]);
+                ChatManager.instance.chatterDict.Remove(chatterName.ToLower());
             }
         }
     }
@@ -50,7 +50,7 @@ public class TestChatterGenerator : MonoBehaviour
         Vector3 instantiationPosition = new Vector3(randomXPosition, ChatManager.instance.spawnBoundaries.transform.position.y, 0f);
         GameObject newChatter = Instantiate(ChatManager.instance.cabbageChatterPrefab, instantiationPosition, new Quaternion(), ChatManager.instance.parentChat.transform) as GameObject;
         CabbageChatter cabbageChatter = newChatter.GetComponent<CabbageChatter>();
-        ChatManager.instance.chatterDict.Add(chatterName, cabbageChatter);
+        ChatManager.instance.chatterDict.Add(chatterName.ToLower(), cabbageChatter);
         ChatManager.instance.currentActiveChatters.Add(cabbageChatter);
         ChatManager.instance.chatterQueue.Enqueue(cabbageChatter);
 

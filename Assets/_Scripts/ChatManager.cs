@@ -114,10 +114,11 @@ public class ChatManager : MonoBehaviour
 
         SetupWheelDict();
 
-        if (!Application.isEditor)
+        /*if (!Application.isEditor)
         {
             this.bballHoopMusic = Resources.LoadAll<AudioClip>("BBallMusic");
         }
+        */
 
         if (!Application.isEditor)
         {
@@ -153,7 +154,7 @@ public class ChatManager : MonoBehaviour
             this.SendPlsLaugh();
         }
 
-        if (key == RawKey.M && shootModeActive)
+        /*if (key == RawKey.M && shootModeActive)
         {
             if (this.bballSource.isPlaying)
             {
@@ -164,7 +165,7 @@ public class ChatManager : MonoBehaviour
                 this.bballSource.Play();    
             }
         }
-
+        */
     }
 
     private void PubSubConnected(object sender, System.EventArgs e)
@@ -198,6 +199,10 @@ public class ChatManager : MonoBehaviour
         else if (e.RewardId.ToString() == TwitchSecrets.AlwaysSunnyRewardID)
         {
             this.InitiateAlwaysSunny(e.Message);
+        }
+        else if (e.RewardId.ToString() == TwitchSecrets.NukeCabbageRewardID)
+        {
+            this.NukeCabbage(e.DisplayName, e.Message);
         }
     }
 
@@ -242,21 +247,26 @@ public class ChatManager : MonoBehaviour
             {
                 this.LaunchAllCabbages();
             }
+
+            if (e.Command.CommandText.ToLower().Contains("nuke"))
+            {
+                this.NukeCabbage("coleslawski", e.Command.ArgumentsAsString);
+            }
         }
 
-        if (e.Command.ChatMessage.UserId == "51114479" && e.Command.CommandText.ToLower().Contains("shots"))
+        if ((e.Command.ChatMessage.UserId == "51114479" || e.Command.ChatMessage.Username.ToLower() == "coleslawski") && e.Command.CommandText.ToLower().Contains("shots"))
         {
             this.InitiateShotsHype();
         }
 
-        if (this.chatterDict.ContainsKey(e.Command.ChatMessage.Username) && e.Command.CommandText.ToLower().Contains("cabbage"))
+        if (this.chatterDict.ContainsKey(e.Command.ChatMessage.Username.ToLower()) && e.Command.CommandText.ToLower().Contains("cabbage"))
         {
-            this.chatterDict[e.Command.ChatMessage.Username].RerollCharacter();
+            this.chatterDict[e.Command.ChatMessage.Username.ToLower()].RerollCharacter();
         }
 
         if (e.Command.CommandText.ToLower().Contains("shoot") && shootModeActive == true)
         {
-            if (this.chatterDict.ContainsKey(e.Command.ChatMessage.Username))
+            if (this.chatterDict.ContainsKey(e.Command.ChatMessage.Username.ToLower()))
             {
                 string chatUsername = e.Command.ChatMessage.Username.ToLower();
                 if (chatUsername == "coleslawski" || chatUsername == "ruddgasm" || chatUsername == "ruddpuddle" || chatUsername == "levanter_")
@@ -265,13 +275,13 @@ public class ChatManager : MonoBehaviour
                 }
                 else
                 {
-                    this.chatterDict[e.Command.ChatMessage.Username].ShootCharacter(e.Command.ArgumentsAsString);
+                    this.chatterDict[e.Command.ChatMessage.Username.ToLower()].ShootCharacter(e.Command.ArgumentsAsString);
                 }
             }
             else
             {
                 this.SpawnNewChatter(e.Command.ChatMessage);
-                this.chatterDict[e.Command.ChatMessage.Username].ShootCharacter(e.Command.ArgumentsAsString);
+                this.chatterDict[e.Command.ChatMessage.Username.ToLower()].ShootCharacter(e.Command.ArgumentsAsString);
             }
         }
 
@@ -287,7 +297,7 @@ public class ChatManager : MonoBehaviour
 
         yield return new WaitForSeconds(randomDelay);
 
-        this.chatterDict[username].ShootCharacter(direction);
+        this.chatterDict[username.ToLower()].ShootCharacter(direction);
     }
 
     private void ProcessMessage(object sender, OnMessageReceivedArgs e)
@@ -307,10 +317,10 @@ public class ChatManager : MonoBehaviour
             this.GrabClipLink(e.ChatMessage.Message);
         }
 
-        if (this.chatterDict.ContainsKey(e.ChatMessage.Username))
+        if (this.chatterDict.ContainsKey(e.ChatMessage.Username.ToLower()))
         {
-            this.chatterDict[e.ChatMessage.Username].DisplayChatMessage(e.ChatMessage.Username, this.GetProperMessage(e.ChatMessage));
-            this.chatterQueue.Enqueue(this.chatterDict[e.ChatMessage.Username]);
+            this.chatterDict[e.ChatMessage.Username.ToLower()].DisplayChatMessage(e.ChatMessage.Username, this.GetProperMessage(e.ChatMessage));
+            this.chatterQueue.Enqueue(this.chatterDict[e.ChatMessage.Username.ToLower()]);
         }
         else //Create a new cabbage chatter
         {
@@ -324,7 +334,8 @@ public class ChatManager : MonoBehaviour
         Vector3 instantiationPosition = new Vector3(randomXPosition, spawnBoundaries.transform.position.y, 0f);
         GameObject newChatter = Instantiate(cabbageChatterPrefab, instantiationPosition, new Quaternion(), this.parentChat.transform) as GameObject;
         CabbageChatter cabbageChatter = newChatter.GetComponent<CabbageChatter>();
-        this.chatterDict.Add(newChatterMessage.Username, cabbageChatter);
+        this.chatterDict.Add(newChatterMessage.Username.ToLower(), cabbageChatter);
+        Debug.LogError("New Chatter Dict Key: " + newChatterMessage.Username.ToLower());
         this.currentActiveChatters.Add(cabbageChatter);
         this.chatterQueue.Enqueue(cabbageChatter);
 
@@ -385,11 +396,11 @@ public class ChatManager : MonoBehaviour
 
     public void RemoveCabbage(string username)
     {
-        if (this.chatterDict.ContainsKey(username))
+        if (this.chatterDict.ContainsKey(username.ToLower()))
         {
-            Destroy(this.chatterDict[username].gameObject);
-            currentActiveChatters.Remove(this.chatterDict[username]);
-            this.chatterDict.Remove(username);
+            Destroy(this.chatterDict[username.ToLower()].gameObject);
+            currentActiveChatters.Remove(this.chatterDict[username.ToLower()]);
+            this.chatterDict.Remove(username.ToLower());
         }
     }
 
@@ -569,20 +580,51 @@ public class ChatManager : MonoBehaviour
 
         if (this.cabbageCodeVictors.Contains(chatUsername))
         {
-            if (this.chatterDict.ContainsKey(chatUsername))
+            if (this.chatterDict.ContainsKey(chatUsername.ToLower()))
             {
-                    this.chatterDict[chatUsername].ToggleMagnifyingGlass();
+                    this.chatterDict[chatUsername.ToLower()].ToggleMagnifyingGlass();
             }
             else
             {
                 this.SpawnNewChatter(activateMessage);
-                this.chatterDict[chatUsername].ToggleMagnifyingGlass();
+                this.chatterDict[chatUsername.ToLower()].ToggleMagnifyingGlass();
             }
         }
         else
         {
             this.chatClient.SendMessage(TwitchSecrets.ChannelName, "@" + chatUsername + " ACCESS DENIED! If you would access to this command, then you must solve the Cabbage Code at: https://jared-slawski.itch.io/the-cabbage-code");
         }
+    }
+
+    private void NukeCabbage(string attacker, string target)
+    {
+        Debug.LogError("Attacker: " + attacker + " Target: " + target);
+
+        string targetNoAt = target;
+        if (target.Contains("@"))
+        {
+            targetNoAt = target.Substring(1).ToLower();
+            if (targetNoAt.Contains(" "))
+            {
+                targetNoAt = targetNoAt.Remove(targetNoAt.Length - 1);
+            }
+        }
+
+        if (this.chatterDict.ContainsKey(targetNoAt))
+        {
+            this.chatterDict[targetNoAt].NukeCabbage();
+
+            if (attacker == targetNoAt)
+            {
+                this.chatClient.SendMessage(TwitchSecrets.ChannelName, "@" + attacker + " nuked themselves!");
+            }
+            else
+            {
+                this.chatClient.SendMessage(TwitchSecrets.ChannelName, "@" + attacker + " nuked " + target);
+            }
+        }
+
+        
     }
 
     private void Update()
