@@ -130,64 +130,15 @@ public class CabbageChatter : MonoBehaviour
 
     private void GenerateCharacter()
     {
-        if (this.chatterName.ToLower() == "ruddgasm")
+        if (ChatManager.instance.mjTime == true)
         {
-            this.baseCabbage.sprite = Resources.Load<Sprite>("CustomCabbages/charles");
+            this.baseCabbage.sprite = Resources.Load <Sprite>("CustomCabbages/michaelJordan");
             return;
         }
-        else if (this.chatterName.ToLower() == "ruddpuddle")
+
+        if (ChatManager.instance.customCabbageSpriteNames.Contains(this.chatterName.ToLower()))
         {
-            this.baseCabbage.sprite = Resources.Load<Sprite>("CustomCabbages/prisonMike");
-            return;
-        }
-        else if (this.chatterName.ToLower() == "levanter_")
-        {
-            this.baseCabbage.sprite = Resources.Load<Sprite>("CustomCabbages/nicCage");
-            return;
-        }
-        else if (this.chatterName.ToLower() == "coleslawski")
-        {
-            this.baseCabbage.sprite = Resources.Load<Sprite>("CustomCabbages/SuperJaredBall");
-            return;
-        }
-        else if (this.chatterName.ToLower() == "cabbagegatekeeper")
-        {
-            this.baseCabbage.sprite = Resources.Load<Sprite>("CustomCabbages/beefCat");
-            return;
-        }
-        else if (this.chatterName.ToLower() == "roh_ka")
-        {
-            this.baseCabbage.sprite = Resources.Load<Sprite>("CustomCabbages/dampboi");
-            return;
-        }
-        else if (this.chatterName.ToLower() == "safireninja")
-        {
-            this.baseCabbage.sprite = Resources.Load<Sprite>("CustomCabbages/ninjaKanpai");
-            return;
-        }
-        else if (this.chatterName.ToLower() == "nickpea_and_thebean")
-        {
-            this.baseCabbage.sprite = Resources.Load<Sprite>("CustomCabbages/PeaCabbage");
-            return;
-        }
-        else if (this.chatterName.ToLower() == "cotmweasel")
-        {
-            this.baseCabbage.sprite = Resources.Load<Sprite>("CustomCabbages/gengar");
-            return;
-        }
-        else if (this.chatterName.ToLower() == "pomothedog")
-        {
-            this.baseCabbage.sprite = Resources.Load<Sprite>("CustomCabbages/pomo");
-            return;
-        }
-        else if (this.chatterName.ToLower() == "itsboats")
-        {
-            this.baseCabbage.sprite = Resources.Load<Sprite>("CustomCabbages/boatLizard");
-            return;
-        }
-        else if (this.chatterName.ToLower() == "rookrules")
-        {
-            this.baseCabbage.sprite = Resources.Load<Sprite>("CustomCabbages/rook");
+            this.baseCabbage.sprite = Resources.Load<Sprite>("CustomCabbages/" + this.chatterName.ToLower());
             return;
         }
 

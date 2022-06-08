@@ -71,6 +71,10 @@ public class ChatManager : MonoBehaviour
 
     private List<string> cabbageCodeVictors;
 
+    public bool mjTime = false;
+
+    public List<string> customCabbageSpriteNames;
+
     // Start is called before the first frame update
     void Awake()
     {
@@ -125,12 +129,39 @@ public class ChatManager : MonoBehaviour
             RawKeyInput.Start(true);
             RawKeyInput.OnKeyUp += HandleKeyUp;
         }
-
+        
         this.bballLevels = Resources.LoadAll<GameObject>("BBallLevels");
 
         this.InitializeCabbageCodeVictors();
 
         StartCoroutine(this.RejoinHeartbeat());
+    }
+
+    private void Start()
+    {
+        this.CreateCustomCabbageList();
+    }
+
+    private void CreateCustomCabbageList()
+    {
+        this.customCabbageSpriteNames = new List<string>();
+        this.customCabbageSpriteNames.Add("ruddgasm");
+        this.customCabbageSpriteNames.Add("ruddpuddle");
+        this.customCabbageSpriteNames.Add("levanter_");
+        this.customCabbageSpriteNames.Add("coleslawski");
+        this.customCabbageSpriteNames.Add("cabbagegatekeeper");
+        this.customCabbageSpriteNames.Add("roh_ka");
+        this.customCabbageSpriteNames.Add("safireninja");
+        this.customCabbageSpriteNames.Add("nickpea_and_thebean");
+        this.customCabbageSpriteNames.Add("cotmweasel");
+        this.customCabbageSpriteNames.Add("pomothedog");
+        this.customCabbageSpriteNames.Add("itsboats");
+        this.customCabbageSpriteNames.Add("rookrules");
+        this.customCabbageSpriteNames.Add("doctor_denny");
+        this.customCabbageSpriteNames.Add("dalbusg");
+        this.customCabbageSpriteNames.Add("mastyff");
+        this.customCabbageSpriteNames.Add("chrisvsbacklog");
+        this.customCabbageSpriteNames.Add("thejackalanimatronic");
     }
 
     private void HandleKeyUp(RawKey key)
@@ -154,7 +185,7 @@ public class ChatManager : MonoBehaviour
             this.SendPlsLaugh();
         }
 
-        /*if (key == RawKey.M && shootModeActive)
+        if (key == RawKey.M && shootModeActive)
         {
             if (this.bballSource.isPlaying)
             {
@@ -165,7 +196,7 @@ public class ChatManager : MonoBehaviour
                 this.bballSource.Play();    
             }
         }
-        */
+        
     }
 
     private void PubSubConnected(object sender, System.EventArgs e)
@@ -252,9 +283,14 @@ public class ChatManager : MonoBehaviour
             {
                 this.NukeCabbage("coleslawski", e.Command.ArgumentsAsString);
             }
+
+            if (e.Command.CommandText.ToLower().Contains("slam"))
+            {
+                this.ToggleMJ();
+            }
         }
 
-        if ((e.Command.ChatMessage.UserId == "51114479" || e.Command.ChatMessage.Username.ToLower() == "coleslawski") && e.Command.CommandText.ToLower().Contains("shots"))
+        if ((e.Command.ChatMessage.Username.ToLower() == "safireninja" || e.Command.ChatMessage.Username.ToLower() == "coleslawski") && e.Command.CommandText.ToLower().Contains("shot"))
         {
             this.InitiateShotsHype();
         }
@@ -521,13 +557,13 @@ public class ChatManager : MonoBehaviour
 
         if (shootModeActive)
         {
-            if (!Application.isEditor)
+            /*if (!Application.isEditor)
             {
                 int audioClipIndex = UnityEngine.Random.Range(0, this.bballHoopMusic.Length);
                 this.bballSource.clip = this.bballHoopMusic[audioClipIndex];
                 bballSource.Play();
             }
-
+            */
             this.bounceMaterial.bounciness = 0.75f;
         }
         else
@@ -598,8 +634,6 @@ public class ChatManager : MonoBehaviour
 
     private void NukeCabbage(string attacker, string target)
     {
-        Debug.LogError("Attacker: " + attacker + " Target: " + target);
-
         string targetNoAt = target;
         if (target.Contains("@"))
         {
@@ -625,6 +659,16 @@ public class ChatManager : MonoBehaviour
         }
 
         
+    }
+
+    private void ToggleMJ()
+    {
+        foreach (CabbageChatter chatter in this.currentActiveChatters)
+        {
+            chatter.NukeCabbage();
+        }
+
+        this.mjTime = !this.mjTime;
     }
 
     private void Update()

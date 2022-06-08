@@ -10,6 +10,9 @@ public class BBallHoop : MonoBehaviour
     [SerializeField]
     private Transform hoopTransform;
 
+    public bool vertical = false;
+    private float maxYExtents = 20f;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -21,15 +24,31 @@ public class BBallHoop : MonoBehaviour
     {
         if (ChatManager.shootModeActive)
         {
-            float targetXPosition = this.currentDirection * this.maxXExtents;
-            Vector3 targetPosition = new Vector3(targetXPosition, this.hoopTransform.position.y, this.hoopTransform.position.z);
-
-            this.hoopTransform.Translate((targetPosition - this.hoopTransform.position).normalized * this.hoopMoveSpeed * Time.fixedDeltaTime);
-            //this.hoopTransform.position = Vector3.Lerp(this.hoopTransform.position, targetPosition, Time.fixedDeltaTime * this.hoopMoveSpeed);
-            if (Mathf.Abs(this.hoopTransform.position.x - targetPosition.x) < 0.1f)
+            if (this.vertical == false)
             {
-                this.hoopTransform.position = targetPosition;
-                this.currentDirection *= -1f;
+                float targetXPosition = this.currentDirection * this.maxXExtents;
+                Vector3 targetPosition = new Vector3(targetXPosition, this.hoopTransform.position.y, this.hoopTransform.position.z);
+
+                this.hoopTransform.Translate((targetPosition - this.hoopTransform.position).normalized * this.hoopMoveSpeed * Time.fixedDeltaTime);
+
+                if (Mathf.Abs(this.hoopTransform.position.x - targetPosition.x) < 0.1f)
+                {
+                    this.hoopTransform.position = targetPosition;
+                    this.currentDirection *= -1f;
+                }
+            }
+            else
+            {
+                float targetYPosition = this.currentDirection * this.maxYExtents;
+                Vector3 targetPosition = new Vector3(this.hoopTransform.position.x, targetYPosition, this.hoopTransform.position.z);
+
+                this.hoopTransform.Translate((targetPosition - this.hoopTransform.position).normalized * this.hoopMoveSpeed * Time.fixedDeltaTime);
+
+                if (Mathf.Abs(this.hoopTransform.position.y - targetPosition.y) < 0.1f)
+                {
+                    this.hoopTransform.position = targetPosition;
+                    this.currentDirection *= -1f;
+                }
             }
         }
     }
