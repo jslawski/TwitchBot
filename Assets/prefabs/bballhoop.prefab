@@ -458,7 +458,7 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.25, y: 0.25, z: 1}
+  m_Size: {x: 0.8, y: 0.25, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &6300338785197588911
 MonoBehaviour:
@@ -869,6 +869,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hoopMoveSpeed: 3
   hoopTransform: {fileID: 6113910595136064461}
+  vertical: 0
 --- !u!1 &6113910595483893899
 GameObject:
   m_ObjectHideFlags: 0

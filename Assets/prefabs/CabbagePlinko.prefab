@@ -1,78 +1,5 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &2006116067
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 2006116068}
-  - component: {fileID: 2006116070}
-  - component: {fileID: 2006116069}
-  m_Layer: 8
-  m_Name: ChatNub
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!224 &2006116068
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2006116067}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 6955807679252239515}
-  m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 6.44, y: -20.57}
-  m_SizeDelta: {x: 11.102473, y: 11.102473}
-  m_Pivot: {x: 0.5, y: 0.5}
---- !u!222 &2006116070
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2006116067}
-  m_CullTransparentMesh: 0
---- !u!114 &2006116069
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2006116067}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: b466207983e272a4681af7dad35e2f50, type: 3}
-  m_Type: 0
-  m_PreserveAspect: 0
-  m_FillCenter: 1
-  m_FillMethod: 4
-  m_FillAmount: 1
-  m_FillClockwise: 1
-  m_FillOrigin: 0
-  m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 1
 --- !u!1 &2108194468
 GameObject:
   m_ObjectHideFlags: 0
@@ -5137,161 +5064,6 @@ Transform:
   m_Father: {fileID: 6955807679810821602}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &2534972317568132022
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 349480428744002152}
-  - component: {fileID: 8682651790076059686}
-  - component: {fileID: 3396245259968250647}
-  m_Layer: 8
-  m_Name: ShootUsername
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!224 &349480428744002152
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2534972317568132022}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.18425998, y: 0.18425998, z: 0.18425998}
-  m_Children: []
-  m_Father: {fileID: 6955807679252239515}
-  m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: -6.5, y: -8.8}
-  m_SizeDelta: {x: 213.88022, y: 42.684258}
-  m_Pivot: {x: 0.5, y: 0.5}
---- !u!222 &8682651790076059686
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2534972317568132022}
-  m_CullTransparentMesh: 0
---- !u!114 &3396245259968250647
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2534972317568132022}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  m_text: Test Username
-  m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_fontSharedMaterials: []
-  m_fontMaterial: {fileID: 0}
-  m_fontMaterials: []
-  m_fontColor32:
-    serializedVersion: 2
-    rgba: 4294967295
-  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
-  m_enableVertexGradient: 0
-  m_colorMode: 3
-  m_fontColorGradient:
-    topLeft: {r: 1, g: 1, b: 1, a: 1}
-    topRight: {r: 1, g: 1, b: 1, a: 1}
-    bottomLeft: {r: 1, g: 1, b: 1, a: 1}
-    bottomRight: {r: 1, g: 1, b: 1, a: 1}
-  m_fontColorGradientPreset: {fileID: 0}
-  m_spriteAsset: {fileID: 0}
-  m_tintAllSprites: 0
-  m_overrideHtmlColors: 0
-  m_faceColor:
-    serializedVersion: 2
-    rgba: 4294967295
-  m_outlineColor:
-    serializedVersion: 2
-    rgba: 4278190080
-  m_fontSize: 28.4
-  m_fontSizeBase: 25
-  m_fontWeight: 400
-  m_enableAutoSizing: 1
-  m_fontSizeMin: 5
-  m_fontSizeMax: 100
-  m_fontStyle: 33
-  m_textAlignment: 514
-  m_characterSpacing: 0
-  m_wordSpacing: 0
-  m_lineSpacing: 0
-  m_lineSpacingMax: 0
-  m_paragraphSpacing: 0
-  m_charWidthMaxAdj: 0
-  m_enableWordWrapping: 1
-  m_wordWrappingRatios: 0.4
-  m_overflowMode: 3
-  m_firstOverflowCharacterIndex: -1
-  m_linkedTextComponent: {fileID: 0}
-  m_isLinkedTextComponent: 0
-  m_isTextTruncated: 0
-  m_enableKerning: 1
-  m_enableExtraPadding: 0
-  checkPaddingRequired: 0
-  m_isRichText: 1
-  m_parseCtrlCharacters: 1
-  m_isOrthographic: 1
-  m_isCullingEnabled: 0
-  m_ignoreRectMaskCulling: 0
-  m_ignoreCulling: 1
-  m_horizontalMapping: 0
-  m_verticalMapping: 0
-  m_uvLineOffset: 0
-  m_geometrySortingOrder: 0
-  m_VertexBufferAutoSizeReduction: 1
-  m_firstVisibleCharacter: 0
-  m_useMaxVisibleDescender: 1
-  m_pageToDisplay: 1
-  m_margin: {x: 0, y: 0, z: 0, w: 0}
-  m_textInfo:
-    textComponent: {fileID: 3396245259968250647}
-    characterCount: 13
-    spriteCount: 0
-    spaceCount: 1
-    wordCount: 2
-    linkCount: 0
-    lineCount: 1
-    pageCount: 1
-    materialCount: 1
-  m_isUsingLegacyAnimationComponent: 0
-  m_isVolumetricText: 0
-  m_spriteAnimator: {fileID: 0}
-  m_hasFontAssetChanged: 0
-  m_subTextObjects:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  m_baseMaterial: {fileID: 0}
-  m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!1 &2564455348565560890
 GameObject:
   m_ObjectHideFlags: 0
@@ -5519,8 +5291,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4278190080
-  m_fontColor: {r: 0, g: 0, b: 0, a: 1}
+    rgba: 4283585277
+  m_fontColor: {r: 0.990566, g: 0.3224012, b: 0.3224012, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -15512,8 +15284,6 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 7017536127451887267}
-  - {fileID: 349480428744002152}
-  - {fileID: 2006116068}
   m_Father: {fileID: 3643246451733707120}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -15591,9 +15361,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6955807679810821602}
-  - component: {fileID: 4744563511851702767}
   - component: {fileID: 1389817806519313973}
   - component: {fileID: 3588747440835296921}
+  - component: {fileID: 5980245200090139221}
   m_Layer: 8
   m_Name: CabbagePlinko
   m_TagString: Untagged
@@ -15617,48 +15387,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &4744563511851702767
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6955807679810821614}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c16383809ba618d4382ad63f4d306fb5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  chatCanvasObject: {fileID: 6955807679252239512}
-  chatCanvas: {fileID: 6955807679252239516}
-  chatBoxObject: {fileID: 0}
-  chatBoxRect: {fileID: 0}
-  chatTextObject: {fileID: 8995931967456589672, guid: 162ef77a6e529a74586cd9f1001c9d42,
-    type: 3}
-  emoteMessageBoxObject: {fileID: 5692386752917170424, guid: 091ed9540ae77754c83ee3b16f96fa34,
-    type: 3}
-  cabbageVisualHolder: {fileID: 1917531214931040417}
-  shooterText: {fileID: 2534972317568132022}
-  crown: {fileID: 8917837804558314087}
-  prestigeBadge: {fileID: 1792477245747012111}
-  prestigeText: {fileID: 6322437161660637547}
-  magnifyingGlass: {fileID: 4717158531017442178}
-  headPiece: {fileID: 2044002785489438088}
-  eyeBrows: {fileID: 1164855262840980166}
-  eyes: {fileID: 3313334447251904257}
-  nose: {fileID: 2382273460419266031}
-  mouth: {fileID: 6309061465887717937}
-  baseCabbage: {fileID: 2108194470}
-  username: {fileID: 12381941892586375}
-  cabbageRigidbody: {fileID: 1389817806519313973}
-  chatterName: 
-  shootScore: 0
-  prestigeLevel: 0
-  prestigeAnnouncement: {fileID: 3318636820637576507, guid: 31e7c096670cf504181f3e3edb975f68,
-    type: 3}
-  shootParticleObject: {fileID: 7999887933340692989}
-  deathEffect: {fileID: 5891589686819358219, guid: 39cc70c5202e04a45909971797f1fdac,
-    type: 3}
 --- !u!54 &1389817806519313973
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -15688,6 +15416,38 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 1.7
   m_Center: {x: -1.5, y: -0.45, z: 0}
+--- !u!114 &5980245200090139221
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6955807679810821614}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 970f52d6a02c2994893bb7990cbb8f19, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  crown: {fileID: 8917837804558314087}
+  prestigeBadge: {fileID: 1792477245747012111}
+  prestigeText: {fileID: 6322437161660637547}
+  magnifyingGlass: {fileID: 4717158531017442178}
+  headPiece: {fileID: 2044002785489438088}
+  eyeBrows: {fileID: 1164855262840980166}
+  eyes: {fileID: 3313334447251904257}
+  nose: {fileID: 2382273460419266031}
+  mouth: {fileID: 6309061465887717937}
+  baseCabbage: {fileID: 2108194470}
+  username: {fileID: 12381941892586375}
+  cabbageRigidbody: {fileID: 1389817806519313973}
+  chatterName: 
+  shootScore: 0
+  prestigeLevel: 0
+  prestigeAnnouncement: {fileID: 3318636820637576507, guid: 31e7c096670cf504181f3e3edb975f68,
+    type: 3}
+  shootParticleObject: {fileID: 7999887933340692989}
+  deathEffect: {fileID: 5891589686819358219, guid: 39cc70c5202e04a45909971797f1fdac,
+    type: 3}
 --- !u!1 &7999887933340692989
 GameObject:
   m_ObjectHideFlags: 0

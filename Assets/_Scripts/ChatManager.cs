@@ -75,6 +75,22 @@ public class ChatManager : MonoBehaviour
 
     public List<string> customCabbageSpriteNames;
 
+    private bool plinko = false;
+    private GameObject[] plinkoLevels;
+    private GameObject activePlinkoLevel;
+    [SerializeField]
+    private GameObject plinkoObject;
+    public GameObject parentPlinko;
+
+    [SerializeField]
+    private GameObject floorCollider;
+    [SerializeField]
+    private GameObject destroyCollider;
+    [SerializeField]
+    private GameObject leftWallCollider;
+    [SerializeField]
+    private AudioSource plinkoSound;
+
     // Start is called before the first frame update
     void Awake()
     {
@@ -131,6 +147,7 @@ public class ChatManager : MonoBehaviour
         }
         
         this.bballLevels = Resources.LoadAll<GameObject>("BBallLevels");
+        this.plinkoLevels = Resources.LoadAll<GameObject>("PlinkoLevels");
 
         this.InitializeCabbageCodeVictors();
 
@@ -324,6 +341,12 @@ public class ChatManager : MonoBehaviour
         if (e.Command.CommandText.ToLower().Contains("hmm"))
         {
             this.ActivateHmmCommand(e.Command.ChatMessage);
+        }
+
+        int plinkoResult = 0;
+        if (this.plinko == true && int.TryParse(e.Command.CommandText, out plinkoResult))
+        {
+            this.AttemptPlinkoDrop(e.Command.ChatMessage.Username.ToLower(), plinkoResult);
         }
     }
 
@@ -656,9 +679,7 @@ public class ChatManager : MonoBehaviour
             {
                 this.chatClient.SendMessage(TwitchSecrets.ChannelName, "@" + attacker + " nuked " + target);
             }
-        }
-
-        
+        } 
     }
 
     private void ToggleMJ()
@@ -671,8 +692,52 @@ public class ChatManager : MonoBehaviour
         this.mjTime = !this.mjTime;
     }
 
+    private void TogglePlinko()
+    {
+        this.plinko = !this.plinko;
+
+        this.leaderboardCanvas.SetActive(this.plinko);
+
+        if (this.plinko == true)
+        {
+            this.floorCollider.SetActive(false);
+            this.leftWallCollider.SetActive(false);
+            this.destroyCollider.SetActive(true);
+            this.plinkoSound.Play();
+
+            int levelIndex = UnityEngine.Random.Range(0, this.plinkoLevels.Length);
+            GameObject randomLevel = this.plinkoLevels[levelIndex];
+            
+            this.activePlinkoLevel = Instantiate(randomLevel, this.plinkoObject.transform, false) as GameObject;            
+        }
+        else
+        {
+            this.floorCollider.SetActive(true);
+            this.leftWallCollider.SetActive(true);
+            this.destroyCollider.SetActive(false);
+            Destroy(this.activePlinkoLevel);
+        }
+    }
+
+    private void AttemptPlinkoDrop(string username, int dropIndex)
+    {
+        PlinkoLevel currentPlinkoLevel = this.activePlinkoLevel.GetComponent<PlinkoLevel>();
+
+        if (currentPlinkoLevel == null)
+        {
+            return;
+        }
+
+        currentPlinkoLevel.ProcessDropCommand(username, dropIndex);
+    }
+
     private void Update()
     {
+        if (Input.GetKeyUp(KeyCode.UpArrow))
+        {
+            this.TogglePlinko();
+        }
+
         if (this.chatterQueue.Count > 0 && this.readyForNextChatter == true)
         {
             this.PushChatterToFront(this.chatterQueue.Dequeue());
@@ -680,7 +745,7 @@ public class ChatManager : MonoBehaviour
 
         if (Application.isEditor && Input.GetKeyUp(KeyCode.F2))
         {
-            this.ToggleShootMode();
+            this.TogglePlinko();
         }
 
         if (Application.isEditor && Input.GetKeyUp(KeyCode.F7))

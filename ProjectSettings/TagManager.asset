@@ -8,6 +8,7 @@ TagManager:
   - Bumper
   - kill
   - floor
+  - destroy
   layers:
   - Default
   - TransparentFX
@@ -24,7 +25,7 @@ TagManager:
   - KillEffectCollider
   - NukedCabbage
   - Portal
-  - 
+  - DropZone
   - 
   - 
   - 

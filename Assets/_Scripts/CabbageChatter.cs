@@ -66,7 +66,7 @@ public class CabbageChatter : MonoBehaviour
     [SerializeField]
     private GameObject shootParticleObject;
 
-    private static float spawnDepth = -2.0f;
+    public static float spawnDepth = -2.0f;
 
     [SerializeField]
     private GameObject deathEffect;
@@ -369,6 +369,10 @@ public class CabbageChatter : MonoBehaviour
         if (other.tag == "kill")
         {
             this.KillCabbage();
+        }
+        else if (other.tag == "destroy")
+        {
+            ChatManager.instance.RemoveCabbage(this.username.text);
         }
     }
 

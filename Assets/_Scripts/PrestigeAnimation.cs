@@ -32,6 +32,20 @@ public class PrestigeAnimation : MonoBehaviour
         this.prestigeLevelText.text = chatter.prestigeLevel.ToString();
     }
 
+    public void SetCabbage(SpriteRenderer baseCabbage, SpriteRenderer headPiece, 
+        SpriteRenderer eyeBrows, SpriteRenderer eyes, SpriteRenderer nose, 
+        SpriteRenderer mouth, int prestigeLevel)
+    {
+        this.baseCabbage.sprite = baseCabbage.sprite;
+        this.headPiece.sprite = headPiece.sprite;
+        this.eyeBrows.sprite = eyeBrows.sprite;
+        this.eyes.sprite = eyes.sprite;
+        this.nose.sprite = nose.sprite;
+        this.mouth.sprite = mouth.sprite;
+
+        this.prestigeLevelText.text = prestigeLevel.ToString();
+    }
+
     public void DestroyAnnouncement()
     {
         Destroy(this.gameObject);
