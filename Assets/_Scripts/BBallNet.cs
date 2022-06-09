@@ -40,15 +40,15 @@ public class BBallNet : MonoBehaviour
         this.niceShotAudio.Play();
         scorer.shootScore++;
 
-        this.scoreText.text = scorer.username.text + " Scored!\n" + scorer.shootScore.ToString() + "pts";
+        this.scoreText.text = scorer.chatterName + " Scored!\n" + scorer.shootScore.ToString() + "pts";
 
-        if (scorer.shootScore >= 10)
+        while (scorer.shootScore >= 10)
         {
             scorer.TriggerPrestige();
         }
 
-        ChatManager.instance.chatterScoreHistory[scorer.username.text] = scorer.shootScore;
-        ChatManager.instance.chatterPrestigeHistory[scorer.username.text] = scorer.prestigeLevel;
+        ChatManager.instance.chatterScoreHistory[scorer.chatterName.ToLower()] = scorer.shootScore;
+        ChatManager.instance.chatterPrestigeHistory[scorer.chatterName.ToLower()] = scorer.prestigeLevel;
         Leaderboard.instance.UpdateLeaderboard(scorer);
 
         StopAllCoroutines();

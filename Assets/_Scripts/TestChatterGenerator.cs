@@ -60,19 +60,19 @@ public class TestChatterGenerator : MonoBehaviour
 
         //Update chatter with their last shoot score, if it exists
         //Otherwise, initialize it to 0
-        if (ChatManager.instance.chatterScoreHistory.ContainsKey(cabbageChatter.chatterName))
+        if (ChatManager.instance.chatterScoreHistory.ContainsKey(cabbageChatter.chatterName.ToLower()))
         {
-            cabbageChatter.shootScore = ChatManager.instance.chatterScoreHistory[cabbageChatter.chatterName];
+            cabbageChatter.shootScore = ChatManager.instance.chatterScoreHistory[cabbageChatter.chatterName.ToLower()];
 
             //Toggle crown if the leader has respawned
-            if (Leaderboard.instance.topLeaders[0].username.text == cabbageChatter.username.text)
+            if (Leaderboard.instance.topLeaders[0].username.text == cabbageChatter.chatterName.ToLower())
             {
                 cabbageChatter.ActivateCrown();
             }
         }
         else
         {
-            ChatManager.instance.chatterScoreHistory.Add(cabbageChatter.chatterName, 0);
+            ChatManager.instance.chatterScoreHistory.Add(cabbageChatter.chatterName.ToLower(), 0);
         }
 
         //Do the same thing with prestige

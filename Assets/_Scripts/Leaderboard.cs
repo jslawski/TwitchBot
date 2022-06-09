@@ -34,7 +34,7 @@ public class FullLeaderboardEntry
         this.eyes = chatter.eyes.sprite;
         this.nose = chatter.nose.sprite;
         this.mouth = chatter.mouth.sprite;
-        this.username = chatter.username.text;
+        this.username = chatter.chatterName.ToLower();
         this.score = score;
     }
 }
@@ -61,7 +61,7 @@ public class Leaderboard : MonoBehaviour
         FullLeaderboardEntry tempEntry = new FullLeaderboardEntry();
         for (int i = 0; i < this.fullLeaderboard.Count; i++)
         {
-            if (this.fullLeaderboard[i].username == chatter.username.text)
+            if (this.fullLeaderboard[i].username == chatter.chatterName.ToLower())
             {
                 tempEntry = new FullLeaderboardEntry(chatter, this.fullLeaderboard[i].score);
                 this.fullLeaderboard.RemoveAt(i);
@@ -78,7 +78,7 @@ public class Leaderboard : MonoBehaviour
             this.UpdateCreatedEntry(tempEntry);
         }
 
-        this.UpdateCrown(chatter.username.text);
+        this.UpdateCrown(chatter.chatterName.ToLower());
     }
 
     private void UpdateCrown(string scorerName)
@@ -94,7 +94,7 @@ public class Leaderboard : MonoBehaviour
 
     private void InsertNewEntry(CabbageChatter chatter)
     {
-        FullLeaderboardEntry newEntry = new FullLeaderboardEntry(chatter, 1);
+        FullLeaderboardEntry newEntry = new FullLeaderboardEntry(chatter, chatter.shootScore);
 
         this.UpdateCreatedEntry(newEntry);
     }

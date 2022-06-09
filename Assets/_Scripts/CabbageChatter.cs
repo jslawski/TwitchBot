@@ -306,7 +306,13 @@ public class CabbageChatter : MonoBehaviour
     public void TriggerPrestige()
     {
         this.prestigeLevel++;
-        this.shootScore = 0;
+        this.shootScore -= 10;
+
+        if (this.shootScore < 0)
+        {
+            this.shootScore = 0;
+        }
+
         this.UpdatePrestigeBadge();
 
         float randomX = Random.Range(this.prestigeAnnouncementMinX, this.prestigeAnnouncementMaxX);
@@ -372,7 +378,7 @@ public class CabbageChatter : MonoBehaviour
         }
         else if (other.tag == "destroy")
         {
-            ChatManager.instance.RemoveCabbage(this.username.text);
+            ChatManager.instance.RemoveCabbage(this.chatterName);
         }
     }
 
@@ -396,6 +402,6 @@ public class CabbageChatter : MonoBehaviour
 
         deathEffectObject.transform.up = orientationVector;
 
-        ChatManager.instance.RemoveCabbage(this.username.text);
+        ChatManager.instance.RemoveCabbage(this.chatterName);
     }
 }

@@ -409,7 +409,7 @@ public class ChatManager : MonoBehaviour
             cabbageChatter.shootScore = this.chatterScoreHistory[cabbageChatter.chatterName];
 
             //Toggle crown if the leader has respawned
-            if (Leaderboard.instance.topLeaders[0].username.text == cabbageChatter.username.text)
+            if (Leaderboard.instance.topLeaders[0].username.text == cabbageChatter.chatterName.ToLower())
             {
                 cabbageChatter.ActivateCrown();
             }
@@ -723,12 +723,56 @@ public class ChatManager : MonoBehaviour
     {
         PlinkoLevel currentPlinkoLevel = this.activePlinkoLevel.GetComponent<PlinkoLevel>();
 
-        if (currentPlinkoLevel == null)
+        if (currentPlinkoLevel == null || this.chatterDict.ContainsKey(username))
         {
             return;
         }
 
-        currentPlinkoLevel.ProcessDropCommand(username, dropIndex);
+        GameObject newChatter = Instantiate(cabbageChatterPrefab, Vector3.zero, new Quaternion(), this.parentPlinko.transform) as GameObject;
+        CabbageChatter cabbageChatter = newChatter.GetComponent<CabbageChatter>();
+        this.chatterDict.Add(username, cabbageChatter);
+        Debug.LogError("New Chatter Dict Key: " + username);
+        this.currentActiveChatters.Add(cabbageChatter);
+
+        cabbageChatter.chatterName = username;
+        newChatter.name = username;
+
+        //Update chatter with their last shoot score, if it exists
+        //Otherwise, initialize it to 0
+        if (this.chatterScoreHistory.ContainsKey(cabbageChatter.chatterName.ToLower()))
+        {
+            cabbageChatter.shootScore = this.chatterScoreHistory[cabbageChatter.chatterName.ToLower()];
+
+            //Toggle crown if the leader has respawned
+            if (Leaderboard.instance.topLeaders[0].username.text == cabbageChatter.chatterName.ToLower())
+            {
+                cabbageChatter.ActivateCrown();
+            }
+        }
+        else
+        {
+            this.chatterScoreHistory.Add(cabbageChatter.chatterName.ToLower(), 0);
+        }
+
+        //Do the same thing with prestige
+        if (this.chatterPrestigeHistory.ContainsKey(cabbageChatter.chatterName))
+        {
+            cabbageChatter.prestigeLevel = this.chatterPrestigeHistory[cabbageChatter.chatterName];
+
+            //Toggle prestige badge if player has one
+            if (cabbageChatter.prestigeLevel > 0)
+            {
+                cabbageChatter.UpdatePrestigeBadge();
+            }
+        }
+        else
+        {
+            this.chatterPrestigeHistory.Add(cabbageChatter.chatterName, 0);
+        }
+
+        cabbageChatter.gameObject.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
+
+        currentPlinkoLevel.ProcessDropCommand(cabbageChatter, dropIndex);
     }
 
     private void Update()
