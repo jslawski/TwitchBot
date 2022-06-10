@@ -19,7 +19,9 @@ public class MovingObject : MonoBehaviour
     [SerializeField]
     private float moveSpeed;
 
+    [SerializeField]
     private int direction = 1;
+    [SerializeField]
     private float tValue = 0.0f;
 
     private void FixedUpdate()

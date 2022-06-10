@@ -75,12 +75,13 @@ public class ChatManager : MonoBehaviour
 
     public List<string> customCabbageSpriteNames;
 
-    private bool plinko = false;
+    public bool plinko = false;
     private GameObject[] plinkoLevels;
     private GameObject activePlinkoLevel;
     [SerializeField]
     private GameObject plinkoObject;
     public GameObject parentPlinko;
+    private int currentPlinkoLevelIndex = -1;
 
     [SerializeField]
     private GameObject floorCollider;
@@ -381,7 +382,7 @@ public class ChatManager : MonoBehaviour
             this.chatterDict[e.ChatMessage.Username.ToLower()].DisplayChatMessage(e.ChatMessage.Username, this.GetProperMessage(e.ChatMessage));
             this.chatterQueue.Enqueue(this.chatterDict[e.ChatMessage.Username.ToLower()]);
         }
-        else //Create a new cabbage chatter
+        else if (this.plinko == false) //Create a new cabbage chatter
         {
             this.SpawnNewChatter(e.ChatMessage);
         }
@@ -705,25 +706,63 @@ public class ChatManager : MonoBehaviour
             this.destroyCollider.SetActive(true);
             this.plinkoSound.Play();
 
-            int levelIndex = UnityEngine.Random.Range(0, this.plinkoLevels.Length);
-            GameObject randomLevel = this.plinkoLevels[levelIndex];
+            StartCoroutine(this.ActivatePlinkoLevel());
             
-            this.activePlinkoLevel = Instantiate(randomLevel, this.plinkoObject.transform, false) as GameObject;            
         }
         else
         {
             this.floorCollider.SetActive(true);
             this.leftWallCollider.SetActive(true);
             this.destroyCollider.SetActive(false);
-            Destroy(this.activePlinkoLevel);
+            Destroy(this.activePlinkoLevel.gameObject);
         }
+    }
+
+    public void LoadNewPlinkoLevel()
+    {
+        StartCoroutine(ActivatePlinkoLevel());
+    }
+
+    private IEnumerator ActivatePlinkoLevel()
+    {
+        if (this.activePlinkoLevel != null)
+        {
+            Destroy(this.activePlinkoLevel.gameObject);
+            yield return null;
+        }
+
+        while (this.chatterDict.Count > 0)
+        {
+            yield return null;
+        }
+
+
+        if (this.currentPlinkoLevelIndex == -1)
+        {
+            this.currentPlinkoLevelIndex = 0;
+        }
+        else
+        {
+            int newPlinkoLevelIndex = this.currentPlinkoLevelIndex;
+
+            while (newPlinkoLevelIndex == this.currentPlinkoLevelIndex)
+            {
+                newPlinkoLevelIndex = UnityEngine.Random.Range(0, this.plinkoLevels.Length);
+            }
+
+            this.currentPlinkoLevelIndex = newPlinkoLevelIndex;
+        }
+        
+        GameObject randomLevel = this.plinkoLevels[this.currentPlinkoLevelIndex];
+
+        this.activePlinkoLevel = Instantiate(randomLevel, this.plinkoObject.transform, false) as GameObject;
     }
 
     private void AttemptPlinkoDrop(string username, int dropIndex)
     {
         PlinkoLevel currentPlinkoLevel = this.activePlinkoLevel.GetComponent<PlinkoLevel>();
 
-        if (currentPlinkoLevel == null || this.chatterDict.ContainsKey(username))
+        if (currentPlinkoLevel == null || this.chatterDict.ContainsKey(username) || !currentPlinkoLevel.IsValidDropIndex(dropIndex))
         {
             return;
         }
@@ -777,11 +816,6 @@ public class ChatManager : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyUp(KeyCode.UpArrow))
-        {
-            this.TogglePlinko();
-        }
-
         if (this.chatterQueue.Count > 0 && this.readyForNextChatter == true)
         {
             this.PushChatterToFront(this.chatterQueue.Dequeue());

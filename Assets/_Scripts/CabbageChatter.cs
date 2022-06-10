@@ -12,7 +12,7 @@ public class CabbageChatter : MonoBehaviour
     public GameObject chatTextObject;
     public GameObject emoteMessageBoxObject;
     public GameObject cabbageVisualHolder;
-    public GameObject shooterText;
+    public GameObject plinkoText;
     public GameObject crown;
     public GameObject prestigeBadge;
     public TextMeshProUGUI prestigeText;
@@ -130,6 +130,12 @@ public class CabbageChatter : MonoBehaviour
 
     private void GenerateCharacter()
     {
+        this.plinkoText.GetComponent<TextMeshProUGUI>().text = chatterName;
+        if (ChatManager.instance.plinko == true)
+        {
+            this.plinkoText.SetActive(true);
+        }
+
         if (ChatManager.instance.mjTime == true)
         {
             this.baseCabbage.sprite = Resources.Load <Sprite>("CustomCabbages/michaelJordan");
@@ -146,7 +152,7 @@ public class CabbageChatter : MonoBehaviour
         this.eyeBrows.sprite = CharacterCreator.instance.GetEyebrows();
         this.eyes.sprite = CharacterCreator.instance.GetEyes();
         this.nose.sprite = CharacterCreator.instance.GetNose();
-        this.mouth.sprite = CharacterCreator.instance.GetMouth();
+        this.mouth.sprite = CharacterCreator.instance.GetMouth();        
     }
 
     public void RerollCharacter()
@@ -173,13 +179,15 @@ public class CabbageChatter : MonoBehaviour
 
         chatCanvasObject.SetActive(true);
 
-        this.LaunchAtRandomVelocity();
-
+        if (ChatManager.instance.plinko == false)
+        {
+            this.LaunchAtRandomVelocity();
+        }
 
         this.username.color = this.chatterColor;
         this.username.text = chatterName;
 
-        this.shooterText.GetComponent<TextMeshProUGUI>().text = chatterName;
+        
 
         if (this.chatBoxObject.transform.childCount > MaxChatMessagesVisable)
         {
@@ -238,8 +246,7 @@ public class CabbageChatter : MonoBehaviour
 
     private IEnumerator ReduceShootCooldown()
     {
-        yield return new WaitForSeconds(this.shootCooldown);
-        //this.shooterText.SetActive(true);
+        yield return new WaitForSeconds(this.shootCooldown);        
         this.shootCooldownActive = false;
     }
 

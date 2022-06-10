@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class DropZone : MonoBehaviour
 {
@@ -8,6 +9,14 @@ public class DropZone : MonoBehaviour
 
     [SerializeField]
     private BoxCollider collider;
+
+    [SerializeField]
+    private TextMeshProUGUI commandText;
+
+    private void Awake()
+    {
+        this.commandText.text = "!" + dropIndex.ToString();
+    }
 
     public void DropCabbage(GameObject newCabbage)
     {

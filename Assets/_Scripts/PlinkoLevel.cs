@@ -4,22 +4,33 @@ using UnityEngine;
 
 public class PlinkoLevel : MonoBehaviour
 {
+    [SerializeField]
     private DropZone[] dropZones;
 
-    [SerializeField]
-    private GameObject cabbagePlinkoPrefab;
-
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         this.dropZones = GameObject.Find("DropZonesParent").GetComponentsInChildren<DropZone>();
     }
 
+    public bool IsValidDropIndex(int dropIndex)
+    {
+        for (int i = 0; i < this.dropZones.Length; i++)
+        {
+            if (dropIndex == this.dropZones[i].dropIndex)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     public void ProcessDropCommand(CabbageChatter cabbage, int dropNum)
     {
-        for (int i = 0; i < dropZones.Length; i++)
+        for (int i = 0; i < this.dropZones.Length; i++)
         {
-            if (dropNum == dropZones[i].dropIndex)
+            if (dropNum == this.dropZones[i].dropIndex)
             {
                 dropZones[i].DropCabbage(cabbage.gameObject);
             }
