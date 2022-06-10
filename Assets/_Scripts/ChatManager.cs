@@ -190,6 +190,11 @@ public class ChatManager : MonoBehaviour
         }
         else if (key == RawKey.F2)
         {
+            this.TogglePlinko();
+        }
+
+        else if (key == RawKey.F3)
+        {
             this.ToggleShootMode();
         }
 
@@ -711,10 +716,7 @@ public class ChatManager : MonoBehaviour
         }
         else
         {
-            this.floorCollider.SetActive(true);
-            this.leftWallCollider.SetActive(true);
-            this.destroyCollider.SetActive(false);
-            Destroy(this.activePlinkoLevel.gameObject);
+            StartCoroutine(this.CleanupPlinko());
         }
     }
 
@@ -756,6 +758,20 @@ public class ChatManager : MonoBehaviour
         GameObject randomLevel = this.plinkoLevels[this.currentPlinkoLevelIndex];
 
         this.activePlinkoLevel = Instantiate(randomLevel, this.plinkoObject.transform, false) as GameObject;
+    }
+
+    private IEnumerator CleanupPlinko()
+    {
+        Destroy(this.activePlinkoLevel.gameObject);
+
+        while (this.chatterDict.Count > 0)
+        {
+            yield return null;
+        }
+
+        this.floorCollider.SetActive(true);
+        this.leftWallCollider.SetActive(true);
+        this.destroyCollider.SetActive(false);
     }
 
     private void AttemptPlinkoDrop(string username, int dropIndex)
@@ -832,6 +848,11 @@ public class ChatManager : MonoBehaviour
         }
 
         if (Application.isEditor && Input.GetKeyUp(KeyCode.F3))
+        {
+            this.ToggleShootMode();
+        }
+
+        if (Application.isEditor && Input.GetKeyUp(KeyCode.F4))
         {
             this.LaunchAllCabbages();
         }

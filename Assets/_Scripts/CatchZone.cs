@@ -53,7 +53,7 @@ public class CatchZone : MonoBehaviour
         ChatManager.instance.chatterPrestigeHistory[scorer.chatterName.ToLower()] = scorer.prestigeLevel;
         Leaderboard.instance.UpdateLeaderboard(scorer);
 
-        if (catchPoints >= 3)
+        if (catchPoints > 3)
         {
             this.catchAudio.clip = Resources.Load<AudioClip>("SoundEffects/plinkoBigCatch");
         }

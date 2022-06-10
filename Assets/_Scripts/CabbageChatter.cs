@@ -135,6 +135,10 @@ public class CabbageChatter : MonoBehaviour
         {
             this.plinkoText.SetActive(true);
         }
+        else
+        {
+            this.plinkoText.SetActive(false);
+        }
 
         if (ChatManager.instance.mjTime == true)
         {
