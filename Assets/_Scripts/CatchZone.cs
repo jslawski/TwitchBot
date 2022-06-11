@@ -38,13 +38,14 @@ public class CatchZone : MonoBehaviour
     {
         if (catchPoints == 0)
         {
+            this.gameObject.GetComponent<BoxCollider>().enabled = false;
             StartCoroutine(this.LoadNextLevel());
             return;
         }
 
         scorer.shootScore += catchPoints;
 
-        while (scorer.shootScore >= 10)
+        while (scorer.shootScore >= ChatManager.instance.prestigeThreshold)
         {
             scorer.TriggerPrestige();
         }

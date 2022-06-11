@@ -33,7 +33,7 @@ public class DebugBezier : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Application.isEditor && !Application.isPlaying)
+        if (Application.isEditor && !Application.isPlaying && this.point3 != null)
         {
             this.DrawBezierCurve();
         }
@@ -45,7 +45,7 @@ public class DebugBezier : MonoBehaviour
 
     private void DrawBezierCurve()
     {
-        this.debugLineRenderer.positionCount = 500;
+        this.debugLineRenderer.positionCount = 200;
 
         Vector3 curvePoint = Vector3.zero;
         float testValue = 0.0f;
@@ -61,11 +61,14 @@ public class DebugBezier : MonoBehaviour
             testValue += (1.0f / (float)this.debugLineRenderer.positionCount);
         }
 
-        curvePoint = (Mathf.Pow((1 - tValue), 3.0f) * this.point0.position) +
+        if (this.targetObject != null)
+        {
+            curvePoint = (Mathf.Pow((1 - tValue), 3.0f) * this.point0.position) +
                 (3 * Mathf.Pow((1 - tValue), 2.0f) * tValue * this.point1.position) +
                 (3 * (1 - tValue) * Mathf.Pow(tValue, 2.0f) * this.point2.position) +
                 (Mathf.Pow(tValue, 3.0f) * this.point3.position);
 
-        this.targetObject.position = curvePoint;
+            this.targetObject.position = curvePoint;
+        }        
     }
 }

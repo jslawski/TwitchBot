@@ -317,7 +317,7 @@ public class CabbageChatter : MonoBehaviour
     public void TriggerPrestige()
     {
         this.prestigeLevel++;
-        this.shootScore -= 10;
+        this.shootScore -= ChatManager.instance.prestigeThreshold;
 
         if (this.shootScore < 0)
         {

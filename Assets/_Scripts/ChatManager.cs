@@ -92,6 +92,8 @@ public class ChatManager : MonoBehaviour
     [SerializeField]
     private AudioSource plinkoSound;
 
+    public int prestigeThreshold = 50;
+
     // Start is called before the first frame update
     void Awake()
     {
@@ -198,9 +200,16 @@ public class ChatManager : MonoBehaviour
             this.ToggleShootMode();
         }
 
-        else if (key == RawKey.F3)
+        else if (key == RawKey.F4)
         {
-            this.LaunchAllCabbages();
+            if (this.plinko)
+            {
+                this.JostleAllCabbages();
+            }
+            else
+            {
+                this.LaunchAllCabbages();
+            }
         }
 
         else if (key == RawKey.F12)
@@ -610,6 +619,14 @@ public class ChatManager : MonoBehaviour
         }
     }
 
+    private void JostleAllCabbages()
+    {
+        foreach (CabbageChatter chatter in this.currentActiveChatters)
+        {
+            chatter.LaunchAtRandomVelocity();
+        }
+    }
+
     private void GrabClipLink(string chatMessage)
     {
         int startIndex = chatMessage.IndexOf(ChatManager.ClipStub);
@@ -745,14 +762,14 @@ public class ChatManager : MonoBehaviour
         }
         else
         {
-            int newPlinkoLevelIndex = this.currentPlinkoLevelIndex;
+            /*int newPlinkoLevelIndex = this.currentPlinkoLevelIndex;
 
             while (newPlinkoLevelIndex == this.currentPlinkoLevelIndex)
             {
                 newPlinkoLevelIndex = UnityEngine.Random.Range(0, this.plinkoLevels.Length);
             }
-
-            this.currentPlinkoLevelIndex = newPlinkoLevelIndex;
+            */
+            this.currentPlinkoLevelIndex = (this.currentPlinkoLevelIndex + 1) % this.plinkoLevels.Length;
         }
         
         GameObject randomLevel = this.plinkoLevels[this.currentPlinkoLevelIndex];
@@ -854,7 +871,14 @@ public class ChatManager : MonoBehaviour
 
         if (Application.isEditor && Input.GetKeyUp(KeyCode.F4))
         {
-            this.LaunchAllCabbages();
+            if (this.plinko)
+            {
+                this.JostleAllCabbages();
+            }
+            else
+            {
+                this.LaunchAllCabbages();
+            }
         }
 
         if (Application.isEditor && Input.GetKeyUp(KeyCode.F12))
