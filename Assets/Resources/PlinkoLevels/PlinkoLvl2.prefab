@@ -24245,7 +24245,7 @@ PrefabInstance:
     - target: {fileID: 7449736140065779318, guid: 53125cdf7c43d1d4c8473a0523b21408,
         type: 3}
       propertyPath: catchPoints
-      value: 0
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 8171941983034686345, guid: 53125cdf7c43d1d4c8473a0523b21408,
         type: 3}

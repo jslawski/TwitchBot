@@ -1373,14 +1373,13 @@ GameObject:
   - component: {fileID: 334813144}
   - component: {fileID: 334813147}
   - component: {fileID: 334813146}
-  - component: {fileID: 334813145}
   m_Layer: 5
   m_Name: Leaderboard
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &334813144
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1402,29 +1401,6 @@ RectTransform:
   m_AnchoredPosition: {x: 5.09, y: -9.048}
   m_SizeDelta: {x: 11.104542, y: 18.094511}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &334813145
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 334813143}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6cdea2733cc1bee47aab764d60ae8041, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  topLeaders:
-  - {fileID: 972709046}
-  - {fileID: 2146823131}
-  - {fileID: 1993601440}
-  - {fileID: 2114492101}
-  - {fileID: 228292659}
-  - {fileID: 411291821}
-  - {fileID: 373301677}
-  - {fileID: 1961645311}
-  - {fileID: 73408749}
-  - {fileID: 1494918365}
 --- !u!114 &334813146
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3187,7 +3163,7 @@ MonoBehaviour:
   alwaysSunnyText: {fileID: 1666372566}
   bounceMaterial: {fileID: 13400000, guid: 242ddf4b9b861cf4b9808b1898b3a751, type: 2}
   hoopObject: {fileID: 1306421989}
-  leaderboardCanvas: {fileID: 1092116820}
+  leaderboardCanvas: {fileID: 334813143}
   bballSource: {fileID: 942403080}
   lastLeader: {fileID: 0}
   mjTime: 0
@@ -9286,13 +9262,14 @@ GameObject:
   - component: {fileID: 1092116823}
   - component: {fileID: 1092116822}
   - component: {fileID: 1092116821}
+  - component: {fileID: 1092116825}
   m_Layer: 5
   m_Name: LeaderboardCanvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1092116821
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9373,6 +9350,29 @@ RectTransform:
   m_AnchoredPosition: {x: -5.6, y: 3.75}
   m_SizeDelta: {x: 61.00833, y: 34.31717}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1092116825
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1092116820}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6cdea2733cc1bee47aab764d60ae8041, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  topLeaders:
+  - {fileID: 972709046}
+  - {fileID: 2146823131}
+  - {fileID: 1993601440}
+  - {fileID: 2114492101}
+  - {fileID: 228292659}
+  - {fileID: 411291821}
+  - {fileID: 373301677}
+  - {fileID: 1961645311}
+  - {fileID: 73408749}
+  - {fileID: 1494918365}
 --- !u!1 &1149776289
 GameObject:
   m_ObjectHideFlags: 0

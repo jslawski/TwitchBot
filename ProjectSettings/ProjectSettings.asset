@@ -709,10 +709,10 @@ PlayerSettings:
     m_VersionCode: 1
     m_VersionName: 
   apiCompatibilityLevel: 6
-  cloudProjectId: 
+  cloudProjectId: c87dc4e8-8c16-41c0-b16c-596fd4dd0286
   framebufferDepthMemorylessMode: 0
-  projectName: 
-  organizationId: 
+  projectName: TwitchBot
+  organizationId: jared-slawski
   cloudEnabled: 0
   enableNativePlatformBackendsForNewInputSystem: 0
   disableOldInputManagerSupport: 0

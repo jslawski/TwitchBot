@@ -28,6 +28,8 @@ public class DropZone : MonoBehaviour
         float randX = Random.Range(minX, maxX);
         float randY = Random.Range(minY, maxY);
 
+        newCabbage.layer = LayerMask.NameToLayer("launchedCabbage");
+
         newCabbage.transform.position = new Vector3(randX, randY, -0.1f);
     }
 }

@@ -25,12 +25,7 @@ public class TestChatterGenerator : MonoBehaviour
         {
             string chatterName = ("TestCabbage" + i.ToString()).ToLower();
 
-            if (ChatManager.instance.chatterDict.ContainsKey(chatterName.ToLower()))
-            {
-                Destroy(ChatManager.instance.chatterDict[chatterName.ToLower()].gameObject);
-                ChatManager.instance.currentActiveChatters.Remove(ChatManager.instance.chatterDict[chatterName.ToLower()]);
-                ChatManager.instance.chatterDict.Remove(chatterName.ToLower());
-            }
+            ChatManager.instance.RemoveCabbage(chatterName);
         }
     }
 
@@ -46,49 +41,13 @@ public class TestChatterGenerator : MonoBehaviour
     {
         string chatterName = ("TestCabbage" + chatterId.ToString()).ToLower();
 
-        float randomXPosition = Random.Range(ChatManager.instance.spawnBoundaries.bounds.min.x, ChatManager.instance.spawnBoundaries.bounds.max.x);
-        Vector3 instantiationPosition = new Vector3(randomXPosition, ChatManager.instance.spawnBoundaries.transform.position.y, 0f);
-        GameObject newChatter = Instantiate(ChatManager.instance.cabbageChatterPrefab, instantiationPosition, new Quaternion(), ChatManager.instance.parentChat.transform) as GameObject;
-        CabbageChatter cabbageChatter = newChatter.GetComponent<CabbageChatter>();
-        ChatManager.instance.chatterDict.Add(chatterName.ToLower(), cabbageChatter);
-        ChatManager.instance.currentActiveChatters.Add(cabbageChatter);
-        ChatManager.instance.chatterQueue.Enqueue(cabbageChatter);
-
-        cabbageChatter.chatterName = chatterName;
-        cabbageChatter.DisplayChatMessage(chatterName, "Test Message");
-        newChatter.name = chatterName;
-
-        //Update chatter with their last shoot score, if it exists
-        //Otherwise, initialize it to 0
-        if (ChatManager.instance.chatterScoreHistory.ContainsKey(cabbageChatter.chatterName.ToLower()))
+        if (ChatManager.instance.plinko == false)
         {
-            cabbageChatter.shootScore = ChatManager.instance.chatterScoreHistory[cabbageChatter.chatterName.ToLower()];
-
-            //Toggle crown if the leader has respawned
-            if (Leaderboard.instance.topLeaders[0].username.text == cabbageChatter.chatterName.ToLower())
-            {
-                cabbageChatter.ActivateCrown();
-            }
+            ChatManager.instance.SpawnNewChatter(chatterName);
         }
         else
         {
-            ChatManager.instance.chatterScoreHistory.Add(cabbageChatter.chatterName.ToLower(), 0);
-        }
-
-        //Do the same thing with prestige
-        if (ChatManager.instance.chatterPrestigeHistory.ContainsKey(cabbageChatter.chatterName))
-        {
-            cabbageChatter.prestigeLevel = ChatManager.instance.chatterPrestigeHistory[cabbageChatter.chatterName];
-
-            //Toggle prestige badge if player has one
-            if (cabbageChatter.prestigeLevel > 0)
-            {
-                cabbageChatter.UpdatePrestigeBadge();
-            }
-        }
-        else
-        {
-            ChatManager.instance.chatterPrestigeHistory.Add(cabbageChatter.chatterName, 0);
+            ChatManager.instance.AttemptPlinkoDrop(chatterName, Random.Range(1, 3));
         }
     }
 }

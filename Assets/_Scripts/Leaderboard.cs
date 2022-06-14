@@ -78,7 +78,10 @@ public class Leaderboard : MonoBehaviour
             this.UpdateCreatedEntry(tempEntry);
         }
 
-        this.UpdateCrown(chatter.chatterName.ToLower());
+        if (ChatManager.instance.plinko == false)
+        {
+            this.UpdateCrown(chatter.chatterName.ToLower());
+        }
     }
 
     private void UpdateCrown(string scorerName)

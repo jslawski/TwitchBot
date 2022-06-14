@@ -60,7 +60,6 @@ public class ChatManager : MonoBehaviour
     private GameObject leaderboardCanvas;
     [SerializeField]
     private AudioSource bballSource;
-    private AudioClip[] bballHoopMusic;
     private GameObject[] bballLevels;
     private GameObject activeBBallLevel;
 
@@ -97,6 +96,8 @@ public class ChatManager : MonoBehaviour
     // Start is called before the first frame update
     void Awake()
     {
+        Application.targetFrameRate = 60;
+        
         if (instance == null)
         {
             instance = this;
@@ -136,12 +137,6 @@ public class ChatManager : MonoBehaviour
         this.chatterQueue = new Queue<CabbageChatter>();
 
         SetupWheelDict();
-
-        /*if (!Application.isEditor)
-        {
-            this.bballHoopMusic = Resources.LoadAll<AudioClip>("BBallMusic");
-        }
-        */
 
         if (!Application.isEditor)
         {
@@ -348,7 +343,7 @@ public class ChatManager : MonoBehaviour
             }
             else
             {
-                this.SpawnNewChatter(e.Command.ChatMessage);
+                this.SpawnNewChatter(e.Command.ChatMessage.Username.ToLower(), e.Command.ChatMessage);
                 this.chatterDict[e.Command.ChatMessage.Username.ToLower()].ShootCharacter(e.Command.ArgumentsAsString);
             }
         }
@@ -398,24 +393,27 @@ public class ChatManager : MonoBehaviour
         }
         else if (this.plinko == false) //Create a new cabbage chatter
         {
-            this.SpawnNewChatter(e.ChatMessage);
+            this.SpawnNewChatter(e.ChatMessage.Username.ToLower(), e.ChatMessage);
         }
     }
 
-    private void SpawnNewChatter(ChatMessage newChatterMessage)
+    public void SpawnNewChatter(string username, ChatMessage newChatterMessage = null)
     {
         float randomXPosition = UnityEngine.Random.Range(spawnBoundaries.bounds.min.x, spawnBoundaries.bounds.max.x);
         Vector3 instantiationPosition = new Vector3(randomXPosition, spawnBoundaries.transform.position.y, 0f);
         GameObject newChatter = Instantiate(cabbageChatterPrefab, instantiationPosition, new Quaternion(), this.parentChat.transform) as GameObject;
         CabbageChatter cabbageChatter = newChatter.GetComponent<CabbageChatter>();
-        this.chatterDict.Add(newChatterMessage.Username.ToLower(), cabbageChatter);
-        Debug.LogError("New Chatter Dict Key: " + newChatterMessage.Username.ToLower());
+        this.chatterDict.Add(username, cabbageChatter);
         this.currentActiveChatters.Add(cabbageChatter);
         this.chatterQueue.Enqueue(cabbageChatter);
 
-        cabbageChatter.chatterName = newChatterMessage.Username.ToLower();
-        cabbageChatter.DisplayChatMessage(newChatterMessage.Username, this.GetProperMessage(newChatterMessage));
-        newChatter.name = newChatterMessage.Username;
+        cabbageChatter.chatterName = username;        
+        newChatter.name = username;
+
+        if (newChatterMessage != null)
+        {
+            cabbageChatter.DisplayChatMessage(username, this.GetProperMessage(newChatterMessage));
+        }
 
         //Update chatter with their last shoot score, if it exists
         //Otherwise, initialize it to 0
@@ -474,7 +472,7 @@ public class ChatManager : MonoBehaviour
         {
             Destroy(this.chatterDict[username.ToLower()].gameObject);
             currentActiveChatters.Remove(this.chatterDict[username.ToLower()]);
-            this.chatterDict.Remove(username.ToLower());
+            this.chatterDict.Remove(username.ToLower());            
         }
     }
 
@@ -668,7 +666,7 @@ public class ChatManager : MonoBehaviour
             }
             else
             {
-                this.SpawnNewChatter(activateMessage);
+                this.SpawnNewChatter(activateMessage.Username.ToLower(), activateMessage);
                 this.chatterDict[chatUsername.ToLower()].ToggleMagnifyingGlass();
             }
         }
@@ -791,7 +789,7 @@ public class ChatManager : MonoBehaviour
         this.destroyCollider.SetActive(false);
     }
 
-    private void AttemptPlinkoDrop(string username, int dropIndex)
+    public void AttemptPlinkoDrop(string username, int dropIndex)
     {
         PlinkoLevel currentPlinkoLevel = this.activePlinkoLevel.GetComponent<PlinkoLevel>();
 
@@ -803,10 +801,10 @@ public class ChatManager : MonoBehaviour
         GameObject newChatter = Instantiate(cabbageChatterPrefab, Vector3.zero, new Quaternion(), this.parentPlinko.transform) as GameObject;
         CabbageChatter cabbageChatter = newChatter.GetComponent<CabbageChatter>();
         this.chatterDict.Add(username, cabbageChatter);
-        Debug.LogError("New Chatter Dict Key: " + username);
+        //Debug.LogError("New Chatter Dict Key: " + username);
         this.currentActiveChatters.Add(cabbageChatter);
 
-        cabbageChatter.chatterName = username;
+        cabbageChatter.chatterName = username.ToLower();
         newChatter.name = username;
 
         //Update chatter with their last shoot score, if it exists

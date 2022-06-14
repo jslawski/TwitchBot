@@ -156,7 +156,7 @@ public class CabbageChatter : MonoBehaviour
         this.eyeBrows.sprite = CharacterCreator.instance.GetEyebrows();
         this.eyes.sprite = CharacterCreator.instance.GetEyes();
         this.nose.sprite = CharacterCreator.instance.GetNose();
-        this.mouth.sprite = CharacterCreator.instance.GetMouth();        
+        this.mouth.sprite = CharacterCreator.instance.GetMouth();
     }
 
     public void RerollCharacter()
@@ -389,7 +389,7 @@ public class CabbageChatter : MonoBehaviour
         }
         else if (other.tag == "destroy")
         {
-            ChatManager.instance.RemoveCabbage(this.chatterName);
+            ChatManager.instance.RemoveCabbage(this.chatterName.ToLower());
         }
     }
 

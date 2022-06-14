@@ -18,7 +18,7 @@ public class CatchZone : MonoBehaviour
     {
         this.pointsText.text = catchPoints.ToString();
 
-        if (catchPoints == 0)
+        if (catchPoints == 10)
         {
             this.pointsText.text = "New Lvl";
         }
@@ -35,14 +35,7 @@ public class CatchZone : MonoBehaviour
     }
 
     private void AwardPoints(CabbageChatter scorer)
-    {
-        if (catchPoints == 0)
-        {
-            this.gameObject.GetComponent<BoxCollider>().enabled = false;
-            StartCoroutine(this.LoadNextLevel());
-            return;
-        }
-
+    {        
         scorer.shootScore += catchPoints;
 
         while (scorer.shootScore >= ChatManager.instance.prestigeThreshold)
@@ -54,23 +47,27 @@ public class CatchZone : MonoBehaviour
         ChatManager.instance.chatterPrestigeHistory[scorer.chatterName.ToLower()] = scorer.prestigeLevel;
         Leaderboard.instance.UpdateLeaderboard(scorer);
 
-        if (catchPoints > 3)
+        if (catchPoints == 10)
+        {
+            this.catchAudio.clip = Resources.Load<AudioClip>("SoundEffects/plinkoLevelSwitch");
+            this.gameObject.GetComponent<BoxCollider>().enabled = false;
+            this.catchAudio.Play();
+            StartCoroutine(this.LoadNextLevel());
+        }
+        else if (catchPoints > 3)
         {
             this.catchAudio.clip = Resources.Load<AudioClip>("SoundEffects/plinkoBigCatch");
+            this.catchAudio.Play();
         }
         else if (catchPoints > 0)
         {
             this.catchAudio.clip = Resources.Load<AudioClip>("SoundEffects/plinkoSmallCatch");
-        }        
-
-        this.catchAudio.Play();
+            this.catchAudio.Play();
+        }         
     }
 
     private IEnumerator LoadNextLevel()
     {
-        this.catchAudio.clip = Resources.Load<AudioClip>("SoundEffects/plinkoLevelSwitch");
-        this.catchAudio.Play();
-
         while (this.catchAudio.isPlaying)
         {
             yield return null;
