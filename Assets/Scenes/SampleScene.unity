@@ -3395,7 +3395,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7934aaab5cc25004eadf0a15e23bee2f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  numTestCabbagesToSpawn: 5
+  numTestCabbagesToSpawn: 50
 --- !u!114 &942403082
 MonoBehaviour:
   m_ObjectHideFlags: 0

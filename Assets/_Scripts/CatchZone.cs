@@ -49,19 +49,19 @@ public class CatchZone : MonoBehaviour
 
         if (catchPoints == 10)
         {
-            this.catchAudio.clip = Resources.Load<AudioClip>("SoundEffects/plinkoLevelSwitch");
+            this.catchAudio.clip = Resources.Load<AudioClip>("SoundEffects/plinkoLevelSwitchNew");
             this.gameObject.GetComponent<BoxCollider>().enabled = false;
             this.catchAudio.Play();
             StartCoroutine(this.LoadNextLevel());
         }
         else if (catchPoints > 3)
         {
-            this.catchAudio.clip = Resources.Load<AudioClip>("SoundEffects/plinkoBigCatch");
+            this.catchAudio.clip = Resources.Load<AudioClip>("SoundEffects/plinkoBigCatchNew");
             this.catchAudio.Play();
         }
         else if (catchPoints > 0)
         {
-            this.catchAudio.clip = Resources.Load<AudioClip>("SoundEffects/plinkoSmallCatch");
+            this.catchAudio.clip = Resources.Load<AudioClip>("SoundEffects/plinkoSmallCatchNew");
             this.catchAudio.Play();
         }         
     }

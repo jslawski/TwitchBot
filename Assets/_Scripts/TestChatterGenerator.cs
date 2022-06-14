@@ -47,7 +47,7 @@ public class TestChatterGenerator : MonoBehaviour
         }
         else
         {
-            ChatManager.instance.AttemptPlinkoDrop(chatterName, Random.Range(1, 3));
+            ChatManager.instance.AttemptPlinkoDrop(chatterName, Random.Range(1, GameObject.Find("DropZonesParent").transform.childCount + 1));
         }
     }
 }
