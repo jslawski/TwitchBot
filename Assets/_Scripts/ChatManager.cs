@@ -82,6 +82,9 @@ public class ChatManager : MonoBehaviour
     public GameObject parentPlinko;
     private int currentPlinkoLevelIndex = -1;
 
+    private List<int> seenPlinkoLevels;
+    private List<int> unseenPlinkoLevels;
+
     [SerializeField]
     private GameObject floorCollider;
     [SerializeField]
@@ -90,6 +93,9 @@ public class ChatManager : MonoBehaviour
     private GameObject leftWallCollider;
     [SerializeField]
     private AudioSource plinkoSound;
+
+    private Coroutine aiCoroutine = null;
+    private float secondsBetweenAIShots = 15.0f;
 
     public int prestigeThreshold = 50;
 
@@ -146,6 +152,13 @@ public class ChatManager : MonoBehaviour
         
         this.bballLevels = Resources.LoadAll<GameObject>("BBallLevels");
         this.plinkoLevels = Resources.LoadAll<GameObject>("PlinkoLevels");
+
+        this.seenPlinkoLevels = new List<int>();
+        this.unseenPlinkoLevels = new List<int>();
+        for (int i = 0; i < this.plinkoLevels.Length; i++)
+        {
+            this.unseenPlinkoLevels.Add(i);
+        }
 
         this.InitializeCabbageCodeVictors();
 
@@ -353,6 +366,17 @@ public class ChatManager : MonoBehaviour
             this.ActivateHmmCommand(e.Command.ChatMessage);
         }
 
+        if (e.Command.CommandText.ToLower().Contains("rand"))
+        {
+            GameObject dropZonesParentObject = GameObject.Find("DropZonesParent");
+
+            if (dropZonesParentObject != null)
+            {
+                this.AttemptPlinkoDrop(e.Command.ChatMessage.Username.ToLower(),
+                    UnityEngine.Random.Range(1, dropZonesParentObject.transform.childCount + 1));
+            }
+        }
+
         int plinkoResult = 0;
         if (this.plinko == true && int.TryParse(e.Command.CommandText, out plinkoResult))
         {
@@ -376,8 +400,8 @@ public class ChatManager : MonoBehaviour
             return;
         }
 
-        if (e.ChatMessage.Message.StartsWith("!"))
-        {
+        if (e.ChatMessage.Message.StartsWith("!") && e.ChatMessage.Username == "cabbagegatekeeper")
+        {            
             return;
         }
 
@@ -583,6 +607,11 @@ public class ChatManager : MonoBehaviour
         {
             this.activeBBallLevel = Instantiate(randomLevel, this.hoopObject.transform, false) as GameObject;
             AutoScore.SetHoopTransform(GameObject.Find("bballhoop").transform);
+
+            if (this.aiCoroutine == null)
+            {
+                this.aiCoroutine = StartCoroutine(this.RunAI());
+            }
         }
         else
         {
@@ -742,6 +771,11 @@ public class ChatManager : MonoBehaviour
 
     private IEnumerator ActivatePlinkoLevel()
     {
+        if (this.aiCoroutine == null)
+        {
+            this.aiCoroutine = StartCoroutine(this.RunAI());
+        }
+
         if (this.activePlinkoLevel != null)
         {
             Destroy(this.activePlinkoLevel.gameObject);
@@ -753,26 +787,41 @@ public class ChatManager : MonoBehaviour
             yield return null;
         }
 
-
-        if (this.currentPlinkoLevelIndex == -1)
+        /*if (this.currentPlinkoLevelIndex == -1)
         {
             this.currentPlinkoLevelIndex = 0;
         }
         else
         {
-            /*int newPlinkoLevelIndex = this.currentPlinkoLevelIndex;
+            int newPlinkoLevelIndex = this.currentPlinkoLevelIndex;
 
             while (newPlinkoLevelIndex == this.currentPlinkoLevelIndex)
             {
                 newPlinkoLevelIndex = UnityEngine.Random.Range(0, this.plinkoLevels.Length);
             }
-            */
+            
             this.currentPlinkoLevelIndex = (this.currentPlinkoLevelIndex + 1) % this.plinkoLevels.Length;
-        }
-        
+        }*/
+
+        this.SelectNewPlinkoLevel();
+
         GameObject randomLevel = this.plinkoLevels[this.currentPlinkoLevelIndex];
 
         this.activePlinkoLevel = Instantiate(randomLevel, this.plinkoObject.transform, false) as GameObject;
+    }
+
+    private void SelectNewPlinkoLevel()
+    {
+        this.currentPlinkoLevelIndex = this.unseenPlinkoLevels[UnityEngine.Random.Range(0, this.unseenPlinkoLevels.Count)];
+
+        this.seenPlinkoLevels.Add(this.currentPlinkoLevelIndex);
+        this.unseenPlinkoLevels.Remove(this.currentPlinkoLevelIndex);
+
+        if (this.unseenPlinkoLevels.Count == 0)
+        {
+            this.unseenPlinkoLevels = this.seenPlinkoLevels;
+            this.seenPlinkoLevels = new List<int>();
+        }        
     }
 
     private IEnumerator CleanupPlinko()
@@ -892,6 +941,37 @@ public class ChatManager : MonoBehaviour
             this.chatClient.JoinChannel(TwitchSecrets.ChannelName, true);
             yield return new WaitForSeconds(300);
         }
+    }
+
+    private IEnumerator RunAI()
+    {
+        yield return new WaitForSeconds(this.secondsBetweenAIShots);
+
+        while (this.plinko || shootModeActive)
+        {
+            if (this.plinko == true)
+            {
+                GameObject dropZonesParentObject = GameObject.Find("DropZonesParent");
+
+                if (dropZonesParentObject != null)
+                {
+                    this.AttemptPlinkoDrop("cabbagegatekeeper",
+                        UnityEngine.Random.Range(1, dropZonesParentObject.transform.childCount + 1));
+                }
+
+            }
+            else if (shootModeActive)
+            {
+                if (this.chatterDict.ContainsKey("cabbagegatekeeper"))
+                {
+                    this.chatterDict["cabbagegatekeeper"].ShootCharacter();
+                }
+            }
+
+            yield return new WaitForSeconds(this.secondsBetweenAIShots);
+        }
+
+        this.aiCoroutine = null;
     }
 
     private void OnApplicationQuit()

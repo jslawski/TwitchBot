@@ -3395,7 +3395,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7934aaab5cc25004eadf0a15e23bee2f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  numTestCabbagesToSpawn: 50
+  numTestCabbagesToSpawn: 10
 --- !u!114 &942403082
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3423,7 +3423,7 @@ AudioSource:
     type: 2}
   m_audioClip: {fileID: 8300000, guid: c58f3294e9725b44fbf91fccbdea84a3, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 1
+  m_Volume: 0.5
   m_Pitch: 1
   Loop: 0
   Mute: 0
