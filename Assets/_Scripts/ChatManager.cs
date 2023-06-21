@@ -95,7 +95,7 @@ public class ChatManager : MonoBehaviour
     private AudioSource plinkoSound;
 
     private Coroutine aiCoroutine = null;
-    private float secondsBetweenAIShots = 15.0f;
+    private float secondsBetweenAIShots = 30.0f;
 
     public int prestigeThreshold = 50;
 
@@ -103,13 +103,12 @@ public class ChatManager : MonoBehaviour
     void Awake()
     {
         Application.targetFrameRate = 60;
-        
+
+
         if (instance == null)
         {
             instance = this;
         }
-
-        Application.runInBackground = true;
 
         ClientOptions clientOptions = new ClientOptions
         {
@@ -175,7 +174,7 @@ public class ChatManager : MonoBehaviour
         this.customCabbageSpriteNames = new List<string>();
         this.customCabbageSpriteNames.Add("ruddgasm");
         this.customCabbageSpriteNames.Add("ruddpuddle");
-        this.customCabbageSpriteNames.Add("levanter_");
+        this.customCabbageSpriteNames.Add("jerry_jerah_jeremeson");
         this.customCabbageSpriteNames.Add("coleslawski");
         this.customCabbageSpriteNames.Add("cabbagegatekeeper");
         this.customCabbageSpriteNames.Add("roh_ka");
@@ -190,6 +189,8 @@ public class ChatManager : MonoBehaviour
         this.customCabbageSpriteNames.Add("mastyff");
         this.customCabbageSpriteNames.Add("chrisvsbacklog");
         this.customCabbageSpriteNames.Add("thejackalanimatronic");
+        this.customCabbageSpriteNames.Add("daddy_dagoth_ur__");
+        this.customCabbageSpriteNames.Add("demonweez666");
     }
 
     private void HandleKeyUp(RawKey key)
