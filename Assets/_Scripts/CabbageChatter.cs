@@ -307,6 +307,11 @@ public class CabbageChatter : MonoBehaviour
         {
             this.chatCanvasObject.SetActive(false);
         }
+
+        if (Input.GetKeyUp(KeyCode.UpArrow))
+        {
+            this.NukeCabbage();
+        }
     }
 
     private Color GetRandomColor()

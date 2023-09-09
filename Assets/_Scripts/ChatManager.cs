@@ -99,11 +99,13 @@ public class ChatManager : MonoBehaviour
 
     public int prestigeThreshold = 50;
 
+    [SerializeField]
+    private GameObject achievementObject;
+
     // Start is called before the first frame update
     void Awake()
     {
         Application.targetFrameRate = 60;
-
 
         if (instance == null)
         {
@@ -191,6 +193,7 @@ public class ChatManager : MonoBehaviour
         this.customCabbageSpriteNames.Add("thejackalanimatronic");
         this.customCabbageSpriteNames.Add("daddy_dagoth_ur__");
         this.customCabbageSpriteNames.Add("demonweez666");
+        this.customCabbageSpriteNames.Add("thebooksnail");
     }
 
     private void HandleKeyUp(RawKey key)
@@ -250,32 +253,30 @@ public class ChatManager : MonoBehaviour
     {
         Debug.LogError("Reward ID: " + e.RewardId.ToString());
 
-        if (e.RewardId.ToString() == TwitchSecrets.AlcoholUpRewardID)
+        switch (e.RewardId.ToString())
         {
-            this.UpdateWheel(e.Message.ToLower(), 1);
-        }
-        else if (e.RewardId.ToString() == TwitchSecrets.AlcoholDownRewardID)
-        {
-            this.UpdateWheel(e.Message.ToLower(), -1);
-        }
-
-        if (this.killSwitchActive)
-        {
-            return;
-        }
-
-        if (e.RewardId.ToString() == TwitchSecrets.ShotsRewardID)
-        {
-            this.InitiateShotsHype();
-        }
-        else if (e.RewardId.ToString() == TwitchSecrets.AlwaysSunnyRewardID)
-        {
-            this.InitiateAlwaysSunny(e.Message);
-        }
-        else if (e.RewardId.ToString() == TwitchSecrets.NukeCabbageRewardID)
-        {
-            this.NukeCabbage(e.DisplayName, e.Message);
-        }
+            case TwitchSecrets.AlcoholUpRewardID:
+                this.UpdateWheel(e.Message.ToLower(), 1);
+                break;
+            case TwitchSecrets.AlcoholDownRewardID:
+                this.UpdateWheel(e.Message.ToLower(), -1);
+                break;
+            case TwitchSecrets.ShotsRewardID:
+                this.InitiateShotsHype();
+                break;
+            case TwitchSecrets.AlwaysSunnyRewardID:
+                this.InitiateAlwaysSunny(e.Message);
+                break;
+            case TwitchSecrets.NukeCabbageRewardID:
+                this.NukeCabbage(e.DisplayName, e.Message);
+                break;
+            case TwitchSecrets.AchievementUnlockedID:
+                this.InitiateAchievementUnlocked(e.Message);
+                break;
+            default:
+                Debug.LogError("Unknown reward ID: " + e.RewardId.ToString());
+                break;
+        }        
     }
 
     private void Client_OnConnected(object sender, OnConnectedArgs e)
@@ -586,6 +587,15 @@ public class ChatManager : MonoBehaviour
     private void DeactivateAlwaysSunny()
     {
         this.alwaysSunnyPanel.SetActive(false);
+    }
+
+    private void InitiateAchievementUnlocked(string achievementName)
+    {
+        Vector2 achievementViewportPosition = new Vector2(0.5f, 0.1f);
+        Vector2 achievementWorldPosition = Camera.main.ViewportToWorldPoint(achievementViewportPosition);
+
+        GameObject achievementInstance = Instantiate(this.achievementObject, achievementWorldPosition, new Quaternion()) as GameObject;
+        achievementInstance.GetComponent<AchievementUnlocked>().DisplayAchievement(achievementName);
     }
 
     private void RollCall()

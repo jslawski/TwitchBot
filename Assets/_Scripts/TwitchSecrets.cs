@@ -17,6 +17,7 @@ public static class TwitchSecrets
     public const string ASMRRewardID = "4752928e-f992-4e37-b7b2-2ee0171b30c9";
     public const string AlwaysSunnyRewardID = "1a94bb95-f316-4424-bed1-50db914c7e1b";
     public const string NukeCabbageRewardID = "06ef844f-e942-4798-8f26-e3f883051299";
+    public const string AchievementUnlockedID = "d60ee905-c739-4ad5-b905-672a9ce5940e";
     public const string ChannelName = "coleslawski";
     public const string AccessToken = "50nmubijyxlea117heftlhtfb3s50k";
     public const string BotName = "cabbagegatekeeper";
