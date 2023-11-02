@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Networking;
+using UnityEngine.Rendering;
 
 public class CabbageChatter : MonoBehaviour
 {
@@ -11,21 +13,13 @@ public class CabbageChatter : MonoBehaviour
     public RectTransform chatBoxRect;
     public GameObject chatTextObject;
     public GameObject emoteMessageBoxObject;
-    public GameObject cabbageVisualHolder;
+    public SortingGroup chatterSpriteGroup;
     public GameObject plinkoText;
     public GameObject crown;
     public GameObject prestigeBadge;
     public TextMeshProUGUI prestigeText;
     public GameObject magnifyingGlass;
-
-    //Character Creator Fields
-    public SpriteRenderer headPiece;
-    public SpriteRenderer eyeBrows;
-    public SpriteRenderer eyes;
-    public SpriteRenderer nose;
-    public SpriteRenderer mouth;
-    public SpriteRenderer baseCabbage;
-
+    
     public TextMeshProUGUI username;
 
     public Rigidbody cabbageRigidbody;
@@ -71,6 +65,9 @@ public class CabbageChatter : MonoBehaviour
     [SerializeField]
     private GameObject deathEffect;
 
+    [SerializeField]
+    private CabbageCharacter character;
+
     private void Awake()
     {
         this.chatterColor = this.GetRandomColor();
@@ -109,7 +106,9 @@ public class CabbageChatter : MonoBehaviour
 
     private void Start()
     {
-        this.GenerateCharacter();
+        this.character = GetComponentInChildren<CabbageCharacter>();
+
+        this.LoadCharacter();
     }
 
     public void ActivateCrown()
@@ -128,7 +127,7 @@ public class CabbageChatter : MonoBehaviour
         this.prestigeText.text = this.prestigeLevel.ToString();
     }
 
-    private void GenerateCharacter()
+    public void LoadCharacter(bool forceRefresh = false)
     {
         this.plinkoText.GetComponent<TextMeshProUGUI>().text = chatterName;
         if (ChatManager.instance.plinko == true)
@@ -140,28 +139,12 @@ public class CabbageChatter : MonoBehaviour
             this.plinkoText.SetActive(false);
         }
 
-        if (ChatManager.instance.mjTime == true)
-        {
-            this.baseCabbage.sprite = Resources.Load <Sprite>("CustomCabbages/michaelJordan");
-            return;
-        }
-
-        if (ChatManager.instance.customCabbageSpriteNames.Contains(this.chatterName.ToLower()))
-        {
-            this.baseCabbage.sprite = Resources.Load<Sprite>("CustomCabbages/" + this.chatterName.ToLower());
-            return;
-        }
-
-        this.headPiece.sprite = CharacterCreator.instance.GetHeadpiece();
-        this.eyeBrows.sprite = CharacterCreator.instance.GetEyebrows();
-        this.eyes.sprite = CharacterCreator.instance.GetEyes();
-        this.nose.sprite = CharacterCreator.instance.GetNose();
-        this.mouth.sprite = CharacterCreator.instance.GetMouth();
+        this.character.UpdateCharacter(this.chatterName, forceRefresh);
     }
-
+    
     public void RerollCharacter()
     {
-        this.GenerateCharacter();
+        this.LoadCharacter();
         this.DisplayChatMessage(this.chatterName, this.rerollPhrases[Random.Range(0, this.rerollPhrases.Count)]);
     }
 
@@ -296,9 +279,8 @@ public class CabbageChatter : MonoBehaviour
 
     public void UpdateLayer(int layerDepth)
     {
-        this.cabbageVisualHolder.transform.position = new Vector3(this.cabbageVisualHolder.transform.position.x, 
-            this.cabbageVisualHolder.transform.position.y, 
-            -layerDepth * this.layerGapAmount);
+        this.chatCanvas.sortingOrder = layerDepth;
+        this.chatterSpriteGroup.sortingOrder = layerDepth;
     }
 
     private void LateUpdate()
@@ -319,8 +301,11 @@ public class CabbageChatter : MonoBehaviour
         return new Color(Random.Range(0.0f, 1.0f), Random.Range(0.0f, 1.0f), Random.Range(0.0f, 1.0f), 1.0f);
     }
 
+    //Prestige is disabled until I rethink how I want to store it on the database
     public void TriggerPrestige()
     {
+        return;
+
         this.prestigeLevel++;
         this.shootScore -= ChatManager.instance.prestigeThreshold;
 

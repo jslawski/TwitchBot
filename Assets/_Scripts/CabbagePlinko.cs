@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
+//Pretty sure this is a useless class. DELETE IT!
+
 public class CabbagePlinko : MonoBehaviour
 {
     public GameObject crown;
@@ -89,11 +91,16 @@ public class CabbagePlinko : MonoBehaviour
         this.prestigeText.text = this.prestigeLevel.ToString();
     }
 
+    
     private void GenerateCharacter()
     {
+        
         this.username.text = this.chatterName;
         this.username.color = this.chatterColor;
 
+        //StartCoroutine(this.LoadUserData());
+        
+        /*
         if (ChatManager.instance.mjTime == true)
         {
             this.baseCabbage.sprite = Resources.Load<Sprite>("CustomCabbages/michaelJordan");
@@ -111,7 +118,11 @@ public class CabbagePlinko : MonoBehaviour
         this.eyes.sprite = CharacterCreator.instance.GetEyes();
         this.nose.sprite = CharacterCreator.instance.GetNose();
         this.mouth.sprite = CharacterCreator.instance.GetMouth();
+        */
     }
+    
+
+
 
     private void OnCollisionEnter(Collision collision)
     {

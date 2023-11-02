@@ -10,13 +10,14 @@ using TwitchLib.Communication.Models;
 using System;
 using TwitchLib.Communication.Clients;
 using System.Collections;
+using CharacterCustomizer;
 
 public class ChatManager : MonoBehaviour
 {
     public static ChatManager instance;
 
     public Client chatClient;
-    private ConnectionCredentials botCreds = new ConnectionCredentials(TwitchSecrets.BotName, TwitchSecrets.AccessToken);
+    private ConnectionCredentials botCreds = new ConnectionCredentials(SecretKeys.BotName, SecretKeys.AccessToken);
 
     private PubSub pubSubClient;
 
@@ -72,8 +73,6 @@ public class ChatManager : MonoBehaviour
 
     public bool mjTime = false;
 
-    public List<string> customCabbageSpriteNames;
-
     public bool plinko = false;
     private GameObject[] plinkoLevels;
     private GameObject activePlinkoLevel;
@@ -95,12 +94,14 @@ public class ChatManager : MonoBehaviour
     private AudioSource plinkoSound;
 
     private Coroutine aiCoroutine = null;
-    private float secondsBetweenAIShots = 30.0f;
+    private float secondsBetweenAIShots = 45.0f;
 
-    public int prestigeThreshold = 50;
+    public int prestigeThreshold = 9999999;
 
     [SerializeField]
     private GameObject achievementObject;
+
+    private int currentSortOrder = 0;
 
     // Start is called before the first frame update
     void Awake()
@@ -112,6 +113,8 @@ public class ChatManager : MonoBehaviour
             instance = this;
         }
 
+        CharacterCache.Setup();
+
         ClientOptions clientOptions = new ClientOptions
         {
             MessagesAllowedInPeriod = 750,
@@ -121,7 +124,7 @@ public class ChatManager : MonoBehaviour
         WebSocketClient customClient = new WebSocketClient(clientOptions);
 
         this.chatClient = new Client();
-        this.chatClient.Initialize(botCreds, TwitchSecrets.ChannelName);
+        this.chatClient.Initialize(botCreds, SecretKeys.ChannelName);
         this.chatClient.OnMessageReceived += this.ProcessMessage;
         this.chatClient.WillReplaceEmotes = true;
         this.chatClient.OnUserLeft += this.RemoveCabbageChatter;
@@ -164,38 +167,10 @@ public class ChatManager : MonoBehaviour
         this.InitializeCabbageCodeVictors();
 
         StartCoroutine(this.RejoinHeartbeat());
-    }
 
-    private void Start()
-    {
-        this.CreateCustomCabbageList();
+        AttributeSpriteDicts.Setup();
     }
-
-    private void CreateCustomCabbageList()
-    {
-        this.customCabbageSpriteNames = new List<string>();
-        this.customCabbageSpriteNames.Add("ruddgasm");
-        this.customCabbageSpriteNames.Add("ruddpuddle");
-        this.customCabbageSpriteNames.Add("jerry_jerah_jeremeson");
-        this.customCabbageSpriteNames.Add("coleslawski");
-        this.customCabbageSpriteNames.Add("cabbagegatekeeper");
-        this.customCabbageSpriteNames.Add("roh_ka");
-        this.customCabbageSpriteNames.Add("safireninja");
-        this.customCabbageSpriteNames.Add("nickpea_and_thebean");
-        this.customCabbageSpriteNames.Add("cotmweasel");
-        this.customCabbageSpriteNames.Add("pomothedog");
-        this.customCabbageSpriteNames.Add("itsboats");
-        this.customCabbageSpriteNames.Add("rookrules");
-        this.customCabbageSpriteNames.Add("doctor_denny");
-        this.customCabbageSpriteNames.Add("dalbusg");
-        this.customCabbageSpriteNames.Add("mastyff");
-        this.customCabbageSpriteNames.Add("chrisvsbacklog");
-        this.customCabbageSpriteNames.Add("thejackalanimatronic");
-        this.customCabbageSpriteNames.Add("daddy_dagoth_ur__");
-        this.customCabbageSpriteNames.Add("demonweez666");
-        this.customCabbageSpriteNames.Add("thebooksnail");
-    }
-
+    
     private void HandleKeyUp(RawKey key)
     {
         if (key == RawKey.F7)
@@ -245,7 +220,7 @@ public class ChatManager : MonoBehaviour
 
     private void PubSubConnected(object sender, System.EventArgs e)
     {
-        pubSubClient.ListenToRewards(TwitchSecrets.ChannelID);
+        pubSubClient.ListenToRewards(SecretKeys.ChannelID);
         pubSubClient.SendTopics();
     }
 
@@ -255,22 +230,22 @@ public class ChatManager : MonoBehaviour
 
         switch (e.RewardId.ToString())
         {
-            case TwitchSecrets.AlcoholUpRewardID:
+            case SecretKeys.AlcoholUpRewardID:
                 this.UpdateWheel(e.Message.ToLower(), 1);
                 break;
-            case TwitchSecrets.AlcoholDownRewardID:
+            case SecretKeys.AlcoholDownRewardID:
                 this.UpdateWheel(e.Message.ToLower(), -1);
                 break;
-            case TwitchSecrets.ShotsRewardID:
+            case SecretKeys.ShotsRewardID:
                 this.InitiateShotsHype();
                 break;
-            case TwitchSecrets.AlwaysSunnyRewardID:
+            case SecretKeys.AlwaysSunnyRewardID:
                 this.InitiateAlwaysSunny(e.Message);
                 break;
-            case TwitchSecrets.NukeCabbageRewardID:
+            case SecretKeys.NukeCabbageRewardID:
                 this.NukeCabbage(e.DisplayName, e.Message);
                 break;
-            case TwitchSecrets.AchievementUnlockedID:
+            case SecretKeys.AchievementUnlockedID:
                 this.InitiateAchievementUnlocked(e.Message);
                 break;
             default:
@@ -281,7 +256,7 @@ public class ChatManager : MonoBehaviour
 
     private void Client_OnConnected(object sender, OnConnectedArgs e)
     {
-        this.chatClient.JoinChannel(TwitchSecrets.ChannelName, true);
+        this.chatClient.JoinChannel(SecretKeys.ChannelName, true);
     }
 
     private void ProcessCommand(object sender, OnChatCommandReceivedArgs e)
@@ -412,6 +387,11 @@ public class ChatManager : MonoBehaviour
             this.GrabClipLink(e.ChatMessage.Message);
         }
 
+        if (e.ChatMessage.Message.Contains("reload"))
+        {
+            this.chatterDict[e.ChatMessage.Username.ToLower()].LoadCharacter(true);
+        }
+
         if (this.chatterDict.ContainsKey(e.ChatMessage.Username.ToLower()))
         {
             this.chatterDict[e.ChatMessage.Username.ToLower()].DisplayChatMessage(e.ChatMessage.Username, this.GetProperMessage(e.ChatMessage));
@@ -433,12 +413,21 @@ public class ChatManager : MonoBehaviour
         this.currentActiveChatters.Add(cabbageChatter);
         this.chatterQueue.Enqueue(cabbageChatter);
 
-        cabbageChatter.chatterName = username;        
+        cabbageChatter.chatterName = username;
         newChatter.name = username;
+
+        cabbageChatter.UpdateLayer(this.currentSortOrder++);
 
         if (newChatterMessage != null)
         {
             cabbageChatter.DisplayChatMessage(username, this.GetProperMessage(newChatterMessage));
+        }
+
+        //Toggle crown if the leader has respawned
+        LeaderboardEntryData topPlayer = Leaderboard.instance.GetTopPlayer();
+        if (topPlayer != null && topPlayer.username == cabbageChatter.chatterName.ToLower())
+        {
+            cabbageChatter.ActivateCrown();
         }
 
         //Update chatter with their last shoot score, if it exists
@@ -447,11 +436,7 @@ public class ChatManager : MonoBehaviour
         {
             cabbageChatter.shootScore = this.chatterScoreHistory[cabbageChatter.chatterName];
 
-            //Toggle crown if the leader has respawned
-            if (Leaderboard.instance.topLeaders[0].username.text == cabbageChatter.chatterName.ToLower())
-            {
-                cabbageChatter.ActivateCrown();
-            }
+            
         }
         else
         {
@@ -472,7 +457,7 @@ public class ChatManager : MonoBehaviour
         else
         {
             this.chatterPrestigeHistory.Add(cabbageChatter.chatterName, 0);
-        }
+        }        
     }
 
     private string GetProperMessage(ChatMessage chatMessage)
@@ -508,7 +493,7 @@ public class ChatManager : MonoBehaviour
         //Remove the chatter from it's current position in the list, and put it at the end
         this.currentActiveChatters.Remove(latestChatter);
         this.currentActiveChatters.Add(latestChatter);
-        UpdateChatterLayers();
+        latestChatter.UpdateLayer(this.currentSortOrder++);
         this.readyForNextChatter = true;
     }
 
@@ -594,7 +579,9 @@ public class ChatManager : MonoBehaviour
         Vector2 achievementViewportPosition = new Vector2(0.5f, 0.1f);
         Vector2 achievementWorldPosition = Camera.main.ViewportToWorldPoint(achievementViewportPosition);
 
-        GameObject achievementInstance = Instantiate(this.achievementObject, achievementWorldPosition, new Quaternion()) as GameObject;
+        Vector3 achievementWorldPosition3D = new Vector3(achievementWorldPosition.x, achievementWorldPosition.y, -1.0f);
+
+        GameObject achievementInstance = Instantiate(this.achievementObject, achievementWorldPosition3D, new Quaternion()) as GameObject;
         achievementInstance.GetComponent<AchievementUnlocked>().DisplayAchievement(achievementName);
     }
 
@@ -631,15 +618,10 @@ public class ChatManager : MonoBehaviour
 
         this.leaderboardCanvas.SetActive(shootModeActive);
 
+        Leaderboard.instance.RefreshLeaderboard();
+
         if (shootModeActive)
         {
-            /*if (!Application.isEditor)
-            {
-                int audioClipIndex = UnityEngine.Random.Range(0, this.bballHoopMusic.Length);
-                this.bballSource.clip = this.bballHoopMusic[audioClipIndex];
-                bballSource.Play();
-            }
-            */
             this.bounceMaterial.bounciness = 0.75f;
         }
         else
@@ -681,12 +663,12 @@ public class ChatManager : MonoBehaviour
     private void ShowRecentClip()
     {
         //Debug.LogError("Recent Clip: " + this.recentClip);
-        this.chatClient.SendMessage(TwitchSecrets.ChannelName, "!showClip " + this.recentClip);
+        this.chatClient.SendMessage(SecretKeys.ChannelName, "!showClip " + this.recentClip);
     }
 
     private void SendPlsLaugh()
     {
-        this.chatClient.SendMessage(TwitchSecrets.ChannelName, "!plslaugh");
+        this.chatClient.SendMessage(SecretKeys.ChannelName, "!plslaugh");
     }
 
     private void InitializeCabbageCodeVictors()
@@ -712,7 +694,7 @@ public class ChatManager : MonoBehaviour
         }
         else
         {
-            this.chatClient.SendMessage(TwitchSecrets.ChannelName, "@" + chatUsername + " ACCESS DENIED! If you would access to this command, then you must solve the Cabbage Code at: https://jared-slawski.itch.io/the-cabbage-code");
+            this.chatClient.SendMessage(SecretKeys.ChannelName, "@" + chatUsername + " ACCESS DENIED! If you would access to this command, then you must solve the Cabbage Code at: https://jared-slawski.itch.io/the-cabbage-code");
         }
     }
 
@@ -734,11 +716,11 @@ public class ChatManager : MonoBehaviour
 
             if (attacker == targetNoAt)
             {
-                this.chatClient.SendMessage(TwitchSecrets.ChannelName, "@" + attacker + " nuked themselves!");
+                this.chatClient.SendMessage(SecretKeys.ChannelName, "@" + attacker + " nuked themselves!");
             }
             else
             {
-                this.chatClient.SendMessage(TwitchSecrets.ChannelName, "@" + attacker + " nuked " + target);
+                this.chatClient.SendMessage(SecretKeys.ChannelName, "@" + attacker + " nuked " + target);
             }
         } 
     }
@@ -758,6 +740,7 @@ public class ChatManager : MonoBehaviour
         this.plinko = !this.plinko;
 
         this.leaderboardCanvas.SetActive(this.plinko);
+        Leaderboard.instance.RefreshLeaderboard();
 
         if (this.plinko == true)
         {
@@ -797,22 +780,6 @@ public class ChatManager : MonoBehaviour
         {
             yield return null;
         }
-
-        /*if (this.currentPlinkoLevelIndex == -1)
-        {
-            this.currentPlinkoLevelIndex = 0;
-        }
-        else
-        {
-            int newPlinkoLevelIndex = this.currentPlinkoLevelIndex;
-
-            while (newPlinkoLevelIndex == this.currentPlinkoLevelIndex)
-            {
-                newPlinkoLevelIndex = UnityEngine.Random.Range(0, this.plinkoLevels.Length);
-            }
-            
-            this.currentPlinkoLevelIndex = (this.currentPlinkoLevelIndex + 1) % this.plinkoLevels.Length;
-        }*/
 
         this.SelectNewPlinkoLevel();
 
@@ -858,14 +825,20 @@ public class ChatManager : MonoBehaviour
             return;
         }
 
-        GameObject newChatter = Instantiate(cabbageChatterPrefab, Vector3.zero, new Quaternion(), this.parentPlinko.transform) as GameObject;
+        GameObject newChatter = Instantiate(cabbageChatterPrefab, Vector3.zero, new Quaternion(), this.parentChat.transform) as GameObject;
         CabbageChatter cabbageChatter = newChatter.GetComponent<CabbageChatter>();
         this.chatterDict.Add(username, cabbageChatter);
-        //Debug.LogError("New Chatter Dict Key: " + username);
         this.currentActiveChatters.Add(cabbageChatter);
 
         cabbageChatter.chatterName = username.ToLower();
         newChatter.name = username;
+
+        //Toggle crown if the leader has respawned
+        LeaderboardEntryData topPlayer = Leaderboard.instance.GetTopPlayer();
+        if (topPlayer != null && topPlayer.username == cabbageChatter.chatterName.ToLower())
+        {
+            cabbageChatter.ActivateCrown();
+        }
 
         //Update chatter with their last shoot score, if it exists
         //Otherwise, initialize it to 0
@@ -873,11 +846,7 @@ public class ChatManager : MonoBehaviour
         {
             cabbageChatter.shootScore = this.chatterScoreHistory[cabbageChatter.chatterName.ToLower()];
 
-            //Toggle crown if the leader has respawned
-            if (Leaderboard.instance.topLeaders[0].username.text == cabbageChatter.chatterName.ToLower())
-            {
-                cabbageChatter.ActivateCrown();
-            }
+            
         }
         else
         {
@@ -949,7 +918,7 @@ public class ChatManager : MonoBehaviour
     {
         while (true)
         {
-            this.chatClient.JoinChannel(TwitchSecrets.ChannelName, true);
+            this.chatClient.JoinChannel(SecretKeys.ChannelName, true);
             yield return new WaitForSeconds(300);
         }
     }

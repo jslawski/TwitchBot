@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public static class TwitchSecrets
+public static class SecretKeys
 {
     public const string ChannelID = "155703686";
     public const string NinjaID = "51114479";

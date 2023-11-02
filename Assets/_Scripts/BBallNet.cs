@@ -49,7 +49,7 @@ public class BBallNet : MonoBehaviour
 
         ChatManager.instance.chatterScoreHistory[scorer.chatterName.ToLower()] = scorer.shootScore;
         ChatManager.instance.chatterPrestigeHistory[scorer.chatterName.ToLower()] = scorer.prestigeLevel;
-        Leaderboard.instance.UpdateLeaderboard(scorer);
+        Leaderboard.instance.QueueLeaderboardUpdate(scorer.chatterName, 3.0f);
 
         StopAllCoroutines();
         StartCoroutine(this.TurnOffScoreTextAfterDelay());

@@ -9,8 +9,6 @@ public class EmoteBox : MonoBehaviour
 {
     public Image emoteImage;
     public Animator gifEmote;
-    //public RawImage gifRawImage;
-    //public UniGifImage gifEmote;
 
     private bool IsStaticEmote(string word)
     {

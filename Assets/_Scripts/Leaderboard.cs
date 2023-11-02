@@ -1,176 +1,158 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using CharacterCustomizer;
+using UnityEngine.Networking;
 
-public class FullLeaderboardEntry
+public class LeaderboardUpdate
 {
-    public Sprite baseCabbage;
-    public Sprite headPiece;
-    public Sprite eyeBrows;
-    public Sprite eyes;
-    public Sprite nose;
-    public Sprite mouth;
-
     public string username;
-    public int score;
+    public float value;
 
-    public FullLeaderboardEntry()
+    public LeaderboardUpdate(string newName, float newValue)
     {
-        this.baseCabbage = null;
-        this.headPiece = null;
-        this.eyeBrows = null;
-        this.eyes = null;
-        this.nose = null;
-        this.mouth = null;
-        this.username = string.Empty;
-        this.score = int.MinValue;
-    }
-
-    public FullLeaderboardEntry(CabbageChatter chatter, int score)
-    {
-        this.baseCabbage = chatter.baseCabbage.sprite;
-        this.headPiece = chatter.headPiece.sprite;
-        this.eyeBrows = chatter.eyeBrows.sprite;
-        this.eyes = chatter.eyes.sprite;
-        this.nose = chatter.nose.sprite;
-        this.mouth = chatter.mouth.sprite;
-        this.username = chatter.chatterName.ToLower();
-        this.score = score;
+        this.username = newName;
+        this.value = newValue;
     }
 }
 
 public class Leaderboard : MonoBehaviour
-{ 
+{
     public static Leaderboard instance;
 
-    public LeaderboardEntry[] topLeaders;
+    [SerializeField]
+    private GameObject parentChatObject;
 
-    private LeaderboardEntry tempLeaderboardEntry;
+    [HideInInspector]
+    public LeaderboardEntryObject[] entries;
 
-    private List<FullLeaderboardEntry> fullLeaderboard;
+    private Queue<LeaderboardUpdate> queuedUpdates;
+
+    private bool readyToProcessUpdate = true;
+
+    public LeaderboardData currentLeaderboard;
 
     private void Awake()
     {
-        instance = this;
-        this.fullLeaderboard = new List<FullLeaderboardEntry>();
+        if (instance == null)
+        {
+            instance = this;
+        }
+    }
+
+    private void Start()
+    {
+        this.entries = GetComponentsInChildren<LeaderboardEntryObject>(true);
+        this.queuedUpdates = new Queue<LeaderboardUpdate>();        
+    }
+
+    public void RefreshLeaderboard()
+    {
+        this.RequestLeaderboard();
+    }
+
+    #region Get Leaderboard
+    private void RequestLeaderboard()
+    {
+        GetCabbageLeaderboardAsyncRequest request = new GetCabbageLeaderboardAsyncRequest(this.RequestLeaderboardSuccess, this.RequestLeaderboardFailure);
+        request.Send();
+    }
+
+    private void RequestLeaderboardSuccess(string data)
+    {
+        this.currentLeaderboard = JsonUtility.FromJson<LeaderboardData>(data);
         this.UpdateLeaderboardVisuals();
     }
 
-    public void UpdateLeaderboard(CabbageChatter chatter)
+    private void RequestLeaderboardFailure()
     {
-        FullLeaderboardEntry tempEntry = new FullLeaderboardEntry();
-        for (int i = 0; i < this.fullLeaderboard.Count; i++)
-        {
-            if (this.fullLeaderboard[i].username == chatter.chatterName.ToLower())
-            {
-                tempEntry = new FullLeaderboardEntry(chatter, this.fullLeaderboard[i].score);
-                this.fullLeaderboard.RemoveAt(i);
-            }
-        }
+        Debug.LogError("Error: Unable to get leaderboard");
+    }
+    #endregion
 
-        if (tempEntry.username == string.Empty)
+    #region UpdateLeaderboard
+    private void UpdateLeaderboard(LeaderboardUpdate updateValues)
+    {
+        UpdateCabbageLeaderboardAsyncRequest request = new UpdateCabbageLeaderboardAsyncRequest(updateValues.username, updateValues.value.ToString(), this.UpdateLeaderboardSuccess, this.UpdateLeaderboardFailure);
+        request.Send();
+    }
+
+    private void UpdateLeaderboardSuccess(string data)
+    {
+        this.currentLeaderboard = JsonUtility.FromJson<LeaderboardData>(data);
+        this.UpdateLeaderboardVisuals();
+        this.readyToProcessUpdate = true;
+    }
+
+    private void UpdateLeaderboardFailure()
+    {
+        Debug.LogError("Error: Unable to update leaderboard entry");
+    }
+    #endregion
+
+
+    public LeaderboardEntryData GetTopPlayer()
+    {
+        if (this.currentLeaderboard.entries.Count > 0)
         {
-            this.InsertNewEntry(chatter);
+            return this.currentLeaderboard.entries[0];
         }
         else
         {
-            tempEntry.score = chatter.shootScore;
-            this.UpdateCreatedEntry(tempEntry);
-        }
-
-        if (ChatManager.instance.plinko == false)
-        {
-            this.UpdateCrown(chatter.chatterName.ToLower());
+            return null;
         }
     }
 
-    private void UpdateCrown(string scorerName)
+    public void QueueLeaderboardUpdate(string username, float value)
     {
-        if (ChatManager.instance.lastLeader != null)
-        {
-            ChatManager.instance.lastLeader.DeactivateCrown();
-        }
-
-        ChatManager.instance.chatterDict[this.topLeaders[0].username.text.ToLower()].ActivateCrown();
-        ChatManager.instance.lastLeader = ChatManager.instance.chatterDict[this.topLeaders[0].username.text.ToLower()];
+        this.queuedUpdates.Enqueue(new LeaderboardUpdate(username, value));        
     }
 
-    private void InsertNewEntry(CabbageChatter chatter)
+    private void FixedUpdate()
     {
-        FullLeaderboardEntry newEntry = new FullLeaderboardEntry(chatter, chatter.shootScore);
-
-        this.UpdateCreatedEntry(newEntry);
+        if (this.queuedUpdates.Count > 0 && this.readyToProcessUpdate == true)
+        {
+            this.ProcessUpdate(this.queuedUpdates.Dequeue());
+        }
     }
 
-    private void UpdateCreatedEntry(FullLeaderboardEntry entry)
+    private void ProcessUpdate(LeaderboardUpdate updateValues)
     {
-        bool inserted = false;
+        this.readyToProcessUpdate = false;
 
-        for (int i = this.fullLeaderboard.Count - 1; i >= 0; i--)
-        {
-            if (entry.score >= this.fullLeaderboard[i].score)
-            {
-                //Insert entry 1 position ahead of the first entry it is >= than
-                //If we are at the end of the list, just add a new entry
-                if ((i + 1) < this.fullLeaderboard.Count)
-                {
-                    this.fullLeaderboard.Insert(i + 1, entry);
-                }
-                else
-                {
-                    this.fullLeaderboard.Add(entry);
-                }
-                
-                inserted = true;
-                break;
-            }
-        }
-
-        //Insert the entry to the bottom of the leaderboard if its score doesn't surpass any existing entries
-        if (inserted == false)
-        {
-            this.fullLeaderboard.Insert(0, entry);
-        }
-
-        if (this.fullLeaderboard.Count == 0)
-        {
-            this.fullLeaderboard.Add(entry);
-        }
-
-        /*string currentLeaderboard = string.Empty;
-        for (int i = this.fullLeaderboard.Count - 1; i >= 0; i--)
-        {
-            currentLeaderboard += this.fullLeaderboard[i].username + ": " + this.fullLeaderboard[i].score + "\n";
-        }
-
-        Debug.LogError("Leaderboard: \n" + currentLeaderboard);
-        */
-        this.UpdateLeaderboardVisuals();
+        this.UpdateLeaderboard(updateValues);
     }
 
     private void UpdateLeaderboardVisuals()
     {
-        int currentLeaderboardIndex = this.topLeaders.Length - 1;
-        for (int i = 0; i < this.topLeaders.Length; i++)
+        for (int i = 0; i < this.currentLeaderboard.entries.Count && i < this.entries.Length; i++)
         {
-            int leaderIndex = (this.fullLeaderboard.Count - 1) - i;
-
-            if (leaderIndex < 0)
-            {
-                break;
-            }
-
-            this.topLeaders[i].UpdateEntry(this.fullLeaderboard[leaderIndex]);
-            this.topLeaders[i].gameObject.SetActive(true);
-            currentLeaderboardIndex--;
+            this.entries[i].UpdateEntry(this.currentLeaderboard.entries[i].username, this.currentLeaderboard.entries[i].value);
         }
 
-        //Disable any empty leaderboard entries
-        for (int i = 0; i < this.topLeaders.Length; i++)
+        this.UpdateCrownHolder();
+    }
+
+    //This function is responsible for changing the crown holder in situations where
+    //Cabbage Chatters remain on screen after scoring points (unlike plinko)    
+    private void UpdateCrownHolder()
+    {
+        if (this.currentLeaderboard == null)
         {
-            if (this.topLeaders[i].score == 0)
+            return;
+        }
+
+        CabbageChatter[] allActiveChatters = this.parentChatObject.GetComponentsInChildren<CabbageChatter>();
+        
+        for (int i = 0; i < allActiveChatters.Length; i++)
+        {
+            if (allActiveChatters[i].chatterName == this.currentLeaderboard.entries[0].username)
             {
-                this.topLeaders[i].gameObject.SetActive(false);
+                allActiveChatters[i].ActivateCrown();
+            }
+            else
+            {
+                allActiveChatters[i].DeactivateCrown();
             }
         }
     }

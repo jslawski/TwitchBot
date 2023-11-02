@@ -43,9 +43,9 @@ public class CatchZone : MonoBehaviour
             scorer.TriggerPrestige();
         }
 
-        ChatManager.instance.chatterScoreHistory[scorer.chatterName.ToLower()] = scorer.shootScore;
-        ChatManager.instance.chatterPrestigeHistory[scorer.chatterName.ToLower()] = scorer.prestigeLevel;
-        Leaderboard.instance.UpdateLeaderboard(scorer);
+        //ChatManager.instance.chatterScoreHistory[scorer.chatterName.ToLower()] = scorer.shootScore;
+        //ChatManager.instance.chatterPrestigeHistory[scorer.chatterName.ToLower()] = scorer.prestigeLevel;
+        Leaderboard.instance.QueueLeaderboardUpdate(scorer.chatterName, catchPoints);
 
         if (catchPoints == 10)
         {
