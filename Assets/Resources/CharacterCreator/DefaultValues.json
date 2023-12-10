@@ -16,9 +16,9 @@
 	{
 		"name": "",
 		"horPos": 0.0,
-		"verPos": 3.5,
-		"scaleX": 3.0,
-		"scaleY": 3.0,
+		"verPos": 0.2,
+		"scaleX": 1.0,
+		"scaleY": 1.0,
 		"rot": 0.0,
 		"dep": -2,
 		"colors": [],
@@ -30,10 +30,10 @@
 		"left":
 		{
 			"name": "",
-			"horPos": -3.5,
-			"verPos": 4.0,
-			"scaleX": 3.0,
-			"scaleY": 3.0,
+			"horPos": -0.25,
+			"verPos": 0.2,
+			"scaleX": 1.0,
+			"scaleY": 1.0,
 			"rot": 0.0,
 			"dep": 0,
 			"colors": [],
@@ -43,10 +43,10 @@
 		"right":
 		{
 			"name": "",
-			"horPos": 3.5,
-			"verPos": 4.0,
-			"scaleX": 3.0,
-			"scaleY": 3.0,
+			"horPos": 0.25,
+			"verPos": 0.2,
+			"scaleX": 1.0,
+			"scaleY": 1.0,
 			"rot": 0.0,
 			"dep": 0,
 			"colors": [],
@@ -59,10 +59,10 @@
 		"left":
 		{
 			"name": "",
-			"horPos": -3.5,
-			"verPos": 1.0,
-			"scaleX": 3.0,
-			"scaleY": 3.0,
+			"horPos": -0.25,
+			"verPos": 0.05,
+			"scaleX": 1.0,
+			"scaleY": 1.0,
 			"rot": 0.0,
 			"dep": -1,
 			"colors": [],
@@ -72,10 +72,10 @@
 		"right":
 		{
 			"name": "",
-			"horPos": 3.5,
-			"verPos": 1.0,
-			"scaleX": 3.0,
-			"scaleY": 3.0,
+			"horPos": 0.25,
+			"verPos": 0.05,
+			"scaleX": 1.0,
+			"scaleY": 1.0,
 			"rot": 0.0,
 			"dep": -1,
 			"colors": [],
@@ -87,9 +87,9 @@
 	{
 		"name": "",
 		"horPos": 0.0,
-		"verPos": -1.0,
-		"scaleX": 3.0,
-		"scaleY": 3.0,
+		"verPos": -0.1,
+		"scaleX": 1.0,
+		"scaleY": 1.0,
 		"rot": 0.0,
 		"dep": 1,
 		"colors": [],
@@ -100,9 +100,9 @@
 	{
 		"name": "",
 		"horPos": 0.0,
-		"verPos": -4.0,
-		"scaleX": 3.0,
-		"scaleY": 3.0,
+		"verPos": -0.3,
+		"scaleX": 1.0,
+		"scaleY": 1.0,
 		"rot": 0.0,
 		"dep": 2,
 		"colors": [],
@@ -113,7 +113,7 @@
 	{
 		"name": "",
 		"horPos": 0.0,
-		"verPos": -8.0,
+		"verPos": -0.5,
 		"scaleX": 1.0,
 		"scaleY": 1.0,
 		"rot": 0.0,
@@ -125,8 +125,8 @@
 	"acc2":
 	{
 		"name": "",
-		"horPos": -5.0,
-		"verPos": -4.0,
+		"horPos": -0.4,
+		"verPos": -0.4,
 		"scaleX": 1.0,
 		"scaleY": 1.0,
 		"rot": 0.0,
@@ -138,8 +138,8 @@
 	"acc3":
 	{
 		"name": "",
-		"horPos": 5.0,
-		"verPos": -4.0,
+		"horPos": 0.4,
+		"verPos": -0.4,
 		"scaleX": 1.0,
 		"scaleY": 1.0,
 		"rot": 0.0,
