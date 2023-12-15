@@ -25,7 +25,7 @@ public class TestChatterGenerator : MonoBehaviour
         {
             string chatterName = ("TestCabbage" + i.ToString()).ToLower();
 
-            ChatManager.instance.RemoveCabbage(chatterName);
+            CabbageManager.instance.RemoveCabbage(chatterName);
         }
     }
 
@@ -39,15 +39,18 @@ public class TestChatterGenerator : MonoBehaviour
 
     private void SpawnNewTestChatter(int chatterId)
     {
+        Debug.LogError("This code was commented out to get other stuff to work.  Go here to fix it.");        
+        /*
         string chatterName = ("TestCabbage" + chatterId.ToString()).ToLower();
 
-        if (ChatManager.instance.plinko == false)
+        if (CabbageManager.instance.plinko == false)
         {
-            ChatManager.instance.SpawnNewChatter(chatterName);
+            CabbageManager.instance.SpawnNewChatter(chatterName);
         }
         else
         {
-            ChatManager.instance.AttemptPlinkoDrop(chatterName, Random.Range(1, GameObject.Find("DropZonesParent").transform.childCount + 1));
+            CabbageManager.instance.AttemptPlinkoDrop(chatterName, Random.Range(1, GameObject.Find("DropZonesParent").transform.childCount + 1));
         }
+        */
     }
 }

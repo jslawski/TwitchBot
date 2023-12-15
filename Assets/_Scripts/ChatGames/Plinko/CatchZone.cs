@@ -6,6 +6,9 @@ using TMPro;
 public class CatchZone : MonoBehaviour
 {
     [SerializeField]
+    private PlinkoLevel plinkoLevel;
+
+    [SerializeField]
     private int catchPoints;
 
     [SerializeField]
@@ -30,7 +33,7 @@ public class CatchZone : MonoBehaviour
         {
             CabbageChatter scorer = other.gameObject.GetComponent<CabbageChatter>();
             this.AwardPoints(scorer);
-            ChatManager.instance.RemoveCabbage(scorer.chatterName);
+            CabbageManager.instance.RemoveCabbage(scorer.chatterName);
         }
     }
 
@@ -38,13 +41,13 @@ public class CatchZone : MonoBehaviour
     {        
         scorer.shootScore += catchPoints;
 
-        while (scorer.shootScore >= ChatManager.instance.prestigeThreshold)
+        while (scorer.shootScore >= CabbageManager.instance.prestigeThreshold)
         {
             scorer.TriggerPrestige();
         }
 
-        //ChatManager.instance.chatterScoreHistory[scorer.chatterName.ToLower()] = scorer.shootScore;
-        //ChatManager.instance.chatterPrestigeHistory[scorer.chatterName.ToLower()] = scorer.prestigeLevel;
+        //CabbageManager.instance.chatterScoreHistory[scorer.chatterName.ToLower()] = scorer.shootScore;
+        //CabbageManager.instance.chatterPrestigeHistory[scorer.chatterName.ToLower()] = scorer.prestigeLevel;
         Leaderboard.instance.QueueLeaderboardUpdate(scorer.chatterName, catchPoints);
 
         if (catchPoints == 10)
@@ -73,6 +76,6 @@ public class CatchZone : MonoBehaviour
             yield return null;
         }
 
-        ChatManager.instance.LoadNewPlinkoLevel();
+        this.plinkoLevel.plinkoGame.LoadNewPlinkoLevel();
     }
 }

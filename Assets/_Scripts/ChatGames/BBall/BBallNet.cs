@@ -42,13 +42,11 @@ public class BBallNet : MonoBehaviour
 
         this.scoreText.text = scorer.chatterName + " Scored!\n" + scorer.shootScore.ToString() + "pts";
 
-        while (scorer.shootScore >= ChatManager.instance.prestigeThreshold)
+        while (scorer.shootScore >= CabbageManager.instance.prestigeThreshold)
         {
             scorer.TriggerPrestige();
         }
 
-        ChatManager.instance.chatterScoreHistory[scorer.chatterName.ToLower()] = scorer.shootScore;
-        ChatManager.instance.chatterPrestigeHistory[scorer.chatterName.ToLower()] = scorer.prestigeLevel;
         Leaderboard.instance.QueueLeaderboardUpdate(scorer.chatterName, 3.0f);
 
         StopAllCoroutines();

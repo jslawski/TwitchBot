@@ -1,16 +1,19 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class PlinkoLevel : MonoBehaviour
 {
     [SerializeField]
     private DropZone[] dropZones;
 
+    [HideInInspector]
+    public PlinkoGame plinkoGame;
+
     // Start is called before the first frame update
     void Awake()
     {
         this.dropZones = GameObject.Find("DropZonesParent").GetComponentsInChildren<DropZone>();
+
+        this.plinkoGame = GetComponentInParent<PlinkoGame>();
     }
 
     public bool IsValidDropIndex(int dropIndex)

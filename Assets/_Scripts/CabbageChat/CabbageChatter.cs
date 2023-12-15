@@ -35,7 +35,6 @@ public class CabbageChatter : MonoBehaviour
 
     const int MaxChatMessagesVisable = 3;
 
-    private List<string> rerollPhrases;
     private List<string> hmmPhrases;
 
     private float layerGapAmount = 0.01f;
@@ -71,21 +70,6 @@ public class CabbageChatter : MonoBehaviour
     private void Awake()
     {
         this.chatterColor = this.GetRandomColor();
-
-        this.rerollPhrases = new List<string>()
-        {
-            "Behold, my new form!",
-            "And this...is to go...EVEN FURTHER BEYOND!",
-            "Bleargh, that was ugly.  I look MUCH better now!",
-            "AAARRRGGHHH, IT HURRRRRTS!",
-            "Did someone call for a sexy new cabbage?",
-            "Form of...CABBAGE!",
-            "Cower in fear at my new form, mortals!",
-            "This is giving me self-esteem issues...",
-            "One handome new cabbage, coming right up!",
-            "Oh god, is this worse?",
-            "Please let this one be okay, this is giving me an existential crisis"
-        };
 
         this.hmmPhrases = new List<string>()
         {
@@ -125,11 +109,11 @@ public class CabbageChatter : MonoBehaviour
         this.prestigeText.text = this.prestigeLevel.ToString();
     }
 
-    public void LoadCharacter()
-    {
-        this.plinkoText.GetComponent<TextMeshProUGUI>().text = chatterName;
-        if (ChatManager.instance.plinko == true)
+    public void LoadCharacter(bool isPlinkoCabbage = false)
+    {        
+        if (isPlinkoCabbage == true)
         {
+            this.plinkoText.GetComponent<TextMeshProUGUI>().text = chatterName;
             this.plinkoText.SetActive(true);
         }
         else
@@ -138,12 +122,6 @@ public class CabbageChatter : MonoBehaviour
         }
 
         this.character.UpdateCharacter(this.chatterName);
-    }
-    
-    public void RerollCharacter()
-    {
-        this.LoadCharacter();
-        this.DisplayChatMessage(this.chatterName, this.rerollPhrases[Random.Range(0, this.rerollPhrases.Count)]);
     }
 
     public void UpdateToNewSortingOrder(int order)
@@ -158,13 +136,13 @@ public class CabbageChatter : MonoBehaviour
         this.cabbageRigidbody.AddForce(new Vector3(xLaunchForce, initialYVelocity, 0f));
     }
 
-    public void DisplayChatMessage(string chatterName, string chatMessage)
+    public void DisplayChatMessage(string chatterName, string chatMessage, bool isPlinkoCabbage = false)
     {
         this.chatterName = chatterName;
 
         chatCanvasObject.SetActive(true);
 
-        if (ChatManager.instance.plinko == false)
+        if (isPlinkoCabbage == false)
         {
             this.LaunchAtRandomVelocity();
         }
@@ -307,7 +285,7 @@ public class CabbageChatter : MonoBehaviour
         return;
 
         this.prestigeLevel++;
-        this.shootScore -= ChatManager.instance.prestigeThreshold;
+        this.shootScore -= CabbageManager.instance.prestigeThreshold;
 
         if (this.shootScore < 0)
         {
@@ -331,11 +309,6 @@ public class CabbageChatter : MonoBehaviour
     public void ToggleMagnifyingGlass()
     {
         this.magnifyingGlass.SetActive(!this.magnifyingGlass.activeSelf);
-
-        if (this.magnifyingGlass.activeSelf == true)
-        {
-            this.DisplayChatMessage(this.chatterName, this.hmmPhrases[Random.Range(0, this.hmmPhrases.Count)]);
-        }
     }
 
     public void NukeCabbage()
@@ -379,7 +352,7 @@ public class CabbageChatter : MonoBehaviour
         }
         else if (other.tag == "destroy")
         {
-            ChatManager.instance.RemoveCabbage(this.chatterName.ToLower());
+            CabbageManager.instance.RemoveCabbage(this.chatterName.ToLower());
         }
     }
 
@@ -403,6 +376,6 @@ public class CabbageChatter : MonoBehaviour
 
         deathEffectObject.transform.up = orientationVector;
 
-        ChatManager.instance.RemoveCabbage(this.chatterName);
+        CabbageManager.instance.RemoveCabbage(this.chatterName);
     }
 }
