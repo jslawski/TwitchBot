@@ -22,18 +22,6 @@ public class PlinkoGame : ChatGame
     
     private GameObject[] allPlinkoLevels;
 
-    public override void ToggleGame()
-    {
-        if (this.gameActive == false)
-        {
-            this.Setup();
-        }
-        else
-        {
-            this.Cleanup();
-        }
-    }
-
     public override void Setup()
     {
         this.SetupPlinkoColliders();
@@ -44,12 +32,12 @@ public class PlinkoGame : ChatGame
 
         StartCoroutine(this.ActivatePlinkoLevel());
         StartCoroutine(this.AICoroutine());
-
-        this.gameActive = true;
     }
 
     public override void ProcessCommand(string username, string commandText, string argumentsAsString = "")
     {
+        int plinkoDropZone = 0;
+
         if (commandText.Contains("rand"))
         {
             GameObject dropZonesParentObject = GameObject.Find("DropZonesParent");
@@ -57,13 +45,11 @@ public class PlinkoGame : ChatGame
             if (dropZonesParentObject != null)
             {
                 this.AttemptPlinkoDrop(username, Random.Range(1, dropZonesParentObject.transform.childCount + 1));
-
-                int plinkoDropZone = 0;
-                if (int.TryParse(commandText, out plinkoDropZone))
-                {
-                    this.AttemptPlinkoDrop(username, plinkoDropZone);
-                }
             }
+        }
+        else if (int.TryParse(commandText, out plinkoDropZone))
+        {
+            this.AttemptPlinkoDrop(username, plinkoDropZone);
         }
     }
 
@@ -102,8 +88,6 @@ public class PlinkoGame : ChatGame
         this.SetupDefaultChatColliders();
 
         StopAllCoroutines();
-
-        this.gameActive = false;
     }
 
     private void SetupPlinkoColliders()
@@ -145,49 +129,11 @@ public class PlinkoGame : ChatGame
         droppedCabbage.chatterName = username;
         droppedCabbage.gameObject.name = username;
 
-        //Toggle crown if the leader has respawned
-        LeaderboardEntryData topPlayer = Leaderboard.instance.GetTopPlayer();
-        if (topPlayer != null && topPlayer.username == droppedCabbage.chatterName.ToLower())
-        {
-            droppedCabbage.ActivateCrown();
-        }
-
         droppedCabbage.gameObject.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
 
         currentPlinkoLevel.ProcessDropCommand(droppedCabbage, dropIndex);
 
         droppedCabbage.LoadCharacter(true);
-
-        /*
-        //Update chatter with their last shoot score, if it exists
-        //Otherwise, initialize it to 0
-        if (this.chatterScoreHistory.ContainsKey(cabbageChatter.chatterName.ToLower()))
-        {
-            cabbageChatter.shootScore = this.chatterScoreHistory[cabbageChatter.chatterName.ToLower()];
-
-
-        }
-        else
-        {
-            this.chatterScoreHistory.Add(cabbageChatter.chatterName.ToLower(), 0);
-        }
-
-        //Do the same thing with prestige
-        if (this.chatterPrestigeHistory.ContainsKey(cabbageChatter.chatterName))
-        {
-            cabbageChatter.prestigeLevel = this.chatterPrestigeHistory[cabbageChatter.chatterName];
-
-            //Toggle prestige badge if player has one
-            if (cabbageChatter.prestigeLevel > 0)
-            {
-                cabbageChatter.UpdatePrestigeBadge();
-            }
-        }
-        else
-        {
-            this.chatterPrestigeHistory.Add(cabbageChatter.chatterName, 0);
-        }
-        */
     }
 
     public void LoadNewPlinkoLevel()

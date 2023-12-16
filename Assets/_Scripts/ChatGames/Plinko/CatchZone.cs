@@ -48,7 +48,7 @@ public class CatchZone : MonoBehaviour
 
         //CabbageManager.instance.chatterScoreHistory[scorer.chatterName.ToLower()] = scorer.shootScore;
         //CabbageManager.instance.chatterPrestigeHistory[scorer.chatterName.ToLower()] = scorer.prestigeLevel;
-        Leaderboard.instance.QueueLeaderboardUpdate(scorer.chatterName, catchPoints);
+        LeaderboardManager.instance.QueueLeaderboardUpdate(scorer.chatterName, catchPoints);
 
         if (catchPoints == 10)
         {

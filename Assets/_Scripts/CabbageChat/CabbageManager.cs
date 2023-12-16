@@ -135,13 +135,9 @@ public class CabbageManager : MonoBehaviour
         {
             cabbageChatter.DisplayChatMessage(username, this.GetProperMessage(newChatterMessage));
         }
-
-        //Toggle crown if the leader has respawned
-        //ToDo: Just have the cabbage ping the backend and see if the person is in first place.
-        LeaderboardEntryData topPlayer = Leaderboard.instance.GetTopPlayer();
-        if (topPlayer != null && topPlayer.username == cabbageChatter.chatterName.ToLower())
+        else
         {
-            cabbageChatter.ActivateCrown();
+            cabbageChatter.LoadCharacter();
         }       
     }
 

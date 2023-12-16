@@ -113,7 +113,7 @@ public class CabbageChatter : MonoBehaviour
     {        
         if (isPlinkoCabbage == true)
         {
-            this.plinkoText.GetComponent<TextMeshProUGUI>().text = chatterName;
+            this.plinkoText.GetComponent<TextMeshProUGUI>().text = this.chatterName;
             this.plinkoText.SetActive(true);
         }
         else
@@ -122,6 +122,11 @@ public class CabbageChatter : MonoBehaviour
         }
 
         this.character.UpdateCharacter(this.chatterName);
+
+        if (LeaderboardManager.instance.IsTopPlayer(this.chatterName))
+        {
+            CrownManager.UpdateCrownHolder(this.chatterName);
+        }
     }
 
     public void UpdateToNewSortingOrder(int order)

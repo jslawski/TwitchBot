@@ -7,18 +7,6 @@ public class BBallGame : ChatGame
     private GameObject[] bballLevels;
     private GameObject activeBBallLevel;
 
-    public override void ToggleGame()
-    {
-        if (this.gameActive == false)
-        {
-            this.Setup();
-        }
-        else
-        {
-            this.Cleanup();
-        }
-    }
-
     public override void Setup()
     {
         this.bballLevels = Resources.LoadAll<GameObject>("BBallLevels");
@@ -26,8 +14,6 @@ public class BBallGame : ChatGame
         this.RandomlyPickLevel();
 
         StartCoroutine(this.AICoroutine());
-
-        this.gameActive = true;
     }
 
     public override void ProcessCommand(string username, string commandText, string argumentsAsString = "")
@@ -67,8 +53,6 @@ public class BBallGame : ChatGame
         StopAllCoroutines();
 
         Destroy(this.activeBBallLevel);
-
-        this.gameActive = false;
     }
 
     private void RandomlyPickLevel()

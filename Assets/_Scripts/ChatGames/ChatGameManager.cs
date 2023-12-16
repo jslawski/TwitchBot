@@ -5,6 +5,9 @@ public class ChatGameManager : MonoBehaviour
     private BBallGame bballGame;
     private PlinkoGame plinkoGame;
 
+    [SerializeField]
+    private LeaderboardManager leaderboardManager;
+
     private void Awake()
     {
         this.bballGame = GetComponentInChildren<BBallGame>();
@@ -30,11 +33,11 @@ public class ChatGameManager : MonoBehaviour
     {
         if (commandText == "bball")
         {
-            this.bballGame.ToggleGame();
+            this.bballGame.ToggleGame(this.leaderboardManager);
         }
         else if (commandText == "plinko")
         {
-            this.plinkoGame.ToggleGame();
+            this.plinkoGame.ToggleGame(this.leaderboardManager);
         }
     }
 

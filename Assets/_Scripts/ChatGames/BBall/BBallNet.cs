@@ -47,7 +47,7 @@ public class BBallNet : MonoBehaviour
             scorer.TriggerPrestige();
         }
 
-        Leaderboard.instance.QueueLeaderboardUpdate(scorer.chatterName, 3.0f);
+        LeaderboardManager.instance.QueueLeaderboardUpdate(scorer.chatterName, 3.0f);
 
         StopAllCoroutines();
         StartCoroutine(this.TurnOffScoreTextAfterDelay());

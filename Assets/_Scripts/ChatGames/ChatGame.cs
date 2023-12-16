@@ -1,19 +1,37 @@
 using System.Collections;
 using UnityEngine;
 
-public abstract class ChatGame : MonoBehaviour
+public class ChatGame : MonoBehaviour
 {
     public float secondsBetweenAIAction = 45.0f;
 
     public bool gameActive = false;
 
-    public abstract void ToggleGame();
+    private LeaderboardManager leaderboardManager;
 
-    public abstract void Setup();
-    
-    public abstract void ProcessCommand(string username, string commandText, string argumentsAsString = "");
+    public void ToggleGame(LeaderboardManager leaderboardManager)
+    {
+        this.leaderboardManager = leaderboardManager;
 
-    public abstract IEnumerator AICoroutine();
+        if (this.gameActive == false)
+        {
+            this.Setup();
+            this.leaderboardManager.EnableLeaderboard();
+            this.gameActive = true;
+        }
+        else
+        {
+            this.Cleanup();
+            this.leaderboardManager.DisableLeaderboard();
+            this.gameActive = false;
+        }
+    }
 
-    public abstract void Cleanup();
+    public virtual void Setup() { }
+
+    public virtual void ProcessCommand(string username, string commandText, string argumentsAsString = "") { }
+
+    public virtual IEnumerator AICoroutine() { yield return null; }
+
+    public virtual void Cleanup() { }
 }

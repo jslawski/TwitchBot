@@ -1,8 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
-using CharacterCustomizer;
-using UnityEngine.Networking;
 
 public class LeaderboardUpdate
 {
@@ -16,21 +13,18 @@ public class LeaderboardUpdate
     }
 }
 
-public class Leaderboard : MonoBehaviour
+public class LeaderboardManager : MonoBehaviour
 {
-    public static Leaderboard instance;
-
-    [SerializeField]
-    private GameObject parentChatObject;
+    public static LeaderboardManager instance;
 
     [HideInInspector]
-    public LeaderboardEntryObject[] entries;
+    public LeaderboardEntryObject[] leaderboardEntryObjects;
 
     private Queue<LeaderboardUpdate> queuedUpdates;
 
     private bool readyToProcessUpdate = true;
 
-    public LeaderboardData currentLeaderboard;
+    public LeaderboardData currentLeaderboardData;
 
     [SerializeField]
     private GameObject leaderboardObject;
@@ -41,14 +35,22 @@ public class Leaderboard : MonoBehaviour
         {
             instance = this;
         }
-    }
 
-    private void Start()
-    {
-        this.entries = GetComponentsInChildren<LeaderboardEntryObject>(true);
+        this.leaderboardEntryObjects = GetComponentsInChildren<LeaderboardEntryObject>(true);
         this.queuedUpdates = new Queue<LeaderboardUpdate>();
 
         this.RefreshLeaderboard();
+    }
+
+    public void EnableLeaderboard()
+    {
+        this.leaderboardObject.SetActive(true);
+        this.RefreshLeaderboard();
+    }
+
+    public void DisableLeaderboard()
+    {
+        this.leaderboardObject.SetActive(false);
     }
 
     public void RefreshLeaderboard()
@@ -71,9 +73,9 @@ public class Leaderboard : MonoBehaviour
             return;
         }
 
-        this.currentLeaderboard = JsonUtility.FromJson<LeaderboardData>(data);
+        this.currentLeaderboardData = JsonUtility.FromJson<LeaderboardData>(data);
 
-        if (this.leaderboardObject.active == true)
+        if (this.leaderboardObject.activeSelf == true)
         {
             this.UpdateLeaderboardVisuals();
         }
@@ -94,7 +96,7 @@ public class Leaderboard : MonoBehaviour
 
     private void UpdateLeaderboardSuccess(string data)
     {
-        this.currentLeaderboard = JsonUtility.FromJson<LeaderboardData>(data);
+        this.currentLeaderboardData = JsonUtility.FromJson<LeaderboardData>(data);
         this.UpdateLeaderboardVisuals();
         this.readyToProcessUpdate = true;
     }
@@ -105,12 +107,11 @@ public class Leaderboard : MonoBehaviour
     }
     #endregion
 
-
     public LeaderboardEntryData GetTopPlayer()
     {
-        if (this.currentLeaderboard.entries.Count > 0)
+        if (this.currentLeaderboardData.entries.Count > 0)
         {
-            return this.currentLeaderboard.entries[0];
+            return this.currentLeaderboardData.entries[0];
         }
         else
         {
@@ -142,43 +143,27 @@ public class Leaderboard : MonoBehaviour
     {
         this.ClearLeaderboardVisuals();
 
-        for (int i = 0; i < this.currentLeaderboard.entries.Count && i < this.entries.Length; i++)
+        for (int i = 0; i < this.currentLeaderboardData.entries.Count && i < this.leaderboardEntryObjects.Length; i++)
         {
-            this.entries[i].UpdateEntry(this.currentLeaderboard.entries[i].username, this.currentLeaderboard.entries[i].value);
+            this.leaderboardEntryObjects[i].UpdateEntry(this.currentLeaderboardData.entries[i].username, this.currentLeaderboardData.entries[i].value);
         }
 
-        this.UpdateCrownHolder();
+        if (this.currentLeaderboardData.entries.Count > 0)
+        {
+            CrownManager.UpdateCrownHolder(this.GetTopPlayer().username);
+        }
     }
 
     private void ClearLeaderboardVisuals()
     {
-        for (int i = 0; i < this.entries.Length; i++)
+        for (int i = 0; i < this.leaderboardEntryObjects.Length; i++)
         {
-            this.entries[i].UpdateEntry(string.Empty, 0);
+            this.leaderboardEntryObjects[i].UpdateEntry(string.Empty, 0);
         }
     }
 
-    //This function is responsible for changing the crown holder in situations where
-    //Cabbage Chatters remain on screen after scoring points (unlike plinko)    
-    private void UpdateCrownHolder()
+    public bool IsTopPlayer(string username)
     {
-        if (this.currentLeaderboard == null)
-        {
-            return;
-        }
-
-        CabbageChatter[] allActiveChatters = this.parentChatObject.GetComponentsInChildren<CabbageChatter>();
-        
-        for (int i = 0; i < allActiveChatters.Length; i++)
-        {
-            if (allActiveChatters[i].chatterName == this.currentLeaderboard.entries[0].username)
-            {
-                allActiveChatters[i].ActivateCrown();
-            }
-            else
-            {
-                allActiveChatters[i].DeactivateCrown();
-            }
-        }
+        return (this.GetTopPlayer().username == username);
     }
 }
