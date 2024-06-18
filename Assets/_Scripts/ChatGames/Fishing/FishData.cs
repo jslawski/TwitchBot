@@ -1,6 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+
+public enum FishRarity { Common, Uncommon, Rare, SuperRare };
 
 [CreateAssetMenu(fileName = "NewFish", menuName = "ScriptableObjects/Fish")]
 public class FishData : ScriptableObject
@@ -8,20 +8,24 @@ public class FishData : ScriptableObject
     public string fishName;
     public Sprite fishSprite;
 
+    public FishRarity rarity;
+
     public int pointValue;
 
     public float minScale;
     public float maxScale;
 
-    public float minDepth;
-    public float maxDepth;
+    public float minViewportHeight;
+    public float maxViewportHeight;
 
     public float minTimeBetweenMovement;
     public float maxTimeBetweenMovement;
 
-    public float defaultHorizontalForce;
+    public float minHorizontalForce;
+    public float maxHorizontalForce;
 
-    public float defaultVerticalForce;
+    public float minVerticalForce;
+    public float maxVerticalForce;
 
     public float GetRandomScale()
     {
@@ -30,7 +34,12 @@ public class FishData : ScriptableObject
 
     public Vector3 GetRandomSpawnPoint()
     {
-        return Vector3.zero;
+        float randomViewportX = Random.Range(0.2f, 0.8f);
+        float randomViewportY = Random.Range(this.minViewportHeight, this.maxViewportHeight);
+
+        Vector3 viewportVector = new Vector3(randomViewportX, randomViewportY, -Camera.main.transform.position.z);
+
+        return (Camera.main.ViewportToWorldPoint(viewportVector));
     }
 
     public float GetNextMoveDelay()
@@ -40,12 +49,25 @@ public class FishData : ScriptableObject
 
     public Vector3 GetRandomMoveForce()
     {
-        float verticalDirection = Random.Range(-1.0f, 1.0f);
-        float moveDirection = Random.Range(-1.0f, 1.0f);
+        int horizontalDirection = Random.Range(0, 2);
+        int verticalDirection = Random.Range(0, 2);
 
-        Vector3 verticalVector = Vector3.up * verticalDirection * this.defaultVerticalForce;
-        Vector3 horizontalVector = Vector3.right * moveDirection * this.defaultHorizontalForce;
+        float horizontalMagnitude = Random.Range(this.minHorizontalForce, this.maxHorizontalForce);
+        float verticalMagnitude = Random.Range(this.minVerticalForce, this.maxVerticalForce);
 
-        return (verticalVector + horizontalVector);
+        Vector3 horizontalVector = Vector3.right * horizontalMagnitude;
+        Vector3 verticalVector = Vector3.up * verticalMagnitude;
+
+        if (horizontalDirection == 0)
+        {
+            horizontalVector *= -1;
+        }
+
+        if (verticalDirection == 0)
+        {
+            verticalVector *= -1;
+        }
+
+        return (horizontalVector + verticalVector);
     }
 }

@@ -4,16 +4,12 @@ using UnityEngine;
 
 public class FishingGame : ChatGame
 {
-    [SerializeField]
-    private GameObject fishPrefab;
-
-    [SerializeField]
-    private GameObject fishParent;
-
-    public FishData testFish;
+    private FishSpawner fishSpawner;
 
     public override void Setup()
     {
+        this.fishSpawner = GetComponentInChildren<FishSpawner>();
+
         //Disable floor, let cabbages drop down.  Wait for them all to be gone
         //Spawn active chat members at the top of the water?
 
@@ -21,20 +17,13 @@ public class FishingGame : ChatGame
         //Display water
 
         //Spawn initial fish
-        this.SpawnInitialFish();
+        this.fishSpawner.SpawnInitialFishes();
 
         //Start fish spawning coroutine
 
         //Start AI Coroutine
     }
-
-    private void SpawnInitialFish()
-    {
-        GameObject spawnedFish = Instantiate(this.fishPrefab, this.fishParent.transform);
-        Fish fishComponent = spawnedFish.GetComponent<Fish>();
-        fishComponent.Setup(testFish);
-    }
-
+    
     public override void ProcessCommand(string username, string commandText, string argumentsAsString = "")
     {
         //!left, !right, !stop, !cast
@@ -48,5 +37,6 @@ public class FishingGame : ChatGame
     public override void Cleanup()
     {
         //Destroy all active fish
+        this.fishSpawner.Cleanup();
     }
 }

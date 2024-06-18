@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b005541b3aa145c46aa593853be939ac, type: 3}
+  m_Name: testRare
+  m_EditorClassIdentifier: 
+  fishName: Monster Bass
+  fishSprite: {fileID: 21300000, guid: 28f16f82e72b1464d84eedd53c03bdd9, type: 3}
+  rarity: 2
+  pointValue: 50
+  minScale: 1.5
+  maxScale: 3
+  minViewportHeight: 0.3
+  maxViewportHeight: 0.6
+  minTimeBetweenMovement: 4
+  maxTimeBetweenMovement: 5
+  minHorizontalForce: 5
+  maxHorizontalForce: 10
+  minVerticalForce: 1
+  maxVerticalForce: 2

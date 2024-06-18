@@ -607,6 +607,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 145889503}
+  - component: {fileID: 145889504}
   m_Layer: 0
   m_Name: FishParent
   m_TagString: Untagged
@@ -629,6 +630,20 @@ Transform:
   m_Father: {fileID: 905507208}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &145889504
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 145889502}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c8e1ba4308ab5164c80fd1748b305972, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fishPrefab: {fileID: 6977645568566528794, guid: 850735d46ba529747a791c1ea48128b6,
+    type: 3}
 --- !u!1 &152434369
 GameObject:
   m_ObjectHideFlags: 0
@@ -2718,10 +2733,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   secondsBetweenAIAction: 45
   gameActive: 0
-  fishPrefab: {fileID: 6977645568566528794, guid: 850735d46ba529747a791c1ea48128b6,
-    type: 3}
-  fishParent: {fileID: 145889502}
-  testFish: {fileID: 11400000, guid: 9232fd9681dadcd4d91d8e0ab21cf25f, type: 2}
 --- !u!1 &942403076
 GameObject:
   m_ObjectHideFlags: 0
