@@ -11,6 +11,9 @@ public class Fish : MonoBehaviour
     private Rigidbody fishRigidbody;
     private SpriteRenderer spriteRenderer;
 
+    private float minXViewportPoint = 0.2f;
+    private float maxXViewportPoint = 0.8f;
+
     public void Setup(FishData fishType)
     {
         this.fishData = fishType;
@@ -36,6 +39,8 @@ public class Fish : MonoBehaviour
 
     private void FixedUpdate()
     {
+        this.HandleBoundaries();
+
         this.UpdateSpriteDirection();
     }
 
@@ -61,6 +66,29 @@ public class Fish : MonoBehaviour
         else
         {
             this.spriteRenderer.flipX = true;
+        }
+    }
+
+    private void HandleBoundaries()
+    {
+        Vector3 viewportPosition = Camera.main.WorldToViewportPoint(this.transform.position);
+
+        if (viewportPosition.x <= this.minXViewportPoint)
+        {
+            this.fishRigidbody.velocity = new Vector3(Mathf.Abs(this.fishRigidbody.velocity.x), this.fishRigidbody.velocity.y, this.fishRigidbody.velocity.z);
+        }
+        else if (viewportPosition.x >= this.maxXViewportPoint)
+        {
+            this.fishRigidbody.velocity = new Vector3(-Mathf.Abs(this.fishRigidbody.velocity.x), this.fishRigidbody.velocity.y, this.fishRigidbody.velocity.z);
+        }
+
+        if (viewportPosition.y <= this.fishData.minViewportHeight)
+        {
+            this.fishRigidbody.velocity = new Vector3(this.fishRigidbody.velocity.x, Mathf.Abs(this.fishRigidbody.velocity.y), this.fishRigidbody.velocity.z);
+        }
+        else if (viewportPosition.y >= this.fishData.maxViewportHeight)
+        {
+            this.fishRigidbody.velocity = new Vector3(this.fishRigidbody.velocity.x, -Mathf.Abs(this.fishRigidbody.velocity.y), this.fishRigidbody.velocity.z);
         }
     }
 

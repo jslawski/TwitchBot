@@ -18,8 +18,8 @@ MonoBehaviour:
   pointValue: 20
   minScale: 1
   maxScale: 2
-  minViewportHeight: 0.5
-  maxViewportHeight: 0.8
+  minViewportHeight: 0.3
+  maxViewportHeight: 0.7
   minTimeBetweenMovement: 1
   maxTimeBetweenMovement: 3
   minHorizontalForce: 10
