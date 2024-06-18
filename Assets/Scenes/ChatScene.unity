@@ -644,6 +644,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   fishPrefab: {fileID: 6977645568566528794, guid: 850735d46ba529747a791c1ea48128b6,
     type: 3}
+  minFish: 10
+  maxFish: 20
 --- !u!1 &152434369
 GameObject:
   m_ObjectHideFlags: 0

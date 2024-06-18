@@ -6,6 +6,8 @@ public class FishingGame : ChatGame
 {
     private FishSpawner fishSpawner;
 
+    private float secondsBetweenFishSpawns = 20f;
+
     public override void Setup()
     {
         this.fishSpawner = GetComponentInChildren<FishSpawner>();
@@ -20,7 +22,7 @@ public class FishingGame : ChatGame
         this.fishSpawner.SpawnInitialFishes();
 
         //Start fish spawning coroutine
-
+        StartCoroutine(this.FishSpawningCoroutine());
         //Start AI Coroutine
     }
     
@@ -34,8 +36,31 @@ public class FishingGame : ChatGame
         yield return null;
     }
 
+    private IEnumerator FishSpawningCoroutine()
+    {
+        yield return null;
+    
+        while (this.gameActive == true)
+        {
+            yield return new WaitForSeconds(this.secondsBetweenFishSpawns);
+
+            Fish[] currentFish = this.fishSpawner.gameObject.GetComponentsInChildren<Fish>();
+
+            if (currentFish.Length < this.fishSpawner.minFish)
+            {
+                this.fishSpawner.SpawnFishGroup(this.fishSpawner.minFish - currentFish.Length);
+            }
+            else if (currentFish.Length < this.fishSpawner.maxFish)
+            {
+                this.fishSpawner.SpawnSingleFish();
+            }
+        }
+    }
+
     public override void Cleanup()
     {
+        this.StopAllCoroutines();
+    
         //Destroy all active fish
         this.fishSpawner.Cleanup();
     }

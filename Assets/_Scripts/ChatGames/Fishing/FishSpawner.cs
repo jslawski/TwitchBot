@@ -7,8 +7,8 @@ public class FishSpawner : MonoBehaviour
     [SerializeField]
     private GameObject fishPrefab;
     
-    private int minFish = 10;
-    private int maxFish = 10;
+    public int minFish = 10;
+    public int maxFish = 20;
 
     private float uncommonFishSpawnChance = 0.40f;
     private float rareFishSpawnChance = 0.20f;
@@ -16,7 +16,17 @@ public class FishSpawner : MonoBehaviour
 
     public void SpawnInitialFishes()
     {
-        for (int i = 0; i < this.maxFish; i++)
+        int randomSpawnNumber = Random.Range(this.minFish, this.maxFish);
+    
+        for (int i = 0; i < randomSpawnNumber; i++)
+        {
+            this.SpawnSingleFish();
+        }
+    }
+
+    public void SpawnFishGroup(int fishToSpawn)
+    {
+        for (int i = 0; i < fishToSpawn; i++)
         {
             this.SpawnSingleFish();
         }
@@ -24,13 +34,6 @@ public class FishSpawner : MonoBehaviour
 
     public void SpawnSingleFish()
     {
-        Fish[] currentFish = GetComponentsInChildren<Fish>();
-
-        if (currentFish.Length >= this.maxFish)
-        {
-            return;
-        }
-
         FishData randomFishData = this.GetRandomFishData();
 
         GameObject spawnedFish = Instantiate(this.fishPrefab, this.gameObject.transform);
