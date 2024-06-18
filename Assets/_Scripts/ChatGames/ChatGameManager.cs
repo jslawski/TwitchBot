@@ -4,6 +4,7 @@ public class ChatGameManager : MonoBehaviour
 {
     private BBallGame bballGame;
     private PlinkoGame plinkoGame;
+    private FishingGame fishingGame;
 
     [SerializeField]
     private LeaderboardManager leaderboardManager;
@@ -12,11 +13,12 @@ public class ChatGameManager : MonoBehaviour
     {
         this.bballGame = GetComponentInChildren<BBallGame>();
         this.plinkoGame = GetComponentInChildren<PlinkoGame>();
+        this.fishingGame = GetComponentInChildren<FishingGame>();
     }
 
     public bool IsChatGameActive()
     {
-        return (this.bballGame.gameActive == true || this.plinkoGame.gameActive == true);
+        return (this.bballGame.gameActive == true || this.plinkoGame.gameActive == true || this.fishingGame.gameActive == true);
     }
 
     public bool IsBBallActive()
@@ -29,6 +31,11 @@ public class ChatGameManager : MonoBehaviour
         return this.plinkoGame.gameActive;
     }
 
+    public bool IsFishingActive()
+    {
+        return this.fishingGame.gameActive;
+    }
+
     public void ProcessGameActivationCommand(string commandText)
     {
         if (commandText == "bball")
@@ -38,6 +45,10 @@ public class ChatGameManager : MonoBehaviour
         else if (commandText == "plinko")
         {
             this.plinkoGame.ToggleGame(this.leaderboardManager);
+        }
+        else if (commandText == "test")
+        {
+            this.fishingGame.ToggleGame(this.leaderboardManager);
         }
     }
 
@@ -51,6 +62,11 @@ public class ChatGameManager : MonoBehaviour
         if (this.plinkoGame.gameActive == true)
         {
             this.plinkoGame.ProcessCommand(username, commandText, arguments);
+        }
+
+        if (this.fishingGame.gameActive == true)
+        {
+            this.fishingGame.ProcessCommand(username, commandText, arguments);
         }
     }
 }

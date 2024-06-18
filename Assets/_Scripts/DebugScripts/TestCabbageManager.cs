@@ -1,31 +1,22 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-public class TestCabbageManager : MonoBehaviour
+public static class TestCabbageManager
 {
     public static int nextTestCabbageID = 0;
-
-    [SerializeField]
-    private GameObject parentChatObject;
-
+    
     public static int GetNewTestCabbageID()
     {
         return nextTestCabbageID++;
     }
 
-    public void ClearTestCabbages()
+    public static void ClearTestCabbages()
     {
-        CabbageChatter[] allCurrentChatters = this.parentChatObject.GetComponentsInChildren<CabbageChatter>();
-
-        for (int i = 0; i < allCurrentChatters.Length; i++)
+        for (int i = 0; i < CabbageManager.instance.currentActiveChatters.Count; i++)
         {
-            if (allCurrentChatters[i].chatterName.Contains("testcabbage") == true)
+            if (CabbageManager.instance.currentActiveChatters[i].chatterName.Contains("testcabbage") == true)
             {
-                Destroy(allCurrentChatters[i].gameObject);
+                CabbageManager.instance.RemoveCabbage(CabbageManager.instance.currentActiveChatters[i].chatterName);
             }
         }
 
-        nextTestCabbageID = 0;
-    }
+        TestCabbageManager.nextTestCabbageID = 0;
+    }    
 }

@@ -27,6 +27,11 @@ public class CabbageCharacter : MonoBehaviour
 
     private void GetCurrentPresetSuccess(string data)
     {
+        if (this.character == null)
+        {
+            return;
+        }
+
         this.character.LoadCharacterFromJSON(data);
 
         //Cache Attribute Settings

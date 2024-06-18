@@ -44,6 +44,18 @@ public class BBallGame : ChatGame
                 CabbageManager.instance.SendBotMessage("!shoot");
             }
 
+            //Chaos
+            if (CabbageManager.instance.TestChatterExists() == true)
+            {
+                for (int i = 0; i < CabbageManager.instance.currentActiveChatters.Count; i++)
+                {
+                    if (CabbageManager.instance.currentActiveChatters[i].chatterName.Contains("testcabbage") == true)
+                    {
+                        CabbageManager.instance.GetCabbageChatter(CabbageManager.instance.currentActiveChatters[i].chatterName).ShootCharacter();
+                    }
+                }
+            }
+
             yield return new WaitForSeconds(this.secondsBetweenAIAction);
         }
     }

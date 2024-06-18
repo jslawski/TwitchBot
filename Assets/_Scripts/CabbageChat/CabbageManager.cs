@@ -43,7 +43,7 @@ public class CabbageManager : MonoBehaviour
     private ChatGameManager chatGameManager;
 
     // Start is called before the first frame update
-    void Awake()
+    void Start()
     {
         Application.targetFrameRate = 60;
 
@@ -63,7 +63,7 @@ public class CabbageManager : MonoBehaviour
         WebSocketClient customClient = new WebSocketClient(clientOptions);
 
         this.chatClient = new Client();
-        this.chatClient.Initialize(botCreds, SecretKeys.ChannelName);
+        this.chatClient.Initialize(this.botCreds, SecretKeys.ChannelName);
         this.chatClient.OnMessageReceived += this.ProcessMessage;
         this.chatClient.WillReplaceEmotes = true;
         this.chatClient.OnUserLeft += this.RemoveCabbageChatterOnLeave;
@@ -84,7 +84,8 @@ public class CabbageManager : MonoBehaviour
 
     private void Client_OnConnected(object sender, OnConnectedArgs e)
     {
-        this.chatClient.JoinChannel(SecretKeys.ChannelName, true);
+        this.chatClient.JoinChannel(SecretKeys.ChannelName);        
+        this.SendBotMessage("Greetings, professor!  Nothing to report!");
     }
 
     private void ProcessCommand(object sender, OnChatCommandReceivedArgs e)
@@ -93,7 +94,7 @@ public class CabbageManager : MonoBehaviour
     }
 
     private void ProcessMessage(object sender, OnMessageReceivedArgs e)
-    {
+    {        
         //Supress SoundAlerts bot and commands
         if (e.ChatMessage.Username == "soundalerts" || e.ChatMessage.Message.StartsWith("!"))
         {
@@ -113,6 +114,44 @@ public class CabbageManager : MonoBehaviour
         else if (this.chatGameManager.IsPlinkoActive() == false) //Create a new cabbage chatter
         {
             this.SpawnNewChatter(e.ChatMessage.Username.ToLower(), e.ChatMessage);
+        }
+    }
+
+    private void ProcessBotMessage(string message)
+    {
+        if (this.chatterDict.ContainsKey(SecretKeys.BotName))
+        {
+            this.chatterDict[SecretKeys.BotName].DisplayChatMessage(SecretKeys.BotName, message, this.chatGameManager.IsPlinkoActive());
+            this.chatterQueue.Enqueue(this.chatterDict[SecretKeys.BotName]);
+        }
+        else if (this.chatGameManager.IsPlinkoActive() == false) //Create a new cabbage chatter
+        {
+            this.SpawnNewBot(message);
+        }
+    }
+
+    private void SpawnNewBot(string message)
+    {
+        float randomXPosition = UnityEngine.Random.Range(spawnBoundaries.bounds.min.x, spawnBoundaries.bounds.max.x);
+        Vector3 instantiationPosition = new Vector3(randomXPosition, spawnBoundaries.transform.position.y, 0f);
+        GameObject newChatter = Instantiate(cabbageChatterPrefab, instantiationPosition, new Quaternion(), this.parentChat.transform) as GameObject;
+        CabbageChatter cabbageChatter = newChatter.GetComponent<CabbageChatter>();
+        this.chatterDict.Add(SecretKeys.BotName, cabbageChatter);
+        this.currentActiveChatters.Add(cabbageChatter);
+        this.chatterQueue.Enqueue(cabbageChatter);
+
+        cabbageChatter.chatterName = SecretKeys.BotName;
+        newChatter.name = SecretKeys.BotName;
+
+        cabbageChatter.UpdateLayer(this.currentSortOrder++);
+
+        if (message != string.Empty)
+        {
+            cabbageChatter.DisplayChatMessage(SecretKeys.BotName, message);
+        }
+        else
+        {
+            cabbageChatter.LoadCharacter();
         }
     }
 
@@ -179,18 +218,24 @@ public class CabbageManager : MonoBehaviour
         if (this.chatterDict.ContainsKey(username.ToLower()))
         {
             Destroy(this.chatterDict[username.ToLower()].gameObject);
-            currentActiveChatters.Remove(this.chatterDict[username.ToLower()]);
-            this.chatterDict.Remove(username.ToLower());            
+            this.chatterDict.Remove(username.ToLower());
         }
+
+        this.currentActiveChatters.Remove(this.currentActiveChatters.Find(x => x.chatterName == username));
     }
 
     private void PushChatterToFront(CabbageChatter latestChatter)
     {
         this.readyForNextChatter = false;
         //Remove the chatter from it's current position in the list, and put it at the end
-        this.currentActiveChatters.Remove(latestChatter);
-        this.currentActiveChatters.Add(latestChatter);
-        latestChatter.UpdateLayer(this.currentSortOrder++);
+        //Check that the chatter still exists, in case it got destroyed while waiting
+        if (latestChatter != null)
+        {
+            this.currentActiveChatters.Remove(latestChatter);
+            this.currentActiveChatters.Add(latestChatter);
+            latestChatter.UpdateLayer(this.currentSortOrder++);
+        }
+
         this.readyForNextChatter = true;
     }
 
@@ -242,6 +287,19 @@ public class CabbageManager : MonoBehaviour
         return this.chatterDict.ContainsKey(username);
     }
 
+    public bool TestChatterExists()
+    {
+        for (int i = 0; i < this.currentActiveChatters.Count; i++)
+        {
+            if (this.currentActiveChatters[i].chatterName.Contains("testcabbage") == true)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     public CabbageChatter GetCabbageChatter(string username)
     {
         return this.chatterDict[username];
@@ -249,7 +307,13 @@ public class CabbageManager : MonoBehaviour
 
     public void SendBotMessage(string message)
     {
+        if (this.chatClient.JoinedChannels.Count < 1)
+        {
+            this.chatClient.JoinChannel(SecretKeys.ChannelName);
+        }
+
         this.chatClient.SendMessage(SecretKeys.ChannelName, message);
+        this.ProcessBotMessage(message);
     }
 
     public int GetCurrentActiveChattersCount()

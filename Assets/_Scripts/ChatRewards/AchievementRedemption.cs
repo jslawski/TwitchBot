@@ -1,5 +1,6 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.Video;
 
 //Clear the rendertexture before you play the video to prevent black screen nonsense
 
@@ -11,15 +12,13 @@ public class AchievementRedemption : RewardRedemption
     private TextMeshProUGUI scoreText;
     [SerializeField]
     private TextMeshProUGUI achievementText;
+    [SerializeField]
+    private RenderTexture achievementRenderTexture;
+    [SerializeField]
+    private VideoPlayer videoPlayer;
 
     public override void TriggerReward(string userRedeemed, string redemptionMessage = "")
     {
-        Vector2 achievementViewportPosition = new Vector2(0.5f, 0.1f);
-        Vector2 achievementWorldPosition = Camera.main.ViewportToWorldPoint(achievementViewportPosition);
-
-        Vector3 achievementWorldPosition3D = new Vector3(achievementWorldPosition.x, achievementWorldPosition.y, -1.0f);
-
-        GameObject achievementInstance = Instantiate(this.achievementObject, achievementWorldPosition3D, new Quaternion()) as GameObject;
         this.achievementObject.SetActive(true);
         this.DisplayAchievement(redemptionMessage);
     }
@@ -28,10 +27,15 @@ public class AchievementRedemption : RewardRedemption
     {
         int randomScore = this.GetRandomScore();
 
+        this.achievementRenderTexture.Release();
+
+        this.videoPlayer.frame = 0;
+        this.videoPlayer.Play();
+
         this.scoreText.text = randomScore.ToString() + "G - ";
         this.achievementText.text = message;
 
-        Invoke("DestroyAchievement", 7f);
+        Invoke("DisableAchievement", 7f);
     }
 
     private int GetRandomScore()
@@ -45,6 +49,11 @@ public class AchievementRedemption : RewardRedemption
 
     private void DisableAchievement()
     {
+        this.achievementRenderTexture.Release();
+
+        this.videoPlayer.frame = 0;
+        this.videoPlayer.Stop();
+
         this.achievementObject.SetActive(false);
     }
 }

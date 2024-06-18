@@ -172,6 +172,11 @@ PrefabInstance:
       propertyPath: catchPoints
       value: 10
       objectReference: {fileID: 0}
+    - target: {fileID: 7449736140065779318, guid: 53125cdf7c43d1d4c8473a0523b21408,
+        type: 3}
+      propertyPath: plinkoLevel
+      value: 
+      objectReference: {fileID: 1631485686795597337}
     - target: {fileID: 9065490866005446529, guid: 53125cdf7c43d1d4c8473a0523b21408,
         type: 3}
       propertyPath: m_Name
@@ -1240,6 +1245,11 @@ PrefabInstance:
       propertyPath: catchPoints
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 7449736140065779318, guid: 53125cdf7c43d1d4c8473a0523b21408,
+        type: 3}
+      propertyPath: plinkoLevel
+      value: 
+      objectReference: {fileID: 1631485686795597337}
     - target: {fileID: 9065490866005446529, guid: 53125cdf7c43d1d4c8473a0523b21408,
         type: 3}
       propertyPath: m_Name

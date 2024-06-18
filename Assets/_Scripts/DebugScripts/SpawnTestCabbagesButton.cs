@@ -6,6 +6,9 @@ public class SpawnTestCabbagesButton : MonoBehaviour
 {
     public int numCabbages;
 
+    [SerializeField]
+    private ChatGameManager chatGameManager;
+
     public void SpawnCabbages()
     {
         for (int i = 0; i < this.numCabbages; i++)
@@ -16,18 +19,16 @@ public class SpawnTestCabbagesButton : MonoBehaviour
 
     private void SpawnNewTestChatter()
     {
-        Debug.LogError("This code was commented out to get other stuff to work.  Go here to fix it.");
-        /*
-        string chatterName = ("TestCabbage" + TestCabbageManager.GetNewTestCabbageID()).ToLower();
+        string chatterName = ("testcabbage" + TestCabbageManager.GetNewTestCabbageID()).ToLower();
 
-        if (CabbageManager.instance.plinko == false)
+        if (this.chatGameManager.IsPlinkoActive() == false)
         {
             CabbageManager.instance.SpawnNewChatter(chatterName);
         }
         else
         {
-            CabbageManager.instance.AttemptPlinkoDrop(chatterName, Random.Range(1, GameObject.Find("DropZonesParent").transform.childCount + 1));
+            this.chatGameManager.ProcessGameCommand(chatterName, Random.Range(1, GameObject.Find("DropZonesParent").transform.childCount + 1).ToString());
         }
-        */
+        
     }
 }

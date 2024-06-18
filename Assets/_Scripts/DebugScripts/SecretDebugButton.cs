@@ -11,7 +11,7 @@ public class SecretDebugButton : MonoBehaviour
     private Coroutine timeoutCoroutine = null;
 
     [SerializeField]
-    private GameObject debugCanvas;
+    private GameObject spawnButtons;
 
     public void TrackClick()
     {
@@ -24,7 +24,7 @@ public class SecretDebugButton : MonoBehaviour
 
         if (this.currentConsecutiveClickCount >= this.clickCount)
         {
-            this.debugCanvas.SetActive(!this.debugCanvas.activeSelf);
+            this.spawnButtons.SetActive(!this.spawnButtons.activeSelf);
             this.currentConsecutiveClickCount = 0;
             StopCoroutine(this.timeoutCoroutine);
             this.timeoutCoroutine = null;

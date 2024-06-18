@@ -15769,6 +15769,7 @@ GameObject:
   - component: {fileID: 11624713692907913}
   - component: {fileID: 5435844814020678864}
   - component: {fileID: 6112250389074388587}
+  - component: {fileID: 1830048225822563844}
   m_Layer: 8
   m_Name: ShootTrail
   m_TagString: Untagged
@@ -20690,6 +20691,20 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &1830048225822563844
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7999887933340692989}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f669ee76b38284d4aa50875045dfd1a2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  disableInstead: 0
+  secondsBeforeDestruction: 3
 --- !u!1 &8917837804558314087
 GameObject:
   m_ObjectHideFlags: 0
@@ -20763,7 +20778,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 10
   m_Sprite: {fileID: 21300000, guid: abb707210df71064fab883b9f906fcac, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0

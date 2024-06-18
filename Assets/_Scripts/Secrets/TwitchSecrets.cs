@@ -6,19 +6,16 @@ public static class SecretKeys
 {
     public const string ChannelID = "155703686";
     public const string NinjaID = "51114479";
-    public const string VoiceModRewardID = "e068d0c9-33be-40be-9178-978d85060d07";
-    public const string ShotsRewardID = "466d6f62-ecc3-4473-ab13-5dd5d1da63be";
-    public const string AccentUpRewardID = "3aad51f5-4913-4f55-9d3d-01d84d054813";
-    public const string AccentDownRewardID = "3b4e8a9d-81a3-46a8-ad40-20c732936341";
-    public const string AlcoholUpRewardID = "f6ff357b-b3fb-490a-9664-b86064aab1f2";
-    public const string AlcoholDownRewardID = "9da8997b-66e5-4bdf-9d37-fbcab86a6bcf";
-    public const string MuteRewardID = "f6917571-e897-4102-b74d-26c9672962e5";
-    public const string AccentActivateRewardID = "765ad5ad-cea1-466c-82a8-d6073fe6369a";
-    public const string ASMRRewardID = "4752928e-f992-4e37-b7b2-2ee0171b30c9";
-    public const string AlwaysSunnyRewardID = "1a94bb95-f316-4424-bed1-50db914c7e1b";
-    public const string NukeCabbageRewardID = "06ef844f-e942-4798-8f26-e3f883051299";
-    public const string AchievementUnlockedID = "d60ee905-c739-4ad5-b905-672a9ce5940e";
+    public const string ShotsRewardID = "db58d6a4-c322-419b-9bb6-95e1ab994038";
+    public const string AlwaysSunnyRewardID = "acbc2655-f856-4f57-a9d9-07bd7b61f807";
+    public const string NukeCabbageRewardID = "95d0e591-56eb-45c3-85f8-c6ee8aa9d809";
+    public const string AchievementUnlockedID = "5b376969-3e22-4066-a138-4a4f8b3bda43";
+    public const string ToBeContinuedID = "a95faad0-5992-4515-9500-b62aff31e0ce";
+    public const string SenatorID = "74049962-09b6-4728-a6cc-fe400e432255";
+    public const string BeRightBackID = "bdab25ee-d35b-4b11-af72-414b537109a5";
     public const string ChannelName = "coleslawski";
-    public const string AccessToken = "50nmubijyxlea117heftlhtfb3s50k";
+    public const string AccessToken = "6qqjsbt1zcp188v697faseyx202q0e";
+    //6qqjsbt1zcp188v697faseyx202q0e
+    //50nmubijyxlea117heftlhtfb3s50k
     public const string BotName = "cabbagegatekeeper";
 }
