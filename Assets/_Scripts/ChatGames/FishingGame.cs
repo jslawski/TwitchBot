@@ -8,32 +8,153 @@ public class FishingGame : ChatGame
 
     private float secondsBetweenFishSpawns = 20f;
 
+    [SerializeField]
+    private GameObject waterObject;
+    [SerializeField]
+    private AnimationCurve waterRevealCurve;
+    private Vector3 waterStartPosition;
+    private Vector3 waterEndPosition;
+
+    [SerializeField]
+    private GameObject leftWall;
+    [SerializeField]
+    private GameObject rightWall;
+
     public override void Setup()
     {
-        this.fishSpawner = GetComponentInChildren<FishSpawner>();
+        this.leftWall.SetActive(false);
+        this.rightWall.SetActive(false);
 
-        //Disable floor, let cabbages drop down.  Wait for them all to be gone
-        //Spawn active chat members at the top of the water?
+        this.SetupCabbages();
 
-        //Enable left and right boundary walls
-        //Display water
+        this.SetupWater();
 
         //Spawn initial fish
-        this.fishSpawner.SpawnInitialFishes();
+        this.fishSpawner = GetComponentInChildren<FishSpawner>();
 
         //Start fish spawning coroutine
         StartCoroutine(this.FishSpawningCoroutine());
-        //Start AI Coroutine
     }
-    
+
     public override void ProcessCommand(string username, string commandText, string argumentsAsString = "")
     {
-        //!left, !right, !stop, !cast
+        if (CabbageManager.instance.DoesChatterExist(username) == false)
+        {
+            //Do a spawn of some sort
+        }
+
+        if (commandText.Contains("left"))
+        {
+            CabbageManager.instance.GetCabbageChatter(username).GetComponentInChildren<CabbageFisher>().MoveLeft();
+        }
+        else if (commandText.Contains("right"))
+        {
+            CabbageManager.instance.GetCabbageChatter(username).GetComponentInChildren<CabbageFisher>().MoveRight();
+        }
     }
 
     public override IEnumerator AICoroutine()
     {
         yield return null;
+    }
+
+    public override void Cleanup()
+    {
+        this.StopAllCoroutines();
+        
+        this.fishSpawner.Cleanup();
+        this.CleanupCabbages();
+        this.CleanupWater();
+
+        this.leftWall.SetActive(true);
+        this.rightWall.SetActive(true);
+    }
+
+    private void SetupCabbages()
+    {
+        CabbageChatter[] activeChatters = CabbageManager.instance.parentChat.GetComponentsInChildren<CabbageChatter>();
+
+        for (int i = 0; i < activeChatters.Length; i++)
+        {
+            SpinCabbage cabbageSpinner = activeChatters[i].GetComponentInChildren<SpinCabbage>();
+            cabbageSpinner.gameObject.transform.rotation = Quaternion.Euler(Vector3.zero);
+            cabbageSpinner.enabled = false;
+
+            activeChatters[i].SuspendCabbage();
+        }
+    }
+
+    private void CleanupCabbages()
+    {
+        CabbageChatter[] activeChatters = CabbageManager.instance.parentChat.GetComponentsInChildren<CabbageChatter>();
+
+        for (int i = 0; i < activeChatters.Length; i++)
+        {
+            SpinCabbage cabbageSpinner = activeChatters[i].GetComponentInChildren<SpinCabbage>();
+            cabbageSpinner.enabled = true;
+
+            activeChatters[i].ToggleBoatAndRod();
+            activeChatters[i].character.gameObject.transform.localRotation = Quaternion.Euler(Vector3.zero);
+        }
+    }
+
+    private void SetupWater()
+    {
+        this.waterStartPosition = new Vector3(-4.0f, -40.0f, 0.0f);
+        this.waterEndPosition = new Vector3(-4.0f, -3.0f, 0.0f);
+
+        this.waterObject.SetActive(true);
+
+        StartCoroutine(this.RevealWater());
+    }
+
+    private void CleanupWater()
+    {
+        StartCoroutine(this.HideWater());
+    }
+
+    private IEnumerator RevealWater()
+    {
+        float currentT = 0.0f;
+        while (currentT < 1.0f)
+        {
+            float animationValue = this.waterRevealCurve.Evaluate(currentT);
+
+            this.waterObject.transform.position = Vector3.Lerp(this.waterStartPosition, this.waterEndPosition, animationValue);
+
+            currentT += Time.fixedDeltaTime;
+
+            yield return new WaitForFixedUpdate();
+        }
+
+        CabbageChatter[] activeChatters = CabbageManager.instance.parentChat.GetComponentsInChildren<CabbageChatter>();
+
+        for (int i = 0; i < activeChatters.Length; i++)
+        {
+            activeChatters[i].ToggleBoatAndRod();
+            activeChatters[i].UnsuspendCabbage();
+        }
+
+        yield return new WaitForSeconds(1.0f);
+
+        this.fishSpawner.SpawnInitialFishes();
+    }
+
+    private IEnumerator HideWater()
+    {
+        float currentT = 1.0f;
+        while (currentT > 0.0f)
+        {
+            float animationValue = this.waterRevealCurve.Evaluate(currentT);
+
+            this.waterObject.transform.position = Vector3.Lerp(this.waterStartPosition, this.waterEndPosition, animationValue);
+
+            currentT -= Time.fixedDeltaTime;
+
+            yield return new WaitForFixedUpdate();
+        }
+
+        this.waterObject.SetActive(false);
     }
 
     private IEnumerator FishSpawningCoroutine()
@@ -55,13 +176,5 @@ public class FishingGame : ChatGame
                 this.fishSpawner.SpawnSingleFish();
             }
         }
-    }
-
-    public override void Cleanup()
-    {
-        this.StopAllCoroutines();
-    
-        //Destroy all active fish
-        this.fishSpawner.Cleanup();
     }
 }

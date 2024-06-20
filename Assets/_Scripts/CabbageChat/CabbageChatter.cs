@@ -19,7 +19,8 @@ public class CabbageChatter : MonoBehaviour
     public GameObject prestigeBadge;
     public TextMeshProUGUI prestigeText;
     public GameObject magnifyingGlass;
-    
+    public GameObject boatAndRod;
+
     public TextMeshProUGUI username;
 
     public Rigidbody cabbageRigidbody;
@@ -64,8 +65,7 @@ public class CabbageChatter : MonoBehaviour
     [SerializeField]
     private GameObject deathEffect;
 
-    [SerializeField]
-    private CabbageCharacter character;
+    public CabbageCharacter character;
 
     private void Awake()
     {
@@ -116,10 +116,6 @@ public class CabbageChatter : MonoBehaviour
             this.plinkoText.GetComponent<TextMeshProUGUI>().text = this.chatterName;
             this.plinkoText.SetActive(true);
         }
-        else
-        {
-            this.plinkoText.SetActive(false);
-        }
 
         this.character.UpdateCharacter(this.chatterName);
 
@@ -147,15 +143,13 @@ public class CabbageChatter : MonoBehaviour
 
         chatCanvasObject.SetActive(true);
 
-        if (isPlinkoCabbage == false)
+        if (isPlinkoCabbage == false && this.boatAndRod.activeSelf == false)
         {
             this.LaunchAtRandomVelocity();
         }
 
         this.username.color = this.chatterColor;
         this.username.text = chatterName;
-
-        
 
         if (this.chatBoxObject.transform.childCount > MaxChatMessagesVisable)
         {
@@ -316,6 +310,14 @@ public class CabbageChatter : MonoBehaviour
         this.magnifyingGlass.SetActive(!this.magnifyingGlass.activeSelf);
     }
 
+    public void ToggleBoatAndRod()
+    {
+        this.plinkoText.GetComponent<TextMeshProUGUI>().text = this.chatterName;
+        this.plinkoText.SetActive(!this.plinkoText.activeSelf);
+
+        this.boatAndRod.SetActive(!this.boatAndRod.activeSelf);
+    }
+
     public void NukeCabbage()
     {
         float xLaunchDirection = Random.Range(-0.5f, 0.5f);
@@ -382,5 +384,16 @@ public class CabbageChatter : MonoBehaviour
         deathEffectObject.transform.up = orientationVector;
 
         CabbageManager.instance.RemoveCabbage(this.chatterName);
+    }
+
+    public void SuspendCabbage()
+    {
+        this.transform.localPosition = new Vector3(this.transform.localPosition.x, 30.0f, this.transform.localPosition.z);
+        this.cabbageRigidbody.useGravity = false;
+    }
+
+    public void UnsuspendCabbage()
+    {
+        this.cabbageRigidbody.useGravity = true;
     }
 }
