@@ -67,6 +67,8 @@ public class CabbageChatter : MonoBehaviour
 
     public CabbageCharacter character;
 
+    public CabbageFisher fisher;
+
     private void Awake()
     {
         this.chatterColor = this.GetRandomColor();
@@ -310,14 +312,19 @@ public class CabbageChatter : MonoBehaviour
         this.magnifyingGlass.SetActive(!this.magnifyingGlass.activeSelf);
     }
 
-    public void ToggleBoatAndRod()
+    public void EnableBoatAndRod()
     {
         this.plinkoText.GetComponent<TextMeshProUGUI>().text = this.chatterName;
-        this.plinkoText.SetActive(!this.plinkoText.activeSelf);
-
-        this.boatAndRod.SetActive(!this.boatAndRod.activeSelf);
+        this.plinkoText.SetActive(true);
+        this.boatAndRod.SetActive(true);
     }
 
+    public void DisableBoatAndRod()
+    {
+        this.plinkoText.SetActive(false);
+        this.boatAndRod.SetActive(false);
+    }
+    
     public void NukeCabbage()
     {
         float xLaunchDirection = Random.Range(-0.5f, 0.5f);

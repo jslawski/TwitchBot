@@ -170,6 +170,13 @@ public class CabbageManager : MonoBehaviour
 
         cabbageChatter.UpdateLayer(this.currentSortOrder++);
 
+        if (this.chatGameManager.IsFishingActive() == true)
+        {
+            cabbageChatter.fisher.Setup();
+            cabbageChatter.SuspendCabbage();
+            cabbageChatter.UnsuspendCabbage();
+        }
+
         if (newChatterMessage != null)
         {
             cabbageChatter.DisplayChatMessage(username, this.GetProperMessage(newChatterMessage));
@@ -177,7 +184,7 @@ public class CabbageManager : MonoBehaviour
         else
         {
             cabbageChatter.LoadCharacter();
-        }       
+        }
     }
 
     private string GetProperMessage(ChatMessage chatMessage)

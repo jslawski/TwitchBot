@@ -7,10 +7,40 @@ public class CabbageFisher : MonoBehaviour
     [SerializeField]
     private CabbageChatter chatter;
 
+    private FishHook hook;
+
     private float moveSpeed = 3.0f;
 
     private float minViewportX = 0.1f;
     private float maxViewportX = 0.8f;
+
+    public void Setup()
+    {
+        this.hook = GetComponentInChildren<FishHook>();
+    
+        this.chatter.gameObject.transform.localScale = Vector3.one * 0.5f;
+    
+        this.chatter.EnableBoatAndRod();
+
+        this.chatter.cabbageRigidbody.velocity = Vector3.zero;
+
+        SpinCabbage cabbageSpinner = chatter.GetComponentInChildren<SpinCabbage>();
+        cabbageSpinner.gameObject.transform.rotation = Quaternion.Euler(Vector3.zero);
+        cabbageSpinner.enabled = false;
+    }
+
+    public void Cleanup()
+    {
+        this.chatter.gameObject.transform.localScale = Vector3.one * 0.8f;
+
+        this.chatter.DisableBoatAndRod();
+
+        SpinCabbage cabbageSpinner = chatter.GetComponentInChildren<SpinCabbage>();
+        cabbageSpinner.gameObject.transform.rotation = Quaternion.Euler(Vector3.zero);
+        cabbageSpinner.enabled = true;
+
+        this.chatter.character.gameObject.transform.localRotation = Quaternion.Euler(Vector3.zero);
+    }
 
     public void MoveLeft()
     {
@@ -48,6 +78,22 @@ public class CabbageFisher : MonoBehaviour
             this.chatter.gameObject.transform.Translate(Vector3.right * this.moveSpeed * Time.fixedDeltaTime);
             yield return new WaitForFixedUpdate();
         }
+    }
+
+    public void Cast()
+    {
+        this.hook.Cast();
+    }
+
+    public void Reel()
+    {
+        this.hook.Reel();
+    }
+
+    public void Hang()
+    {
+        this.hook.Hang();
+        this.StopMovement();
     }
 
     public void StopMovement()

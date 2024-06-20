@@ -15,16 +15,8 @@ public class FishingGame : ChatGame
     private Vector3 waterStartPosition;
     private Vector3 waterEndPosition;
 
-    [SerializeField]
-    private GameObject leftWall;
-    [SerializeField]
-    private GameObject rightWall;
-
     public override void Setup()
     {
-        this.leftWall.SetActive(false);
-        this.rightWall.SetActive(false);
-
         this.SetupCabbages();
 
         this.SetupWater();
@@ -38,18 +30,30 @@ public class FishingGame : ChatGame
 
     public override void ProcessCommand(string username, string commandText, string argumentsAsString = "")
     {
-        if (CabbageManager.instance.DoesChatterExist(username) == false)
+        if (CabbageManager.instance.DoesChatterExist(username) == false && !commandText.Contains("test"))
         {
-            //Do a spawn of some sort
+            CabbageManager.instance.SpawnNewChatter(username);
         }
 
         if (commandText.Contains("left"))
         {
-            CabbageManager.instance.GetCabbageChatter(username).GetComponentInChildren<CabbageFisher>().MoveLeft();
+            CabbageManager.instance.GetCabbageChatter(username).fisher.MoveLeft();
         }
         else if (commandText.Contains("right"))
         {
-            CabbageManager.instance.GetCabbageChatter(username).GetComponentInChildren<CabbageFisher>().MoveRight();
+            CabbageManager.instance.GetCabbageChatter(username).fisher.MoveRight();
+        }
+        else if (commandText.Contains("down"))
+        {
+            CabbageManager.instance.GetCabbageChatter(username).fisher.Cast();
+        }
+        else if (commandText.Contains("up"))
+        {
+            CabbageManager.instance.GetCabbageChatter(username).fisher.Reel();
+        }
+        else if (commandText.Contains("stop"))
+        {
+            CabbageManager.instance.GetCabbageChatter(username).fisher.Hang();
         }
     }
 
@@ -65,9 +69,6 @@ public class FishingGame : ChatGame
         this.fishSpawner.Cleanup();
         this.CleanupCabbages();
         this.CleanupWater();
-
-        this.leftWall.SetActive(true);
-        this.rightWall.SetActive(true);
     }
 
     private void SetupCabbages()
@@ -76,10 +77,7 @@ public class FishingGame : ChatGame
 
         for (int i = 0; i < activeChatters.Length; i++)
         {
-            SpinCabbage cabbageSpinner = activeChatters[i].GetComponentInChildren<SpinCabbage>();
-            cabbageSpinner.gameObject.transform.rotation = Quaternion.Euler(Vector3.zero);
-            cabbageSpinner.enabled = false;
-
+            activeChatters[i].fisher.Setup();
             activeChatters[i].SuspendCabbage();
         }
     }
@@ -90,11 +88,7 @@ public class FishingGame : ChatGame
 
         for (int i = 0; i < activeChatters.Length; i++)
         {
-            SpinCabbage cabbageSpinner = activeChatters[i].GetComponentInChildren<SpinCabbage>();
-            cabbageSpinner.enabled = true;
-
-            activeChatters[i].ToggleBoatAndRod();
-            activeChatters[i].character.gameObject.transform.localRotation = Quaternion.Euler(Vector3.zero);
+            activeChatters[i].fisher.Cleanup();
         }
     }
 
@@ -131,7 +125,6 @@ public class FishingGame : ChatGame
 
         for (int i = 0; i < activeChatters.Length; i++)
         {
-            activeChatters[i].ToggleBoatAndRod();
             activeChatters[i].UnsuspendCabbage();
         }
 
