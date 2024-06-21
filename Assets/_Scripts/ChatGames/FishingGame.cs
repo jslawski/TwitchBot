@@ -35,6 +35,11 @@ public class FishingGame : ChatGame
             CabbageManager.instance.SpawnNewChatter(username);
         }
 
+        if (CabbageManager.instance.GetCabbageChatter(username).fisher.HasHookedFish() == true)
+        {
+            return;
+        }
+
         if (commandText.Contains("left"))
         {
             CabbageManager.instance.GetCabbageChatter(username).fisher.MoveLeft();

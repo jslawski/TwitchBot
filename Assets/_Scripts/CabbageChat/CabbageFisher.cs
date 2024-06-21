@@ -100,4 +100,14 @@ public class CabbageFisher : MonoBehaviour
     {
         this.StopAllCoroutines();
     }
+
+    public bool HasHookedFish()
+    {
+        return (this.hook.hookedFish != null);
+    }
+
+    public void CatchFish(FishData caughtFish)
+    {
+        LeaderboardManager.instance.QueueLeaderboardUpdate(this.chatter.chatterName, caughtFish.pointValue);
+    }
 }

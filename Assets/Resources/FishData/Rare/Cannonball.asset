@@ -10,19 +10,19 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b005541b3aa145c46aa593853be939ac, type: 3}
-  m_Name: testRare
+  m_Name: Cannonball
   m_EditorClassIdentifier: 
-  fishName: Monster Bass
-  fishSprite: {fileID: 21300000, guid: 28f16f82e72b1464d84eedd53c03bdd9, type: 3}
+  fishName: Shadowfish
+  fishSprite: {fileID: 21300000, guid: 370f7c001b762dc4f866ba53091a4907, type: 3}
   rarity: 2
   pointValue: 50
-  minScale: 1.5
-  maxScale: 3
-  minViewportHeight: 0.3
-  maxViewportHeight: 0.5
-  minTimeBetweenMovement: 4
-  maxTimeBetweenMovement: 5
-  minHorizontalForce: 5
-  maxHorizontalForce: 10
-  minVerticalForce: 1
-  maxVerticalForce: 2
+  minScale: 3
+  maxScale: 5
+  minViewportHeight: 0.1
+  maxViewportHeight: 0.6
+  minTimeBetweenMovement: 5
+  maxTimeBetweenMovement: 10
+  minHorizontalForce: 10
+  maxHorizontalForce: 20
+  minVerticalForce: 5
+  maxVerticalForce: 10

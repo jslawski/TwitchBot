@@ -10,13 +10,20 @@ public class FishHook : MonoBehaviour
     [SerializeField]
     private LineRenderer fishingLine;
 
-    private float moveSpeed = 3.0f;
+    private float defaultReelSpeed = 5.0f;
     private float minViewportY = 0.01f;
+
+    public Fish hookedFish;
 
     // Update is called once per frame
     void FixedUpdate()
     {
         this.UpdateFishingLine();
+
+        if (this.hookedFish != null)
+        {
+            this.hookedFish.gameObject.transform.position = this.gameObject.transform.position;
+        }
     }
 
     private void UpdateFishingLine()
@@ -27,6 +34,7 @@ public class FishHook : MonoBehaviour
 
     public void Cast()
     {
+        this.StopAllCoroutines();
         StartCoroutine(this.CastCoroutine());
     }
 
@@ -37,7 +45,7 @@ public class FishHook : MonoBehaviour
 
         while (this.gameObject.transform.position.y >= oceanFloorY)
         {
-            this.gameObject.transform.Translate(Vector3.down * this.moveSpeed * Time.fixedDeltaTime);
+            this.gameObject.transform.Translate(Vector3.down * this.defaultReelSpeed * Time.fixedDeltaTime);
             yield return new WaitForFixedUpdate();
         }
     }
@@ -49,15 +57,43 @@ public class FishHook : MonoBehaviour
 
     public void Reel()
     {
-        StartCoroutine(this.ReelCoroutine());
+        this.StopAllCoroutines();
+        StartCoroutine(this.ReelCoroutine(this.defaultReelSpeed));
     }
 
-    private IEnumerator ReelCoroutine()
+    private IEnumerator ReelCoroutine(float reelSpeed)
     {
         while (this.gameObject.transform.position.y <= this.hookOrigin.position.y)
         {
-            this.gameObject.transform.Translate(Vector3.up * this.moveSpeed * Time.fixedDeltaTime);
+            this.gameObject.transform.Translate(Vector3.up * reelSpeed * Time.fixedDeltaTime);
             yield return new WaitForFixedUpdate();
         }
+
+        if (this.hookedFish != null)
+        {
+            this.Catch();
+        }
+    }
+
+    private void ReelHookedFish()
+    {
+        float reelSpeed = this.defaultReelSpeed;// / this.hookedFish.gameObject.transform.localScale.x;
+        StartCoroutine(this.ReelCoroutine(reelSpeed));
+    }
+
+    public void InitiateHook(Fish hookedFish)
+    {
+        this.hookedFish = hookedFish;
+        this.StopAllCoroutines();
+
+        this.ReelHookedFish();
+    }
+
+    private void Catch()
+    {
+        GetComponentInParent<CabbageFisher>().CatchFish(this.hookedFish.fishData);
+        
+        Destroy(this.hookedFish.gameObject);
+        this.hookedFish = null;
     }
 }

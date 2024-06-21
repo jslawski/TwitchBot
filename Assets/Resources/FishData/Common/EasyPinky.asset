@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b005541b3aa145c46aa593853be939ac, type: 3}
+  m_Name: EasyPinky
+  m_EditorClassIdentifier: 
+  fishName: Easy Pinky
+  fishSprite: {fileID: 1763651035, guid: 885d36caf92eaf0458d2a4d58501a69a, type: 3}
+  rarity: 0
+  pointValue: 3
+  minScale: 7
+  maxScale: 8
+  minViewportHeight: 0.1
+  maxViewportHeight: 0.7
+  minTimeBetweenMovement: 8
+  maxTimeBetweenMovement: 10
+  minHorizontalForce: 10
+  maxHorizontalForce: 15
+  minVerticalForce: 0
+  maxVerticalForce: 1

@@ -2573,7 +2573,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 20
   m_Sprite: {fileID: 21300000, guid: a05f0e10c32c4784e8b3380291e20152, type: 3}
   m_Color: {r: 0.14195444, g: 0.14851375, b: 0.20754719, a: 0.5529412}
   m_FlipX: 0
@@ -2859,8 +2859,6 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  leftWall: {fileID: 2082328110}
-  rightWall: {fileID: 655162645}
 --- !u!1 &942403076
 GameObject:
   m_ObjectHideFlags: 0

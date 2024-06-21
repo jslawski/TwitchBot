@@ -2,9 +2,11 @@ using System.Collections;
 using UnityEngine;
 
 public class Fish : MonoBehaviour
-{
+{    
+    public FishData fishData;
+
     [SerializeField]
-    private FishData fishData;
+    private GameObject flippableParent;
 
     private bool hooked = false;
 
@@ -13,6 +15,8 @@ public class Fish : MonoBehaviour
 
     private float minXViewportPoint = 0.2f;
     private float maxXViewportPoint = 0.8f;
+
+    private Collider fishCollider;
 
     public void Setup(FishData fishType)
     {
@@ -30,6 +34,7 @@ public class Fish : MonoBehaviour
     {
         this.fishRigidbody = GetComponent<Rigidbody>();
         this.spriteRenderer = GetComponentInChildren<SpriteRenderer>();
+        this.fishCollider = GetComponentInChildren<Collider>();
     }
 
     void Start()
@@ -41,7 +46,10 @@ public class Fish : MonoBehaviour
     {
         this.HandleBoundaries();
 
-        this.UpdateSpriteDirection();
+        if (this.hooked == false)
+        {
+            this.UpdateFacingDirection();
+        }
     }
 
     private IEnumerator FishAI()
@@ -57,15 +65,15 @@ public class Fish : MonoBehaviour
         }
     }
 
-    private void UpdateSpriteDirection()
+    private void UpdateFacingDirection()
     {
         if (this.fishRigidbody.velocity.x >= 0.0f)
         {
-            this.spriteRenderer.flipX = false;
+            this.flippableParent.transform.rotation = Quaternion.Euler(0.0f, 0.0f, 0.0f);
         }
         else
         {
-            this.spriteRenderer.flipX = true;
+            this.flippableParent.transform.rotation = Quaternion.Euler(0.0f, 180.0f, 0.0f);
         }
     }
 
@@ -96,5 +104,30 @@ public class Fish : MonoBehaviour
     {
         StopAllCoroutines();
         Destroy(this.gameObject);
+    }
+
+    private void HookFish(FishHook hook)
+    {
+        StopAllCoroutines();
+
+        this.hooked = true;
+
+        this.fishRigidbody.velocity = Vector3.zero;
+        this.gameObject.transform.position = hook.gameObject.transform.position;
+        this.flippableParent.transform.rotation = Quaternion.Euler(0.0f, 0.0f, 90.0f);
+
+        hook.InitiateHook(this);
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        this.fishCollider.enabled = false;
+
+        FishHook collidedHook = other.GetComponent<FishHook>();
+
+        if (collidedHook.hookedFish == null)
+        {
+            this.HookFish(collidedHook);
+        }
     }
 }
