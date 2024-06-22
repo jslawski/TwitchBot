@@ -79,6 +79,8 @@ public class FishHook : MonoBehaviour
     {
         float reelSpeed = this.defaultReelSpeed;// / this.hookedFish.gameObject.transform.localScale.x;
         StartCoroutine(this.ReelCoroutine(reelSpeed));
+
+        GetComponentInParent<CabbageFisher>().StopMovement();
     }
 
     public void InitiateHook(Fish hookedFish)
@@ -91,7 +93,7 @@ public class FishHook : MonoBehaviour
 
     private void Catch()
     {
-        GetComponentInParent<CabbageFisher>().CatchFish(this.hookedFish.fishData);
+        GetComponentInParent<CabbageFisher>().CatchFish(this.hookedFish.fishData, this.hookedFish.gameObject.transform.localScale.x);
         
         Destroy(this.hookedFish.gameObject);
         this.hookedFish = null;

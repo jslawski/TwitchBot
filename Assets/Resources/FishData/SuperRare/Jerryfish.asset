@@ -12,17 +12,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b005541b3aa145c46aa593853be939ac, type: 3}
   m_Name: Jerryfish
   m_EditorClassIdentifier: 
-  fishName: Golden Guppy
-  fishSprite: {fileID: 21300000, guid: 460fdfc6a77bf7a4fbe445504a1c8511, type: 3}
+  fishName: JERRYFISH
+  fishSprite: {fileID: 21300000, guid: ab1c693387e4c58458c6b42300839595, type: 3}
   rarity: 3
   pointValue: 100
-  minScale: 10
-  maxScale: 15
+  minScale: 2
+  maxScale: 4
   minViewportHeight: 0.1
-  maxViewportHeight: 0.3
-  minTimeBetweenMovement: 2
-  maxTimeBetweenMovement: 3
+  maxViewportHeight: 0.6
+  minTimeBetweenMovement: 1
+  maxTimeBetweenMovement: 2
   minHorizontalForce: 10
   maxHorizontalForce: 20
-  minVerticalForce: 1
+  minVerticalForce: 2
   maxVerticalForce: 5

@@ -10,9 +10,9 @@ public class FishSpawner : MonoBehaviour
     public int minFish = 10;
     public int maxFish = 20;
 
-    private float uncommonFishSpawnChance = 0.10f;
-    private float rareFishSpawnChance = 0.05f;
-    private float superRareFishSpawnChance = 0.01f;
+    private float uncommonFishSpawnChance = 0.30f;
+    private float rareFishSpawnChance = 0.07f;
+    private float superRareFishSpawnChance = 0.03f;
 
     public void SpawnInitialFishes()
     {
@@ -66,8 +66,6 @@ public class FishSpawner : MonoBehaviour
         }
 
         int randomIndex = Random.Range(0, potentialFish.Length);
-
-        Debug.LogError("Roll: " + randomRoll + " Fish: " + potentialFish[randomIndex].fishName);
 
         return potentialFish[randomIndex];
     }

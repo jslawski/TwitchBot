@@ -15,9 +15,9 @@ MonoBehaviour:
   fishName: Big Gus
   fishSprite: {fileID: 21300000, guid: a46116938feaab64c8071cb38c9b928c, type: 3}
   rarity: 2
-  pointValue: 50
-  minScale: 10
-  maxScale: 15
+  pointValue: 15
+  minScale: 7
+  maxScale: 10
   minViewportHeight: 0.1
   maxViewportHeight: 0.2
   minTimeBetweenMovement: 3

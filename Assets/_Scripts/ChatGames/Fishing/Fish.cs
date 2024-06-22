@@ -13,8 +13,8 @@ public class Fish : MonoBehaviour
     private Rigidbody fishRigidbody;
     private SpriteRenderer spriteRenderer;
 
-    private float minXViewportPoint = 0.2f;
-    private float maxXViewportPoint = 0.8f;
+    private float minXViewportPoint = 0.1f;
+    private float maxXViewportPoint = 0.7f;
 
     private Collider fishCollider;
 
@@ -121,12 +121,11 @@ public class Fish : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        this.fishCollider.enabled = false;
-
         FishHook collidedHook = other.GetComponent<FishHook>();
 
         if (collidedHook.hookedFish == null)
         {
+            this.fishCollider.enabled = false;
             this.HookFish(collidedHook);
         }
     }

@@ -15,14 +15,14 @@ MonoBehaviour:
   fishName: Anti-Camo Carp
   fishSprite: {fileID: -1128514779, guid: 885d36caf92eaf0458d2a4d58501a69a, type: 3}
   rarity: 1
-  pointValue: 20
-  minScale: 5
-  maxScale: 10
+  pointValue: 7
+  minScale: 3
+  maxScale: 5
   minViewportHeight: 0.5
   maxViewportHeight: 0.7
   minTimeBetweenMovement: 1
   maxTimeBetweenMovement: 3
   minHorizontalForce: 5
   maxHorizontalForce: 15
-  minVerticalForce: 1
-  maxVerticalForce: 2
+  minVerticalForce: 3
+  maxVerticalForce: 5

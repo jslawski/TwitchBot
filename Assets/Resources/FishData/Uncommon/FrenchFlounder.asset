@@ -15,9 +15,9 @@ MonoBehaviour:
   fishName: French Flounder
   fishSprite: {fileID: 498594447, guid: 885d36caf92eaf0458d2a4d58501a69a, type: 3}
   rarity: 1
-  pointValue: 20
-  minScale: 5
-  maxScale: 10
+  pointValue: 7
+  minScale: 4
+  maxScale: 6
   minViewportHeight: 0.3
   maxViewportHeight: 0.6
   minTimeBetweenMovement: 2

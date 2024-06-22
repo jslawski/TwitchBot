@@ -15,9 +15,9 @@ MonoBehaviour:
   fishName: Firey Tang
   fishSprite: {fileID: 762997236, guid: 885d36caf92eaf0458d2a4d58501a69a, type: 3}
   rarity: 1
-  pointValue: 20
-  minScale: 5
-  maxScale: 10
+  pointValue: 7
+  minScale: 3
+  maxScale: 5
   minViewportHeight: 0.3
   maxViewportHeight: 0.6
   minTimeBetweenMovement: 1

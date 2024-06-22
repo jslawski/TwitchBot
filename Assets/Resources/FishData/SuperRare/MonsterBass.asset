@@ -13,11 +13,11 @@ MonoBehaviour:
   m_Name: MonsterBass
   m_EditorClassIdentifier: 
   fishName: MONSTER BASS
-  fishSprite: {fileID: 21300000, guid: 070f4eee42bc5754b8e5c198d00791df, type: 3}
+  fishSprite: {fileID: 21300000, guid: e9d99e41c161414449c129fcb27fda14, type: 3}
   rarity: 3
-  pointValue: 100
-  minScale: 3
-  maxScale: 5
+  pointValue: 50
+  minScale: 10
+  maxScale: 15
   minViewportHeight: 0.1
   maxViewportHeight: 0.3
   minTimeBetweenMovement: 4

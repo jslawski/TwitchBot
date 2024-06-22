@@ -46,7 +46,7 @@ public class ChatGameManager : MonoBehaviour
         {
             this.plinkoGame.ToggleGame(this.leaderboardManager);
         }
-        else if (commandText == "test")
+        else if (commandText == "fish")
         {
             this.fishingGame.ToggleGame(this.leaderboardManager);
         }

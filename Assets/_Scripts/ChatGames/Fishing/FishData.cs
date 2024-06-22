@@ -34,7 +34,7 @@ public class FishData : ScriptableObject
 
     public Vector3 GetRandomSpawnPoint()
     {
-        float randomViewportX = Random.Range(0.2f, 0.8f);
+        float randomViewportX = Random.Range(0.1f, 0.7f);
         float randomViewportY = Random.Range(this.minViewportHeight, this.maxViewportHeight);
 
         Vector3 viewportVector = new Vector3(randomViewportX, randomViewportY, -Camera.main.transform.position.z);

@@ -6,7 +6,7 @@ public class FishingGame : ChatGame
 {
     private FishSpawner fishSpawner;
 
-    private float secondsBetweenFishSpawns = 20f;
+    private float secondsBetweenFishSpawns = 10f;
 
     [SerializeField]
     private GameObject waterObject;
@@ -14,6 +14,9 @@ public class FishingGame : ChatGame
     private AnimationCurve waterRevealCurve;
     private Vector3 waterStartPosition;
     private Vector3 waterEndPosition;
+
+    [SerializeField]
+    private GameObject instructionsCanvas;
 
     public override void Setup()
     {
@@ -30,7 +33,7 @@ public class FishingGame : ChatGame
 
     public override void ProcessCommand(string username, string commandText, string argumentsAsString = "")
     {
-        if (CabbageManager.instance.DoesChatterExist(username) == false && !commandText.Contains("test"))
+        if (CabbageManager.instance.DoesChatterExist(username) == false && !commandText.Contains("fish"))
         {
             CabbageManager.instance.SpawnNewChatter(username);
         }
@@ -40,23 +43,23 @@ public class FishingGame : ChatGame
             return;
         }
 
-        if (commandText.Contains("left"))
+        if (commandText.ToLower().Contains("left"))
         {
             CabbageManager.instance.GetCabbageChatter(username).fisher.MoveLeft();
         }
-        else if (commandText.Contains("right"))
+        else if (commandText.ToLower().Contains("right"))
         {
             CabbageManager.instance.GetCabbageChatter(username).fisher.MoveRight();
         }
-        else if (commandText.Contains("down"))
+        else if (commandText.ToLower().Contains("cast"))
         {
             CabbageManager.instance.GetCabbageChatter(username).fisher.Cast();
         }
-        else if (commandText.Contains("up"))
+        else if (commandText.ToLower().Contains("reel"))
         {
             CabbageManager.instance.GetCabbageChatter(username).fisher.Reel();
         }
-        else if (commandText.Contains("stop"))
+        else if (commandText.Contains("hang"))
         {
             CabbageManager.instance.GetCabbageChatter(username).fisher.Hang();
         }
@@ -99,8 +102,8 @@ public class FishingGame : ChatGame
 
     private void SetupWater()
     {
-        this.waterStartPosition = new Vector3(-4.0f, -40.0f, 0.0f);
-        this.waterEndPosition = new Vector3(-4.0f, -3.0f, 0.0f);
+        this.waterStartPosition = new Vector3(-7.0f, -40.0f, 0.0f);
+        this.waterEndPosition = new Vector3(-7.0f, -3.0f, 0.0f);
 
         this.waterObject.SetActive(true);
 
@@ -109,6 +112,7 @@ public class FishingGame : ChatGame
 
     private void CleanupWater()
     {
+        this.instructionsCanvas.SetActive(false);
         StartCoroutine(this.HideWater());
     }
 
@@ -136,6 +140,8 @@ public class FishingGame : ChatGame
         yield return new WaitForSeconds(1.0f);
 
         this.fishSpawner.SpawnInitialFishes();
+
+        this.instructionsCanvas.SetActive(true);
     }
 
     private IEnumerator HideWater()

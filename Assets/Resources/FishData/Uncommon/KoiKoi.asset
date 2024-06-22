@@ -15,14 +15,14 @@ MonoBehaviour:
   fishName: Koi Koi
   fishSprite: {fileID: -1806414052, guid: 885d36caf92eaf0458d2a4d58501a69a, type: 3}
   rarity: 1
-  pointValue: 20
-  minScale: 5
-  maxScale: 10
+  pointValue: 7
+  minScale: 3
+  maxScale: 5
   minViewportHeight: 0.2
   maxViewportHeight: 0.4
   minTimeBetweenMovement: 3
   maxTimeBetweenMovement: 5
-  minHorizontalForce: 1
-  maxHorizontalForce: 5
-  minVerticalForce: 1
-  maxVerticalForce: 2
+  minHorizontalForce: 10
+  maxHorizontalForce: 15
+  minVerticalForce: 0
+  maxVerticalForce: 0

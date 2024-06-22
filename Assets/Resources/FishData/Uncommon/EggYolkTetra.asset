@@ -12,17 +12,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b005541b3aa145c46aa593853be939ac, type: 3}
   m_Name: EggYolkTetra
   m_EditorClassIdentifier: 
-  fishName: Egg Yolk Tetra
+  fishName: Egg Tetra
   fishSprite: {fileID: 1153656197, guid: 885d36caf92eaf0458d2a4d58501a69a, type: 3}
   rarity: 1
-  pointValue: 20
-  minScale: 4
-  maxScale: 6
+  pointValue: 10
+  minScale: 2
+  maxScale: 3
   minViewportHeight: 0.1
   maxViewportHeight: 0.5
-  minTimeBetweenMovement: 2
-  maxTimeBetweenMovement: 5
-  minHorizontalForce: 5
-  maxHorizontalForce: 10
-  minVerticalForce: 0
-  maxVerticalForce: 2
+  minTimeBetweenMovement: 1
+  maxTimeBetweenMovement: 3
+  minHorizontalForce: 10
+  maxHorizontalForce: 15
+  minVerticalForce: 3
+  maxVerticalForce: 5

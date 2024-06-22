@@ -7,12 +7,15 @@ public class CabbageFisher : MonoBehaviour
     [SerializeField]
     private CabbageChatter chatter;
 
+    [SerializeField]
+    private GameObject fishCaughtAnimationPrefab;
+
     private FishHook hook;
 
     private float moveSpeed = 3.0f;
 
     private float minViewportX = 0.1f;
-    private float maxViewportX = 0.8f;
+    private float maxViewportX = 0.7f;
 
     public void Setup()
     {
@@ -47,6 +50,8 @@ public class CabbageFisher : MonoBehaviour
         this.StopMovement();
         this.chatter.character.gameObject.transform.localRotation = Quaternion.Euler(0.0f, -180.0f, 0.0f);
         StartCoroutine(this.MoveLeftCoroutine());
+
+        this.Reel();
     }
 
     private IEnumerator MoveLeftCoroutine()
@@ -66,6 +71,8 @@ public class CabbageFisher : MonoBehaviour
         this.StopMovement();
         this.chatter.character.gameObject.transform.localRotation = Quaternion.Euler(0.0f, 0, 0.0f);
         StartCoroutine(this.MoveRightCoroutine());
+
+        this.Reel();
     }
 
     private IEnumerator MoveRightCoroutine()
@@ -82,6 +89,7 @@ public class CabbageFisher : MonoBehaviour
 
     public void Cast()
     {
+        this.StopMovement();
         this.hook.Cast();
     }
 
@@ -106,8 +114,11 @@ public class CabbageFisher : MonoBehaviour
         return (this.hook.hookedFish != null);
     }
 
-    public void CatchFish(FishData caughtFish)
+    public void CatchFish(FishData caughtFish, float size)
     {
         LeaderboardManager.instance.QueueLeaderboardUpdate(this.chatter.chatterName, caughtFish.pointValue);
+
+        GameObject announcementObject = Instantiate(this.fishCaughtAnimationPrefab, Vector3.zero, new Quaternion());
+        announcementObject.GetComponent<FishCaughtAnimation>().Setup(this.chatter, caughtFish, size);
     }
 }

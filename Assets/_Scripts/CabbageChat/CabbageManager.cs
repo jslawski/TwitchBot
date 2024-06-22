@@ -90,7 +90,17 @@ public class CabbageManager : MonoBehaviour
 
     private void ProcessCommand(object sender, OnChatCommandReceivedArgs e)
     {
-        this.commandManager.ProcessCommand(e.Command.ChatMessage.Username.ToLower(), e.Command.CommandText, e.Command.ArgumentsAsString);
+        StartCoroutine(this.ProcessCommandDelay(e.Command.ChatMessage.Username.ToLower(), e.Command.CommandText, e.Command.ArgumentsAsString));
+    }
+
+    private IEnumerator ProcessCommandDelay(string username, string commandText, string arguments)
+    {
+        if (username == "ruddgasm" || username == "ruddpuddle" || username == "jerry_jerah_jeremeson" || username == "coleslawski")
+        {
+            yield return new WaitForSeconds(UnityEngine.Random.Range(0.5f, 1.5f));
+        }
+
+        this.commandManager.ProcessCommand(username, commandText, arguments);
     }
 
     private void ProcessMessage(object sender, OnMessageReceivedArgs e)

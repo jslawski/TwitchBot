@@ -12,17 +12,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b005541b3aa145c46aa593853be939ac, type: 3}
   m_Name: Nemo
   m_EditorClassIdentifier: 
-  fishName: Shadowfish
+  fishName: Nemo
   fishSprite: {fileID: 21300000, guid: 989c356cb7ca0044d91375df13ea54e3, type: 3}
   rarity: 2
-  pointValue: 50
-  minScale: 3
-  maxScale: 5
+  pointValue: 25
+  minScale: 2
+  maxScale: 3
   minViewportHeight: 0.1
   maxViewportHeight: 0.8
   minTimeBetweenMovement: 0.5
   maxTimeBetweenMovement: 1
   minHorizontalForce: 10
   maxHorizontalForce: 20
-  minVerticalForce: 3
-  maxVerticalForce: 5
+  minVerticalForce: 5
+  maxVerticalForce: 10
