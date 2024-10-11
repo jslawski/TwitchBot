@@ -32,4 +32,17 @@ public static class CharacterCache
     {
         return CharacterCache.cache.ContainsKey(username);
     }
+
+    public static void ClearCacheForUser(string username)
+    {
+        if (username == null || username == string.Empty)
+        {
+            return;
+        }
+    
+        if (CharacterCache.IsCached(username))
+        {
+            CharacterCache.cache.Remove(username);
+        }
+    }
 }

@@ -11,8 +11,8 @@ public class FishSpawner : MonoBehaviour
     public int maxFish = 20;
 
     private float uncommonFishSpawnChance = 0.30f;
-    private float rareFishSpawnChance = 0.07f;
-    private float superRareFishSpawnChance = 0.03f;
+    private float rareFishSpawnChance = 0.15f;
+    private float superRareFishSpawnChance = 0.05f;
 
     public void SpawnInitialFishes()
     {

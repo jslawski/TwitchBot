@@ -104,6 +104,7 @@ public class LeaderboardManager : MonoBehaviour
     private void UpdateLeaderboardFailure()
     {
         Debug.LogError("Error: Unable to update leaderboard entry");
+        this.readyToProcessUpdate = true;
     }
     #endregion
 

@@ -21292,6 +21292,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: CabbagePreview
       objectReference: {fileID: 0}
+    - target: {fileID: 6612685848520066565, guid: 699f5019a26e4884a9c29456aea2cbaa,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6612685848520066566, guid: 699f5019a26e4884a9c29456aea2cbaa,
         type: 3}
       propertyPath: m_RootOrder

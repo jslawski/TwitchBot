@@ -7,6 +7,9 @@ public class CommandManager : MonoBehaviour
     [SerializeField]
     private ChatGameManager chatGameManager;
 
+    [SerializeField]
+    private GameObject buzzerManagerObject;
+
     public void ProcessCommand(string username, string commandText, string arguments)
     {
         if (this.IsNinjaShotCommand(username, commandText))
@@ -25,10 +28,15 @@ public class CommandManager : MonoBehaviour
             {
                 this.ShowRecentClip();
             }
+            else if (commandText == "buzz")
+            {
+                this.buzzerManagerObject.SetActive(!this.buzzerManagerObject.activeSelf);
+            }
             else
             {
                 this.chatGameManager.ProcessGameActivationCommand(commandText);
-            }            
+            }
+            
         }
 
         if (this.chatGameManager.IsChatGameActive() == true)

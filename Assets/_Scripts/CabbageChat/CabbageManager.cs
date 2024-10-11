@@ -30,7 +30,7 @@ public class CabbageManager : MonoBehaviour
     [SerializeField]
     private GameObject leaderboardCanvas;
     
-    private const string ClipStub = "https://clips.twitch.tv/";
+    private const string ClipStub = "https://www.twitch.tv/coleslawski/clip/";
     public static string recentClip = string.Empty;
 
     public int prestigeThreshold = 9999999;
@@ -95,9 +95,9 @@ public class CabbageManager : MonoBehaviour
 
     private IEnumerator ProcessCommandDelay(string username, string commandText, string arguments)
     {
-        if (username == "ruddgasm" || username == "ruddpuddle" || username == "jerry_jerah_jeremeson" || username == "coleslawski")
+        if (username == "ruddgasm" || username == "ruddpuddle" || username == "jerry_jerah_jeremeson")
         {
-            yield return new WaitForSeconds(UnityEngine.Random.Range(0.5f, 1.5f));
+           yield return new WaitForSeconds(UnityEngine.Random.Range(0.5f, 0.75f));
         }
 
         this.commandManager.ProcessCommand(username, commandText, arguments);

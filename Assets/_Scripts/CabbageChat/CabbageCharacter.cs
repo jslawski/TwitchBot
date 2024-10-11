@@ -20,9 +20,11 @@ public class CabbageCharacter : MonoBehaviour
                 this.ScaleCharacter();
             }
         }
-
-        GetCurrentPresetAsyncRequest request = new GetCurrentPresetAsyncRequest(this.username, this.GetCurrentPresetSuccess, this.GetCurrentPresetFailure);
-        request.Send();
+        else
+        {
+            GetCurrentPresetAsyncRequest request = new GetCurrentPresetAsyncRequest(this.username, this.GetCurrentPresetSuccess, this.GetCurrentPresetFailure);
+            request.Send();
+        }
     }
 
     private void GetCurrentPresetSuccess(string data)
@@ -79,5 +81,10 @@ public class CabbageCharacter : MonoBehaviour
         }
         
         this.character.gameObject.transform.localScale = new Vector3(adjustment, adjustment, adjustment);
+    }
+
+    private void OnDestroy()
+    {
+        CharacterCache.ClearCacheForUser(this.username);
     }
 }
