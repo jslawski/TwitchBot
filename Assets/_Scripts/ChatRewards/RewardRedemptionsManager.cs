@@ -35,10 +35,13 @@ public class RewardRedemptionsManager : MonoBehaviour
         this.rewardsDict.Add(SecretKeys.ShotsRewardID, rewards[0].GetComponent<RewardRedemption>());
         this.rewardsDict.Add(SecretKeys.AlwaysSunnyRewardID, rewards[1].GetComponent<RewardRedemption>());
         this.rewardsDict.Add(SecretKeys.NukeCabbageRewardID, rewards[2].GetComponent<RewardRedemption>());
-        this.rewardsDict.Add(SecretKeys.AchievementUnlockedID, rewards[3].GetComponent<RewardRedemption>());
-        this.rewardsDict.Add(SecretKeys.ToBeContinuedID, rewards[4].GetComponent<RewardRedemption>());
-        this.rewardsDict.Add(SecretKeys.SenatorID, rewards[5].GetComponent<RewardRedemption>());
-        this.rewardsDict.Add(SecretKeys.BeRightBackID, rewards[6].GetComponent<RewardRedemption>());
+        this.rewardsDict.Add(SecretKeys.SenatorID, rewards[3].GetComponent<RewardRedemption>());
+        this.rewardsDict.Add(SecretKeys.WhiplashID, rewards[4].GetComponent<RewardRedemption>());
+        this.rewardsDict.Add(SecretKeys.TombaTimeID, rewards[5].GetComponent<RewardRedemption>());
+        this.rewardsDict.Add(SecretKeys.WiiMenuID, rewards[6].GetComponent<RewardRedemption>());
+        this.rewardsDict.Add(SecretKeys.ToBeContinuedID, rewards[7].GetComponent<RewardRedemption>());
+        this.rewardsDict.Add(SecretKeys.BeRightBackID, rewards[8].GetComponent<RewardRedemption>());
+        this.rewardsDict.Add(SecretKeys.AchievementUnlockedID, rewards[9].GetComponent<RewardRedemption>());
     }
 
     private void PubSubConnected(object sender, System.EventArgs e)
@@ -50,7 +53,18 @@ public class RewardRedemptionsManager : MonoBehaviour
     private void PubSubRewardRedeemed(object sender, OnRewardRedeemedArgs e)
     {
         Debug.Log("Reward ID: " + e.RewardId.ToString());
+        
+        if (this.rewardsDict.ContainsKey(e.RewardId.ToString()))
+        {
+            this.rewardsDict[e.RewardId.ToString()].TriggerReward(e.DisplayName, e.Message);
+        }
 
-        this.rewardsDict[e.RewardId.ToString()].TriggerReward(e.DisplayName, e.Message);
+        this.UpdateChatterPointCount(e.DisplayName.ToLower(), e.RewardCost);
+    }
+
+    private void UpdateChatterPointCount(string chatterName, int pointsSpent)
+    {
+        UpdateChatterPointCountAsyncRequest request = new UpdateChatterPointCountAsyncRequest(chatterName, pointsSpent.ToString());
+        request.Send();
     }
 }

@@ -19,6 +19,8 @@ public class EmoteBox : MonoBehaviour
 
     public void LoadEmote(string emoteUrl)
     {
+        Debug.LogError(emoteUrl);
+    
         if (this.IsStaticEmote(emoteUrl))
         {
             StartCoroutine(GetEmoteFromUrl(emoteUrl));
@@ -30,7 +32,7 @@ public class EmoteBox : MonoBehaviour
     }
 
     private IEnumerator GetEmoteFromUrl(string emoteUrl)
-    {
+    {    
         using (UnityWebRequest emoteRequest = UnityWebRequestTexture.GetTexture(emoteUrl))
         {
             yield return emoteRequest.SendWebRequest();

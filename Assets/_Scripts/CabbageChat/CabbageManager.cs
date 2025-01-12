@@ -84,7 +84,7 @@ public class CabbageManager : MonoBehaviour
 
     private void Client_OnConnected(object sender, OnConnectedArgs e)
     {
-        this.chatClient.JoinChannel(SecretKeys.ChannelName);        
+        this.chatClient.JoinChannel(SecretKeys.ChannelName);
         this.SendBotMessage("Greetings, professor!  Nothing to report!");
     }
 
@@ -125,6 +125,14 @@ public class CabbageManager : MonoBehaviour
         {
             this.SpawnNewChatter(e.ChatMessage.Username.ToLower(), e.ChatMessage);
         }
+
+        this.UpdateChatterMessageCount(e.ChatMessage.Username.ToLower());
+    }
+
+    private void UpdateChatterMessageCount(string chatterName)
+    {
+        UpdateChatterMessageCountAsyncRequest request = new UpdateChatterMessageCountAsyncRequest(chatterName);
+        request.Send();
     }
 
     private void ProcessBotMessage(string message)

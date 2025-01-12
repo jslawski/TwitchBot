@@ -13,6 +13,9 @@ public static class SecretKeys
     public const string ToBeContinuedID = "a95faad0-5992-4515-9500-b62aff31e0ce";
     public const string SenatorID = "74049962-09b6-4728-a6cc-fe400e432255";
     public const string BeRightBackID = "bdab25ee-d35b-4b11-af72-414b537109a5";
+    public const string TombaTimeID = "14168c4e-4f9a-4f05-a280-f82262834cf9";
+    public const string WiiMenuID = "9eebea3b-dd38-41da-8c71-157c1cbd68fd";
+    public const string WhiplashID = "cdefd137-e272-4741-b4ed-f5a7e0f611a0";
     public const string ChannelName = "coleslawski";
     public const string AccessToken = "6qqjsbt1zcp188v697faseyx202q0e";
     //6qqjsbt1zcp188v697faseyx202q0e

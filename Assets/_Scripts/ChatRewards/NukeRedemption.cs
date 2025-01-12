@@ -22,7 +22,7 @@ public class NukeRedemption : RewardRedemption
 
         sanitizedTarget = sanitizedTarget.Trim().ToLower();
 
-        Debug.LogError(sanitizedTarget);
+        //Debug.LogError(sanitizedTarget);
 
         if (CabbageManager.instance.DoesChatterExist(sanitizedTarget))
         {

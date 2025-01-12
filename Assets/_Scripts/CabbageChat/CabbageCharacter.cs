@@ -22,9 +22,11 @@ public class CabbageCharacter : MonoBehaviour
         }
         else
         {
-            GetCurrentPresetAsyncRequest request = new GetCurrentPresetAsyncRequest(this.username, this.GetCurrentPresetSuccess, this.GetCurrentPresetFailure);
-            request.Send();
+            //put the next two lines here if you want cache to work
         }
+
+        GetCurrentPresetAsyncRequest request = new GetCurrentPresetAsyncRequest(this.username, this.GetCurrentPresetSuccess, this.GetCurrentPresetFailure);
+        request.Send();
     }
 
     private void GetCurrentPresetSuccess(string data)
