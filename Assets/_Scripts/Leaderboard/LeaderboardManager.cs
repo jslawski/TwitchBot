@@ -127,6 +127,11 @@ public class LeaderboardManager : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (this.queuedUpdates == null)
+        {
+            return;
+        }
+    
         if (this.queuedUpdates.Count > 0 && this.readyToProcessUpdate == true)
         {
             this.ProcessUpdate(this.queuedUpdates.Dequeue());
@@ -165,6 +170,14 @@ public class LeaderboardManager : MonoBehaviour
 
     public bool IsTopPlayer(string username)
     {
-        return (this.GetTopPlayer().username == username);
+        LeaderboardEntryData topPlayerUsername = this.GetTopPlayer();
+        if (topPlayerUsername != null)
+        {
+            return (this.GetTopPlayer().username == username);
+        }
+        else
+        {
+            return false;
+        }        
     }
 }

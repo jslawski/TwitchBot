@@ -51,7 +51,6 @@ public class CabbageManager : MonoBehaviour
         {
             instance = this;
         }
-
         CharacterCache.Setup();
 
         ClientOptions clientOptions = new ClientOptions
@@ -80,6 +79,12 @@ public class CabbageManager : MonoBehaviour
         StartCoroutine(this.RejoinHeartbeat());
 
         AttributeSpriteDicts.Setup();
+
+        if (Application.isEditor == false)
+        {
+            UpdateStreamDatesAsyncRequest updateDatesRequest = new UpdateStreamDatesAsyncRequest();
+            updateDatesRequest.Send();
+        }
     }
 
     private void Client_OnConnected(object sender, OnConnectedArgs e)
@@ -287,6 +292,11 @@ public class CabbageManager : MonoBehaviour
 
     private void Update()
     {
+        if (this.chatterQueue == null)
+        {
+            return;
+        }
+    
         if (this.chatterQueue.Count > 0 && this.readyForNextChatter == true)
         {
             this.PushChatterToFront(this.chatterQueue.Dequeue());

@@ -16,6 +16,7 @@ public static class SecretKeys
     public const string TombaTimeID = "14168c4e-4f9a-4f05-a280-f82262834cf9";
     public const string WiiMenuID = "9eebea3b-dd38-41da-8c71-157c1cbd68fd";
     public const string WhiplashID = "cdefd137-e272-4741-b4ed-f5a7e0f611a0";
+    public const string GoodBadEndingID = "6e058574-1df8-4dd5-8f39-99f0e0b99caf";
     public const string ChannelName = "coleslawski";
     public const string AccessToken = "6qqjsbt1zcp188v697faseyx202q0e";
     //6qqjsbt1zcp188v697faseyx202q0e

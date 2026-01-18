@@ -12,11 +12,28 @@ public class AlwaysSunnyRedemption : RewardRedemption
     {
         this.alwaysSunnyText.text = "\"" + redemptionMessage + "\"";
         this.alwaysSunnyPanel.SetActive(true);
+
+        for (int i = 0; i < this.affectedVideoRewards.Length; i++)
+        {
+            if (this.affectedVideoRewards[i].gameObject.activeSelf == true)
+            {
+                this.affectedVideoRewards[i].PauseVideo();
+            }
+        }
+
         Invoke("DeactivateAlwaysSunny", 7.5f);
     }
 
     private void DeactivateAlwaysSunny()
     {
         this.alwaysSunnyPanel.SetActive(false);
+
+        for (int i = 0; i < this.affectedVideoRewards.Length; i++)
+        {
+            if (this.affectedVideoRewards[i].gameObject.activeSelf == true)
+            {
+                this.affectedVideoRewards[i].ResumeVideo();
+            }
+        }
     }
 }

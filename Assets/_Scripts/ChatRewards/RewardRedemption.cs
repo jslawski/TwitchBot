@@ -4,6 +4,9 @@ using UnityEngine;
 
 public abstract class RewardRedemption : MonoBehaviour
 {
+    [SerializeField]
+    protected RenderTextureVideoManager[] affectedVideoRewards;
+
     // Update is called once per frame
     public abstract void TriggerReward(string userRedeemed, string redemptionMessage = "");
 }

@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class ChatGame : MonoBehaviour
 {
-    public float secondsBetweenAIAction = 45.0f;
+    public float secondsBetweenAIAction = 120f;
 
     public bool gameActive = false;
 

@@ -42,6 +42,7 @@ public class RewardRedemptionsManager : MonoBehaviour
         this.rewardsDict.Add(SecretKeys.ToBeContinuedID, rewards[7].GetComponent<RewardRedemption>());
         this.rewardsDict.Add(SecretKeys.BeRightBackID, rewards[8].GetComponent<RewardRedemption>());
         this.rewardsDict.Add(SecretKeys.AchievementUnlockedID, rewards[9].GetComponent<RewardRedemption>());
+        this.rewardsDict.Add(SecretKeys.GoodBadEndingID, rewards[10].GetComponent<RewardRedemption>());
     }
 
     private void PubSubConnected(object sender, System.EventArgs e)
